@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="viewModel"
+            type="de.ka.jamit.arch.ui.main.MainViewModel" />
+    </data>
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".ui.main.MainActivity">
+
+        <fragment
+            android:id="@+id/main_nav_host_fragment"
+            android:name="androidx.navigation.fragment.NavHostFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:defaultNavHost="true"
+            app:navGraph="@navigation/nav_graph_main" />
+
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            style="@style/bottomNavigation"
+            android:id="@+id/bottom_navigation"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/navBarHeight"
+            app:layout_anchor="@+id/main_nav_host_fragment"
+            app:layout_anchorGravity="bottom"
+            app:menu="@menu/bottom_navigation" />
+
+        <de.ka.jamit.arch.utils.Snacker
+            android:id="@+id/mainSnacker"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/default_76"
+            android:layout_marginEnd="@dimen/default_76"
+            android:layout_marginBottom="@dimen/default_68"
+            app:layout_anchor="@+id/main_nav_host_fragment"
+            app:layout_anchorGravity="bottom|center_horizontal" />
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+</layout>

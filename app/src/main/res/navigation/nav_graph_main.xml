@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph_main"
+    app:startDestination="@id/homeFragment">
+
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="de.ka.jamit.arch.ui.home.HomeFragment"
+        android:label="fragment_home"
+        tools:layout="@layout/fragment_home" />
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="de.ka.jamit.arch.ui.profile.ProfileFragment"
+        android:label="fragment_profile"
+        tools:layout="@layout/fragment_profile" />
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="de.ka.jamit.arch.ui.settings.SettingsFragment"
+        android:label="fragment_settings"
+        tools:layout="@layout/fragment_settings" />
+    <fragment
+        android:id="@+id/detailFragment"
+        android:name="de.ka.jamit.arch.ui.settings.detail.DetailFragment"
+        android:label="DetailFragment"
+        tools:layout="@layout/fragment_detail" />
+
+    <dialog
+        android:id="@+id/dialogFragment"
+        android:name="de.ka.jamit.arch.ui.profile.dialogs.ProfileDialog"
+        android:label="DialogFragment"
+        tools:layout="@layout/dialog_profile" />
+
+    <dialog
+        android:id="@+id/dialogBottomSheet"
+        android:name="de.ka.jamit.arch.ui.profile.dialogs.ProfileBottomSheet"
+        android:label="BottomSheet"
+        tools:layout="@layout/dialog_profile" />
+
+</navigation>

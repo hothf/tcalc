@@ -1,0 +1,73 @@
+{
+  "_note1": "KEEP THIS FILE! Check it into a version control system (VCS) like git.",
+  "_note2": "ObjectBox manages crucial IDs for your object model. See docs for details.",
+  "_note3": "If you have VCS merge conflicts, you must resolve them according to ObjectBox docs.",
+  "entities": [
+    {
+      "id": "2:1574775729979564377",
+      "lastPropertyId": "8:6510946630205075916",
+      "name": "PeopleDao",
+      "properties": [
+        {
+          "id": "1:3415489001624859788",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:1912812774473146109",
+          "name": "name",
+          "type": 9
+        },
+        {
+          "id": "3:8603587990634726071",
+          "name": "height",
+          "type": 9
+        },
+        {
+          "id": "4:3554967240625618713",
+          "name": "mass",
+          "type": 9
+        },
+        {
+          "id": "5:8890814650197825200",
+          "name": "hair_color",
+          "type": 9
+        },
+        {
+          "id": "6:3622446154679168283",
+          "name": "skin_color",
+          "type": 9
+        },
+        {
+          "id": "7:3662954271741150012",
+          "name": "eye_color",
+          "type": 9
+        },
+        {
+          "id": "8:6510946630205075916",
+          "name": "gender",
+          "type": 9
+        }
+      ],
+      "relations": []
+    }
+  ],
+  "lastEntityId": "2:1574775729979564377",
+  "lastIndexId": "0:0",
+  "lastRelationId": "0:0",
+  "lastSequenceId": "0:0",
+  "modelVersion": 5,
+  "modelVersionParserMinimum": 5,
+  "retiredEntityUids": [
+    4588755026466946129
+  ],
+  "retiredIndexUids": [],
+  "retiredPropertyUids": [
+    7535486235035811989,
+    5295257134527964451,
+    68862689860177328
+  ],
+  "retiredRelationUids": [],
+  "version": 1
+}
