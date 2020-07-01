@@ -7,7 +7,7 @@
 
         <variable
             name="viewModel"
-            type="de.ka.jamit.arch.ui.profile.ProfileViewModel" />
+            type="de.ka.jamit.tcalc.ui.profile.ProfileViewModel" />
     </data>
 
     <LinearLayout

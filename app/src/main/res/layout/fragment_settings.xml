@@ -7,7 +7,7 @@
 
         <variable
             name="viewModel"
-            type="de.ka.jamit.arch.ui.settings.SettingsViewModel" />
+            type="de.ka.jamit.tcalc.ui.settings.SettingsViewModel" />
     </data>
 
     <RelativeLayout
@@ -34,7 +34,7 @@
             android:onClick="@{()->viewModel.sort()}"
             android:text="sort" />
 
-        <de.ka.jamit.arch.utils.AutoReleaseRecyclerView
+        <de.ka.jamit.tcalc.utils.AutoReleaseRecyclerView
             android:id="@+id/recyclerSettings"
             android:layout_width="match_parent"
             android:layout_height="match_parent"

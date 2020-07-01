@@ -6,7 +6,7 @@
     <data>
         <variable
             name="viewModel"
-            type="de.ka.jamit.arch.ui.main.MainViewModel" />
+            type="de.ka.jamit.tcalc.ui.main.MainViewModel" />
     </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -32,7 +32,7 @@
             app:layout_anchorGravity="bottom"
             app:menu="@menu/bottom_navigation" />
 
-        <de.ka.jamit.arch.utils.Snacker
+        <de.ka.jamit.tcalc.utils.Snacker
             android:id="@+id/mainSnacker"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

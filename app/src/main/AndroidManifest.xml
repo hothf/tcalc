@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="de.ka.jamit.arch">
+    package="de.ka.jamit.tcalc">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -10,7 +10,7 @@
     <uses-permission android:name="android.permission.CALL_PHONE" /><!--TODO Remember to remove if not needed-->
 
     <application
-        android:name="de.ka.jamit.arch.App"
+        android:name="de.ka.jamit.tcalc.App"
         android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -18,7 +18,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name="de.ka.jamit.arch.ui.main.MainActivity">
+        <activity android:name="de.ka.jamit.tcalc.ui.main.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
