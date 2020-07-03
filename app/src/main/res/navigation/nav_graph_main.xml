@@ -21,4 +21,10 @@
         android:label="fragment_home_enter_dialog"
         tools:layout="@layout/dialog_home_enter" />
 
+    <dialog
+        android:id="@+id/dialogHomeAdd"
+        android:name="de.ka.jamit.tcalc.ui.home.add.HomeAddDialog"
+        android:label="fragment_home_add_dialog"
+        tools:layout="@layout/dialog_home_add" />
+
 </navigation>

@@ -50,6 +50,6 @@ class HomeViewModel : BaseViewModel() {
     fun layoutManager() = LinearLayoutManager(resourcesProvider.getApplicationContext())
 
     fun onAddClicked() {
-        repository.addRecord(key = "hello")
+        navigateTo(R.id.dialogHomeAdd)
     }
 }

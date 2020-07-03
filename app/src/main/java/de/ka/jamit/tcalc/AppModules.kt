@@ -4,6 +4,7 @@ import de.ka.jamit.tcalc.repo.Repository
 import de.ka.jamit.tcalc.repo.RepositoryImpl
 import de.ka.jamit.tcalc.repo.db.AppDatabase
 import de.ka.jamit.tcalc.ui.home.HomeViewModel
+import de.ka.jamit.tcalc.ui.home.add.HomeAddDialogViewModel
 import de.ka.jamit.tcalc.ui.home.dialog.HomeEnterDialogViewModel
 import de.ka.jamit.tcalc.ui.main.MainViewModel
 import de.ka.jamit.tcalc.ui.settings.SettingsViewModel
@@ -24,6 +25,7 @@ val appModule = module {
     viewModel { HomeViewModel() }
     viewModel { SettingsViewModel() }
     viewModel { HomeEnterDialogViewModel() }
+    viewModel { HomeAddDialogViewModel() }
 
     single { ResourcesProviderImpl(get()) as ResourcesProvider }
     single { GlobalMessageEventListener() }
