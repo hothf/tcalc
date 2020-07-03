@@ -12,17 +12,23 @@ import de.ka.jamit.tcalc.base.BaseViewModel
 class HomeEnterDialogViewModel : BaseViewModel() {
 
     val titleText = MutableLiveData<String>("")
+    val valueText = MutableLiveData<String>("")
+
     private var key: Long = 0L
 
     fun choose() {
-        handle(Choose(42, key))
+        valueText.value?.toFloat()?.let {
+            repository.updateRecord(it, key)
+            handle(Choose(it, key))
+        }
     }
 
     override fun onArgumentsReceived(bundle: Bundle) {
         super.onArgumentsReceived(bundle)
         titleText.postValue(bundle.getString(HomeEnterDialog.TITLE_KEY) ?: "")
+        valueText.postValue(bundle.getFloat(HomeEnterDialog.VALUE_KEY).toString())
         key = bundle.getLong(HomeEnterDialog.RESULT_KEY)
     }
 
-    class Choose(val value: Int, val key: Long)
+    class Choose(val value: Float, val key: Long)
 }

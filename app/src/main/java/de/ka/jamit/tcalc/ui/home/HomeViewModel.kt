@@ -28,6 +28,7 @@ class HomeViewModel : BaseViewModel() {
     private val itemListener: (HomeListItemViewModel) -> Unit = {
         val arguments = Bundle().apply {
             putString(HomeEnterDialog.TITLE_KEY, it.title)
+            putFloat(HomeEnterDialog.VALUE_KEY, it.item.value)
             putLong(HomeEnterDialog.RESULT_KEY, it.item.id)
         }
         navigateTo(R.id.dialogHomeEnter, args = arguments)
@@ -46,22 +47,9 @@ class HomeViewModel : BaseViewModel() {
 
     }
 
-    /**
-     * Updates an item with the given value and the given key.
-     */
-    fun updateItem(value: Int, key: Long) {
-        repository.updateRecord(value, key)
-    }
-
     fun layoutManager() = LinearLayoutManager(resourcesProvider.getApplicationContext())
 
     fun clicked() {
         repository.saveRecord(RecordDao(id = 0, key = "hello"))
-    }
-
-
-    private fun showLoading() {
-        buttonVisibility.postValue(View.GONE)
-        loadingVisibility.postValue(View.VISIBLE)
     }
 }

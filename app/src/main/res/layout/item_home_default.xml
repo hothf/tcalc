@@ -19,15 +19,10 @@
             tools:text="Item title" />
 
         <TextView
-            android:id="@+id/value"
-            style="@style/textDefault.bold"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:layout_below="@+id/title"
-            android:layout_centerVertical="true"
-            android:padding="@dimen/default_8"
+            android:layout_width="wrap_content"
             android:text="@{viewModel.value}"
-            tools:text="Item title" />
+            android:layout_height="wrap_content" />
 
     </RelativeLayout>
 

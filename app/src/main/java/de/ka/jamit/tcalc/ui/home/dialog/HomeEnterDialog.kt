@@ -18,20 +18,13 @@ class HomeEnterDialog : BaseDialogFragment<DialogHomeEnterBinding, HomeEnterDial
 ) {
 
     override fun onHandle(element: Any?) {
-        if (element is HomeEnterDialogViewModel.Choose) {
-            val resultBundle = Bundle().apply {
-                putInt(DIALOG_CHOOSE_RESULT, element.value)
-                putLong(DIALOG_CHOOSE_KEY, element.key)
-            }
-            dismissDialogWithResult(RESULT_KEY, resultBundle)
-        }
+        dismissAllowingStateLoss()
     }
 
     companion object {
         const val TITLE_KEY = "_k_title_"
         const val RESULT_KEY = "_k_result"
-        const val DIALOG_CHOOSE_RESULT = "_d_result"
-        const val DIALOG_CHOOSE_KEY = "_d_res_key"
+        const val VALUE_KEY = "_k_val"
     }
 }
 

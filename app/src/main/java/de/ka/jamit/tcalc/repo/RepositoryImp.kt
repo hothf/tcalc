@@ -27,10 +27,10 @@ class RepositoryImpl(val app: Application, val db: AppDatabase) : Repository {
         return RxQuery.observable<RecordDao>(query)
     }
 
-    override fun updateRecord(value: Int, key: Long) {
+    override fun updateRecord(value: Float, key: Long) {
         val existing = recordDao.get(key)
         if (existing != null) {
-            recordDao.put(RecordDao(id = key, value = value.toFloat(), key = existing.key))
+            recordDao.put(RecordDao(id = key, value = value, key = existing.key))
         }
     }
 }
