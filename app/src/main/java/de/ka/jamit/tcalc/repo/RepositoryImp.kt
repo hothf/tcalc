@@ -9,6 +9,7 @@ import io.objectbox.query.Query
 
 import io.objectbox.rx.RxQuery
 import io.reactivex.Observable
+import io.reactivex.Single
 
 
 /**
@@ -41,6 +42,12 @@ class RepositoryImpl(val app: Application, val db: AppDatabase) : Repository {
         val existing = recordDao.get(id)
         if (existing != null) {
             recordDao.put(RecordDao(id = id, value = value, key = existing.key))
+        }
+    }
+
+    override fun calc(data: List<RecordDao>): Single<Float> {
+        return Single.fromCallable {
+            data.fold(0.0f) { total, item -> total + item.value }
         }
     }
 }

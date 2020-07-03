@@ -31,5 +31,10 @@ interface Repository {
      */
     fun updateRecord(value: Float, id: Long)
 
+    /**
+     * Calculates the sum of the data.
+     */
+    fun calc(data: List<RecordDao>): Single<Float>
+
 
 }

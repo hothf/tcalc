@@ -23,20 +23,39 @@
         <de.ka.jamit.tcalc.utils.AutoReleaseRecyclerView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_above="@+id/addButton"
+            android:layout_above="@+id/resultContainer"
             android:layout_below="@+id/appbar"
             app:adapter="@{viewModel.adapter}"
             app:layoutManager="@{viewModel.layoutManager()}" />
 
-        <Button
-            android:id="@+id/addButton"
-            android:layout_width="wrap_content"
+        <RelativeLayout
+            android:id="@+id/resultContainer"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
             android:layout_alignParentBottom="true"
-            android:layout_marginBottom="@dimen/navBarHeight"
-            android:onClick="@{()->viewModel.onAddClicked()}"
-            android:text="add" />
+            android:layout_marginBottom="@dimen/navBarHeight">
+
+
+            <ProgressBar
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:visibility="@{viewModel.loadingVisibility}" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{viewModel.resultText}" />
+
+            <Button
+                android:id="@+id/addButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:onClick="@{()->viewModel.onAddClicked()}"
+                android:text="add" />
+
+        </RelativeLayout>
     </RelativeLayout>
 
     <data>
