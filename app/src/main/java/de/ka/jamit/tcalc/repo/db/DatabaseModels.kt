@@ -4,12 +4,7 @@ import io.objectbox.annotation.Entity
 import io.objectbox.annotation.Id
 
 @Entity
-data class PeopleDao(
+data class RecordDao(
         @Id var id: Long = 142547635L,
-        val name: String,
-        val height: String? = null,
-        val mass: String? = null,
-        val hair_color: String? = null,
-        val skin_color: String? = null,
-        val eye_color: String? = null,
-        val gender: String? = null)
+        val key: String,
+        val value: Float = 0.0f)

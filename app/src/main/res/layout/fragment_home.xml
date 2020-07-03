@@ -3,19 +3,25 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <data>
-
-        <variable
-            name="viewModel"
-            type="de.ka.jamit.tcalc.ui.home.HomeViewModel" />
-
-
-    </data>
-
     <RelativeLayout
         android:id="@+id/main"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
+        <Button
+            android:id="@+id/home_okay_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:onClick="@{()->viewModel.clicked()}"
+            android:text="Okay!"
+            android:visibility="@{safeUnbox(viewModel.buttonVisibility)}" />
+
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:visibility="@{safeUnbox(viewModel.loadingVisibility)}" />
 
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/appbar"
@@ -29,30 +35,21 @@
 
         </com.google.android.material.appbar.AppBarLayout>
 
-
-        <Button
-            android:id="@+id/home_okay_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:onClick="@{()->viewModel.clicked()}"
-            android:text="Okay!"
-            android:visibility="@{safeUnbox(viewModel.buttonVisibility)}" />
-
-        <Button
-            android:id="@+id/home_request_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/home_okay_button"
-            android:layout_centerInParent="true"
-            android:onClick="@{()->viewModel.requestPermissions()}"
-            android:text="Request Permissions" />
-
-        <ProgressBar
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:visibility="@{safeUnbox(viewModel.loadingVisibility)}" />
+        <de.ka.jamit.tcalc.utils.AutoReleaseRecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/appbar"
+            android:layout_marginBottom="@dimen/navBarHeight"
+            app:adapter="@{viewModel.adapter}"
+            app:layoutManager="@{viewModel.layoutManager()}" />
 
     </RelativeLayout>
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="de.ka.jamit.tcalc.ui.home.HomeViewModel" />
+
+    </data>
 </layout>

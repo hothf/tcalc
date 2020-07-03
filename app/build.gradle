@@ -95,6 +95,7 @@ dependencies {
 
     // database
     implementation "io.objectbox:objectbox-kotlin:$objectbox_version"
+    implementation "io.objectbox:objectbox-rxjava:$objectbox_version"
 
     // time
     implementation "com.jakewharton.threetenabp:threetenabp:$java_time_abp_version"

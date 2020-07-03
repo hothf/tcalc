@@ -1,5 +1,6 @@
 <resources>
 
+
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
@@ -19,8 +20,8 @@
 
     <style name="bottomNavigation" parent="Widget.Design.BottomNavigationView">
         <item name="android:background">@color/defaultBackgroundPrimary</item>
-        <item name="itemIconTint">@color/fontNav</item>
-        <item name="itemTextColor">@color/fontNav</item>
+        <item name="itemIconTint">@color/colorAccent</item>
+        <item name="itemTextColor">@color/colorAccent</item>
     </style>
 
     <style name="buttonDefault" parent="Base.TextAppearance.AppCompat.Button">
@@ -33,4 +34,21 @@
         <item name="android:paddingStart">@dimen/default_16</item>
     </style>
 
+    <style name="textDefault" parent="TextAppearance.AppCompat">
+        <item name="android:textSize">@dimen/font_max_size</item>
+        <item name="android:textColor">@color/colorAccent</item>
+    </style>
+
+    <style name="textDefault.bold" parent="textDefault">
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="textDefault.title" parent="TextAppearance.AppCompat">
+        <item name="android:textSize">@dimen/font_max_size</item>
+        <item name="android:textColor">@color/fontNav</item>
+    </style>
+
+    <style name="textDefault.title.bold" parent="textDefault.title">
+        <item name="android:textStyle">bold</item>
+    </style>
 </resources>

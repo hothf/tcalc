@@ -20,11 +20,12 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>(R.layout.a
         val navController = findNavController(this, R.id.main_nav_host_fragment)
 
         navController.addOnDestinationChangedListener { _, dest: NavDestination, _ ->
-            if (dest.id == R.id.detailFragment) {
-                getBinding<ActivityMainBinding>()?.bottomNavigation?.visibility = View.GONE
-            } else {
-                getBinding<ActivityMainBinding>()?.bottomNavigation?.visibility = View.VISIBLE
-            }
+//            add excemptions here where the bottom navigation should be hidden!
+//            if (dest.id == R.id.detailFragment) {
+//                getBinding<ActivityMainBinding>()?.bottomNavigation?.visibility = View.GONE
+//            } else {
+            getBinding<ActivityMainBinding>()?.bottomNavigation?.visibility = View.VISIBLE
+//            }
         }
 
         getBinding<ActivityMainBinding>()?.bottomNavigation?.let {
@@ -34,12 +35,5 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>(R.layout.a
 
     override fun onShowMessage(showSnack: ShowSnack) {
         getBinding<ActivityMainBinding>()?.mainSnacker?.reveal(showSnack)
-    }
-
-    override fun onFinish() {
-        // we handle back presses in this example somewhere differently. This is why we should finish the app at some
-        // point. This is triggered by listening to a close event and then forwarded to this point, where we simply
-        // finish the app.
-        finish()
     }
 }

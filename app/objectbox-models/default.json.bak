@@ -10,35 +10,44 @@
       "properties": [
         {
           "id": "1:3415489001624859788",
-          "name": "id"
+          "name": "id",
+          "type": 6,
+          "flags": 1
         },
         {
           "id": "2:1912812774473146109",
-          "name": "name"
+          "name": "name",
+          "type": 9
         },
         {
           "id": "3:8603587990634726071",
-          "name": "height"
+          "name": "height",
+          "type": 9
         },
         {
           "id": "4:3554967240625618713",
-          "name": "mass"
+          "name": "mass",
+          "type": 9
         },
         {
           "id": "5:8890814650197825200",
-          "name": "hair_color"
+          "name": "hair_color",
+          "type": 9
         },
         {
           "id": "6:3622446154679168283",
-          "name": "skin_color"
+          "name": "skin_color",
+          "type": 9
         },
         {
           "id": "7:3662954271741150012",
-          "name": "eye_color"
+          "name": "eye_color",
+          "type": 9
         },
         {
           "id": "8:6510946630205075916",
-          "name": "gender"
+          "name": "gender",
+          "type": 9
         }
       ],
       "relations": []
@@ -48,8 +57,8 @@
   "lastIndexId": "0:0",
   "lastRelationId": "0:0",
   "lastSequenceId": "0:0",
-  "modelVersion": 4,
-  "modelVersionParserMinimum": 4,
+  "modelVersion": 5,
+  "modelVersionParserMinimum": 5,
   "retiredEntityUids": [
     4588755026466946129
   ],

@@ -1,6 +1,8 @@
 package de.ka.jamit.tcalc.repo
 
-import de.ka.jamit.tcalc.repo.api.BasePeople
+import de.ka.jamit.tcalc.repo.db.RecordDao
+import io.reactivex.Observable
+import io.reactivex.Observer
 import io.reactivex.Single
 import retrofit2.Response
 
@@ -10,7 +12,11 @@ import retrofit2.Response
 interface Repository {
 
     /**
-     * Retrieves people. If there are some cached, they will be retrieved on errors, like no internet.
+     * Retrieves all records
      */
-    fun getPeople(): Single<Response<BasePeople?>>
+    fun observeRecords(): Observable<List<RecordDao>>
+
+    fun saveRecord(newRecord: RecordDao)
+
+
 }

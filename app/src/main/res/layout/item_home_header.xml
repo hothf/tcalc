@@ -7,22 +7,22 @@
 
         <variable
             name="viewModel"
-            type="de.ka.jamit.tcalc.ui.settings.detail.DetailViewModel" />
+            type="de.ka.jamit.tcalc.ui.home.list.HomeListItemViewModel" />
     </data>
-
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/colorAccent">
+        android:layout_height="@dimen/navBarHeight">
 
-        <Button
-            android:id="@+id/detail_back_button"
+        <TextView
+            style="@style/textDefault.title.bold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:onClick="@{()->viewModel.onClickedResult()}"
-            android:text="Back" />
-
+            android:layout_alignParentBottom="true"
+            android:padding="@dimen/default_8"
+            android:text="@{viewModel.title}"
+            tools:text="Item title" />
 
     </RelativeLayout>
+
 </layout>
