@@ -27,9 +27,9 @@ class HomeViewModel : BaseViewModel() {
     private val resourcesProvider: ResourcesProvider by inject()
     private val itemListener: (HomeListItemViewModel) -> Unit = {
         val arguments = Bundle().apply {
-            putString(HomeEnterDialog.TITLE_KEY, it.title)
+            putString(HomeEnterDialog.TITLE_KEY, it.item.key)
             putFloat(HomeEnterDialog.VALUE_KEY, it.item.value)
-            putLong(HomeEnterDialog.RESULT_KEY, it.item.id)
+            putLong(HomeEnterDialog.ID_KEY, it.item.id)
         }
         navigateTo(R.id.dialogHomeEnter, args = arguments)
     }
@@ -49,7 +49,7 @@ class HomeViewModel : BaseViewModel() {
 
     fun layoutManager() = LinearLayoutManager(resourcesProvider.getApplicationContext())
 
-    fun clicked() {
-        repository.saveRecord(RecordDao(id = 0, key = "hello"))
+    fun onAddClicked() {
+        repository.addRecord(key = "hello")
     }
 }

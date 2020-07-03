@@ -3,34 +3,48 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="?android:attr/selectableItemBackground"
-        android:onClick="@{()->viewModel.onClick()}">
-
-        <TextView
-            android:id="@+id/title"
-            style="@style/textDefault.bold"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="@dimen/default_8"
-            android:text="@{viewModel.title}"
-            tools:text="Item title" />
-
-        <TextView
-            android:layout_below="@+id/title"
-            android:layout_width="wrap_content"
-            android:text="@{viewModel.value}"
-            android:layout_height="wrap_content" />
-
-    </RelativeLayout>
-
     <data>
 
         <variable
             name="viewModel"
             type="de.ka.jamit.tcalc.ui.home.list.HomeListItemViewModel" />
     </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:background="?android:attr/selectableItemBackground"
+        android:onClick="@{()->viewModel.onClick()}">
+
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#ff0000" />
+
+        <RelativeLayout
+            android:id="@+id/swipeableContainer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/cardview_light_background">
+
+
+            <TextView
+                android:id="@+id/title"
+                style="@style/textDefault.bold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/default_8"
+                android:text="@{viewModel.title}"
+                tools:text="Item title" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/title"
+                android:text="@{viewModel.value}" />
+        </RelativeLayout>
+
+    </RelativeLayout>
 
 </layout>

@@ -16,9 +16,20 @@ interface Repository {
      */
     fun observeRecords(): Observable<List<RecordDao>>
 
-    fun saveRecord(newRecord: RecordDao)
+    /**
+     * Saves a new record
+     */
+    fun addRecord(key: String, value: Float = 0.0f)
 
-    fun updateRecord(value: Float, key: Long)
+    /**
+     * Deletes a given record.
+     */
+    fun deleteRecord(id: Long)
+
+    /**
+     * Updates a record with the given value.
+     */
+    fun updateRecord(value: Float, id: Long)
 
 
 }

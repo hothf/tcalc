@@ -18,13 +18,15 @@ class HomeEnterDialog : BaseDialogFragment<DialogHomeEnterBinding, HomeEnterDial
 ) {
 
     override fun onHandle(element: Any?) {
-        dismissAllowingStateLoss()
+        if (element is HomeEnterDialogViewModel.Choose) {
+            dismissAllowingStateLoss()
+        }
     }
 
     companion object {
         const val TITLE_KEY = "_k_title_"
-        const val RESULT_KEY = "_k_result"
-        const val VALUE_KEY = "_k_val"
+        const val ID_KEY = "_k_id_"
+        const val VALUE_KEY = "_k_val_"
     }
 }
 

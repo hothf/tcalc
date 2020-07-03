@@ -18,8 +18,18 @@ class RepositoryImpl(val app: Application, val db: AppDatabase) : Repository {
 
     private val recordDao: Box<RecordDao> = db.get().boxFor()
 
-    override fun saveRecord(newRecord: RecordDao) {
-        recordDao.put(newRecord)
+    init {
+        if (recordDao.isEmpty) {
+            recordDao.put(db.masterData)
+        }
+    }
+
+    override fun addRecord(key: String, value: Float) {
+        recordDao.put(RecordDao(id = 0, key = key, value = value))
+    }
+
+    override fun deleteRecord(id: Long) {
+        recordDao.remove(id)
     }
 
     override fun observeRecords(): Observable<List<RecordDao>> {
@@ -27,10 +37,10 @@ class RepositoryImpl(val app: Application, val db: AppDatabase) : Repository {
         return RxQuery.observable<RecordDao>(query)
     }
 
-    override fun updateRecord(value: Float, key: Long) {
-        val existing = recordDao.get(key)
+    override fun updateRecord(value: Float, id: Long) {
+        val existing = recordDao.get(id)
         if (existing != null) {
-            recordDao.put(RecordDao(id = key, value = value, key = existing.key))
+            recordDao.put(RecordDao(id = id, value = value, key = existing.key))
         }
     }
 }

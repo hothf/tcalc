@@ -30,5 +30,5 @@ val appModule = module {
     single { CloseEventListener() }
 
     single { AppDatabase(get()) }
-    single { RepositoryImpl(get(), db = get()) as Repository }
+    single { RepositoryImpl(get(), get()) as Repository }
 }
