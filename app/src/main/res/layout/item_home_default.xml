@@ -3,28 +3,39 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?android:attr/selectableItemBackground"
+        android:onClick="@{()->viewModel.onClick()}">
+
+        <TextView
+            android:id="@+id/title"
+            style="@style/textDefault.bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/default_8"
+            android:text="@{viewModel.title}"
+            tools:text="Item title" />
+
+        <TextView
+            android:id="@+id/value"
+            style="@style/textDefault.bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/title"
+            android:layout_centerVertical="true"
+            android:padding="@dimen/default_8"
+            android:text="@{viewModel.value}"
+            tools:text="Item title" />
+
+    </RelativeLayout>
+
     <data>
 
         <variable
             name="viewModel"
             type="de.ka.jamit.tcalc.ui.home.list.HomeListItemViewModel" />
     </data>
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/navBarHeight"
-        android:background="?android:attr/selectableItemBackground"
-        android:onClick="@{()->viewModel.onClick()}">
-
-        <TextView
-            style="@style/textDefault.bold"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:padding="@dimen/default_8"
-            android:text="@{viewModel.title}"
-            tools:text="Item title" />
-
-    </RelativeLayout>
 
 </layout>

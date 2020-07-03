@@ -18,5 +18,7 @@ interface Repository {
 
     fun saveRecord(newRecord: RecordDao)
 
+    fun updateRecord(value: Int, key: Long)
+
 
 }

@@ -24,30 +24,13 @@ class RepositoryImpl(val app: Application, val db: AppDatabase) : Repository {
 
     override fun observeRecords(): Observable<List<RecordDao>> {
         val query: Query<RecordDao> = recordDao.query().build()
-
-
         return RxQuery.observable<RecordDao>(query)
-
-//        val query: Query<RecordDao> = recordDao.query().equal(RecordDao.complete, false).build();
-//        return recordDao.
-//                .getPeople()
-//                .doOnSuccess { result: Response<BasePeople?> -> // on success map to db people and insert
-//                    val people = result.body()?.results?.map { PeopleDao(id = 0, name = it.name + "cached") }
-//                    peopleDao.removeAll()
-//                    peopleDao.put(people)
-//                }.onErrorReturn { Response.success(getCached()) } // on error we try to get the last cached items
     }
 
-
-//    Query<Task> query = taskBox.query().equal(Task_.complete, false).build();
-//    query.subscribe(subscriptions)
-//    .on(AndroidScheduler.mainThread())
-//    .observer(data -> updateUi(data ));
-//
-//    private fun getCached(): BasePeople {
-//        return BasePeople(peopleDao
-//                .all
-//                .filterNotNull()
-//                .map { People(it.name, it.height, it.mass, it.hair_color, it.skin_color, it.eye_color, it.gender) })
-//    }
+    override fun updateRecord(value: Int, key: Long) {
+        val existing = recordDao.get(key)
+        if (existing != null) {
+            recordDao.put(RecordDao(id = key, value = value.toFloat(), key = existing.key))
+        }
+    }
 }

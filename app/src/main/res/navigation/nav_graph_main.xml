@@ -15,5 +15,10 @@
         android:name="de.ka.jamit.tcalc.ui.settings.SettingsFragment"
         android:label="fragment_settings"
         tools:layout="@layout/fragment_settings" />
+    <dialog
+        android:id="@+id/dialogHomeEnter"
+        android:name="de.ka.jamit.tcalc.ui.home.dialog.HomeEnterDialog"
+        android:label="fragment_home_enter_dialog"
+        tools:layout="@layout/dialog_home_enter" />
 
 </navigation>
