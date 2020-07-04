@@ -5,7 +5,7 @@
   "entities": [
     {
       "id": "3:2102197368772465985",
-      "lastPropertyId": "3:2202904196200137962",
+      "lastPropertyId": "4:2410613748714263914",
       "name": "RecordDao",
       "properties": [
         {
@@ -24,6 +24,12 @@
           "name": "value",
           "type": 7,
           "flags": 4
+        },
+        {
+          "id": "4:2410613748714263914",
+          "name": "timeSpan",
+          "type": 5,
+          "flags": 2
         }
       ],
       "relations": []

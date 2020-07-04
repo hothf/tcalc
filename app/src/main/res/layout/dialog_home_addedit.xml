@@ -7,7 +7,7 @@
 
         <variable
             name="viewModel"
-            type="de.ka.jamit.tcalc.ui.home.dialog.HomeEnterDialogViewModel" />
+            type="de.ka.jamit.tcalc.ui.home.add.HomeAddEditDialogViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -15,31 +15,46 @@
         android:layout_height="match_parent">
 
 
-        <TextView
-            android:id="@+id/textView"
-            android:layout_width="200dp"
-            android:layout_height="200dp"
-            android:background="?attr/selectableItemBackground"
-
-            android:gravity="center"
-            android:text="@{viewModel.titleText}"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.497"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.118" />
-
         <EditText
+            android:id="@+id/editText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
+            android:layout_marginBottom="384dp"
+            android:text="@={viewModel.keyText}"
+            app:layout_constraintBottom_toTopOf="@+id/button"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.448"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <EditText
+            android:id="@+id/editText2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="152dp"
             android:text="@={viewModel.valueText}"
             app:layout_constraintBottom_toTopOf="@+id/button"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.448"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView" />
+            app:layout_constraintTop_toBottomOf="@+id/editText" />
+
+        <Spinner
+            android:id="@+id/timespanSpinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:setAdapter="@{viewModel.timeSpanAdapter}"
+            android:selectedItemPosition="@={viewModel.timeSpanPosition}"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/editText"
+            app:layout_constraintVertical_bias="0.094" />
 
         <Button
             android:id="@+id/button"

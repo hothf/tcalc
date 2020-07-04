@@ -41,7 +41,9 @@ class HomeListAdapter(list: ArrayList<HomeListItemViewModel> = arrayListOf()) :
 
         override fun areContentsTheSame(oldItem: HomeListItemViewModel,
                                         newItem: HomeListItemViewModel): Boolean {
-            return oldItem.title == newItem.title && oldItem.value == newItem.value
+            return oldItem.title == newItem.title
+                    && oldItem.value == newItem.value
+                    && oldItem.item == newItem.item
         }
     }
 }

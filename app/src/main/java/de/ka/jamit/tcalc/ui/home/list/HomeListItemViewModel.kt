@@ -19,6 +19,7 @@ class HomeListItemViewModel(val item: RecordDao,
     val isHeader = listener == null
     val title = AppDatabase.getTranslatedStringForKey(resourcesProvider, item.key)
     val value = item.value.toString()
+    val timeSpan = item.timeSpan.name
 
     /**
      * Called on a click of the item.

@@ -25,8 +25,15 @@ class RepositoryImpl(val app: Application, val db: AppDatabase) : Repository {
         }
     }
 
-    override fun addRecord(key: String, value: Float) {
-        recordDao.put(RecordDao(id = 0, key = key, value = value))
+    override fun addRecord(key: String, value: Float, timeSpan: RecordDao.TimeSpan) {
+        recordDao.put(RecordDao(id = 0, key = key, value = value, timeSpan = timeSpan))
+    }
+
+    override fun updateRecord(value: Float, key: String, timeSpan: RecordDao.TimeSpan, id: Long) {
+        val existing = recordDao.get(id)
+        if (existing != null) {
+            recordDao.put(RecordDao(id = id, value = value, key = key, timeSpan = timeSpan))
+        }
     }
 
     override fun deleteRecord(id: Long) {
@@ -38,16 +45,11 @@ class RepositoryImpl(val app: Application, val db: AppDatabase) : Repository {
         return RxQuery.observable<RecordDao>(query)
     }
 
-    override fun updateRecord(value: Float, id: Long) {
-        val existing = recordDao.get(id)
-        if (existing != null) {
-            recordDao.put(RecordDao(id = id, value = value, key = existing.key))
-        }
-    }
-
     override fun calc(data: List<RecordDao>): Single<Float> {
         return Single.fromCallable {
-            data.fold(0.0f) { total, item -> total + item.value }
+            data.fold(0.0f) { total, item ->
+                total + item.value
+            }
         }
     }
 }

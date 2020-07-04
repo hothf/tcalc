@@ -39,10 +39,18 @@
                 tools:text="Item title" />
 
             <TextView
+                android:id="@+id/value"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/title"
                 android:text="@{viewModel.value}" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/title"
+                android:layout_toEndOf="@+id/value"
+                android:text="@{viewModel.timeSpan}" />
         </RelativeLayout>
 
     </RelativeLayout>

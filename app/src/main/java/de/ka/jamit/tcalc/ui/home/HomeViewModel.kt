@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import de.ka.jamit.tcalc.R
 import de.ka.jamit.tcalc.base.BaseViewModel
 import de.ka.jamit.tcalc.repo.db.RecordDao
-import de.ka.jamit.tcalc.ui.home.dialog.HomeEnterDialog
+import de.ka.jamit.tcalc.ui.home.add.HomeAddEditDialog
 import de.ka.jamit.tcalc.ui.home.list.HomeListAdapter
 import de.ka.jamit.tcalc.ui.home.list.HomeListItemViewModel
 import de.ka.jamit.tcalc.utils.resources.ResourcesProvider
@@ -30,11 +30,13 @@ class HomeViewModel : BaseViewModel() {
     private val resourcesProvider: ResourcesProvider by inject()
     private val itemListener: (HomeListItemViewModel) -> Unit = {
         val arguments = Bundle().apply {
-            putString(HomeEnterDialog.TITLE_KEY, it.item.key)
-            putFloat(HomeEnterDialog.VALUE_KEY, it.item.value)
-            putLong(HomeEnterDialog.ID_KEY, it.item.id)
+            putBoolean(HomeAddEditDialog.UPDATE_KEY, true)
+            putString(HomeAddEditDialog.TITLE_KEY, it.item.key)
+            putFloat(HomeAddEditDialog.VALUE_KEY, it.item.value)
+            putInt(HomeAddEditDialog.TIMESPAN_KEY, it.item.timeSpan.id)
+            putLong(HomeAddEditDialog.ID_KEY, it.item.id)
         }
-        navigateTo(R.id.dialogHomeEnter, args = arguments)
+        navigateTo(R.id.dialogHomeAdd, args = arguments)
     }
 
     init {
