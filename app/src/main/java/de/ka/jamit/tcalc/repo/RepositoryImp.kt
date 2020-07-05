@@ -3,6 +3,7 @@ package de.ka.jamit.tcalc.repo
 import android.app.Application
 import de.ka.jamit.tcalc.repo.db.AppDatabase
 import de.ka.jamit.tcalc.repo.db.RecordDao
+import de.ka.jamit.tcalc.repo.db.UserDao
 import io.objectbox.Box
 import io.objectbox.kotlin.boxFor
 import io.objectbox.query.Query
@@ -18,21 +19,70 @@ import io.reactivex.Single
 class RepositoryImpl(val app: Application, val db: AppDatabase) : Repository {
 
     private val recordDao: Box<RecordDao> = db.get().boxFor()
+    private val userDao: Box<UserDao> = db.get().boxFor()
+    private var currentlySelectedUser: UserDao? = null
 
     init {
+        if (userDao.isEmpty) {
+            userDao.put(db.defaultUser)
+        }
         if (recordDao.isEmpty) {
             recordDao.put(db.masterData)
         }
     }
 
+    override fun getCurrentlySelectedUser(): UserDao {
+        if (currentlySelectedUser == null) {
+            currentlySelectedUser = userDao.all.find { it.selected }
+        }
+        // intentional force unwrap, there has to be a user!
+        return currentlySelectedUser!!
+    }
+
+    override fun selectUser(id: Long) {
+        val existing = getCurrentlySelectedUser()
+        updateUser(existing.id, existing.name, false)
+
+        val selectedUser = userDao.get(id)
+        if (selectedUser != null) {
+            updateUser(id, selectedUser.name, true)
+            currentlySelectedUser = selectedUser
+        }
+    }
+
+    override fun updateUser(id: Long, name: String, selected: Boolean) {
+        userDao.get(id)?.let {
+            userDao.put(UserDao(id = id, name = name, selected = selected))
+        }
+    }
+
+    override fun addUser(name: String) {
+        userDao.put(UserDao(0, name, false))
+    }
+
+    override fun deleteUser(id: Long) {
+        userDao.remove(id)
+    }
+
     override fun addRecord(key: String, value: Float, timeSpan: RecordDao.TimeSpan) {
-        recordDao.put(RecordDao(id = 0, key = key, value = value, timeSpan = timeSpan))
+        getCurrentlySelectedUser().let {
+            recordDao.put(RecordDao(
+                    id = 0,
+                    value = value,
+                    key = key,
+                    timeSpan = timeSpan,
+                    userId = it.id))
+        }
     }
 
     override fun updateRecord(value: Float, key: String, timeSpan: RecordDao.TimeSpan, id: Long) {
-        val existing = recordDao.get(id)
-        if (existing != null) {
-            recordDao.put(RecordDao(id = id, value = value, key = key, timeSpan = timeSpan))
+        recordDao.get(id)?.let {
+            recordDao.put(RecordDao(
+                    id = id,
+                    value = value,
+                    key = key,
+                    timeSpan = timeSpan,
+                    userId = it.userId))
         }
     }
 

@@ -5,7 +5,7 @@
   "entities": [
     {
       "id": "3:2102197368772465985",
-      "lastPropertyId": "4:2410613748714263914",
+      "lastPropertyId": "5:8553923404158522657",
       "name": "RecordDao",
       "properties": [
         {
@@ -30,12 +30,43 @@
           "name": "timeSpan",
           "type": 5,
           "flags": 2
+        },
+        {
+          "id": "5:8553923404158522657",
+          "name": "userId",
+          "type": 6,
+          "flags": 4
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "4:7077598409687785052",
+      "lastPropertyId": "3:6060225751370836712",
+      "name": "UserDao",
+      "properties": [
+        {
+          "id": "1:7332173870955140454",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:5947194286838615804",
+          "name": "name",
+          "type": 9
+        },
+        {
+          "id": "3:6060225751370836712",
+          "name": "selected",
+          "type": 1,
+          "flags": 4
         }
       ],
       "relations": []
     }
   ],
-  "lastEntityId": "3:2102197368772465985",
+  "lastEntityId": "4:7077598409687785052",
   "lastIndexId": "0:0",
   "lastRelationId": "0:0",
   "lastSequenceId": "0:0",

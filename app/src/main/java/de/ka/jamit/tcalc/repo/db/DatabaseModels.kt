@@ -13,7 +13,8 @@ data class RecordDao(
         val key: String,
         val value: Float = 0.0f,
         @Convert(converter = TimeSpanConverter::class, dbType = Int::class)
-        val timeSpan: TimeSpan = TimeSpan.MONTHLY) {
+        val timeSpan: TimeSpan = TimeSpan.MONTHLY,
+        val userId: Long) {
 
     enum class TimeSpan(val id: Int) {
         MONTHLY(0), QUARTERLY(1), YEARLY(2);
@@ -28,7 +29,16 @@ data class RecordDao(
             val entry = TimeSpan.values().find { it.id == databaseValue }
             return entry ?: TimeSpan.MONTHLY
         }
-    };
+    }
 }
+
+@Keep
+@Entity
+data class UserDao(
+        @Id var id: Long = 122547635L,
+        val name: String = "",
+        val selected: Boolean = false
+)
+
 
 

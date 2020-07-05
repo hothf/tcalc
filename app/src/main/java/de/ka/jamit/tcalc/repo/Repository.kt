@@ -1,6 +1,7 @@
 package de.ka.jamit.tcalc.repo
 
 import de.ka.jamit.tcalc.repo.db.RecordDao
+import de.ka.jamit.tcalc.repo.db.UserDao
 import io.reactivex.Observable
 import io.reactivex.Observer
 import io.reactivex.Single
@@ -35,6 +36,31 @@ interface Repository {
      * Calculates the sum of the data.
      */
     fun calc(data: List<RecordDao>): Single<Float>
+
+    /**
+     * Retrieves the currently selected user.
+     */
+    fun getCurrentlySelectedUser(): UserDao
+
+    /**
+     * Selects the given user.
+     */
+    fun selectUser(id: Long)
+
+    /**
+     * Updates the given user
+     */
+    fun updateUser(id: Long, name: String, selected: Boolean)
+
+    /**
+     * Adds a new user.
+     */
+    fun addUser(name: String)
+
+    /**
+     * Deletes the given user.
+     */
+    fun deleteUser(id: Long)
 
 
 }
