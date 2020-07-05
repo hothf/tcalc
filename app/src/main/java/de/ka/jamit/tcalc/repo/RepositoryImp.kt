@@ -3,6 +3,7 @@ package de.ka.jamit.tcalc.repo
 import android.app.Application
 import de.ka.jamit.tcalc.repo.db.AppDatabase
 import de.ka.jamit.tcalc.repo.db.RecordDao
+import de.ka.jamit.tcalc.repo.db.RecordDao_
 import de.ka.jamit.tcalc.repo.db.UserDao
 import io.objectbox.Box
 import io.objectbox.kotlin.boxFor
@@ -25,10 +26,17 @@ class RepositoryImpl(val app: Application, val db: AppDatabase) : Repository {
     init {
         if (userDao.isEmpty) {
             userDao.put(db.defaultUser)
+            userDao.put(UserDao(0, "hehe", false))
+            userDao.put(UserDao(0, "hoho", false))
         }
         if (recordDao.isEmpty) {
             recordDao.put(db.masterData)
         }
+    }
+
+    override fun observeUsers(): Observable<List<UserDao>> {
+        val query: Query<UserDao> = userDao.query().build()
+        return RxQuery.observable<UserDao>(query)
     }
 
     override fun getCurrentlySelectedUser(): UserDao {
@@ -91,7 +99,7 @@ class RepositoryImpl(val app: Application, val db: AppDatabase) : Repository {
     }
 
     override fun observeRecords(): Observable<List<RecordDao>> {
-        val query: Query<RecordDao> = recordDao.query().build()
+        val query: Query<RecordDao> = recordDao.query().equal(RecordDao_.userId, getCurrentlySelectedUser().id).build()
         return RxQuery.observable<RecordDao>(query)
     }
 

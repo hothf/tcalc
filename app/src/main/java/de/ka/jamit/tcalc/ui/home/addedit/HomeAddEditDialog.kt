@@ -1,4 +1,4 @@
-package de.ka.jamit.tcalc.ui.home.add
+package de.ka.jamit.tcalc.ui.home.addedit
 
 import de.ka.jamit.tcalc.R
 import de.ka.jamit.tcalc.base.BaseDialogFragment

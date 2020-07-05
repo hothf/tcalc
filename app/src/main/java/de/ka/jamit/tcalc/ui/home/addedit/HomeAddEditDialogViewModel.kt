@@ -1,4 +1,4 @@
-package de.ka.jamit.tcalc.ui.home.add
+package de.ka.jamit.tcalc.ui.home.addedit
 
 import android.os.Bundle
 import android.widget.ArrayAdapter

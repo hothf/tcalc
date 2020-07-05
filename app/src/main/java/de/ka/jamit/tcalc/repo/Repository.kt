@@ -38,6 +38,11 @@ interface Repository {
     fun calc(data: List<RecordDao>): Single<Float>
 
     /**
+     * Retrieves all users
+     */
+    fun observeUsers(): Observable<List<UserDao>>
+
+    /**
      * Retrieves the currently selected user.
      */
     fun getCurrentlySelectedUser(): UserDao

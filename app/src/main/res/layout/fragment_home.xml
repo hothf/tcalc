@@ -18,6 +18,13 @@
                 android:layout_height="?attr/actionBarSize"
                 app:layout_scrollFlags="scroll|enterAlways" />
 
+            <Spinner
+                android:id="@+id/timespanSpinner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:selectedItemPosition="@={viewModel.userPosition}"
+                app:setAdapter="@{viewModel.userAdapter}" />
+
         </com.google.android.material.appbar.AppBarLayout>
 
         <de.ka.jamit.tcalc.utils.AutoReleaseRecyclerView

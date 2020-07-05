@@ -4,7 +4,7 @@ import de.ka.jamit.tcalc.repo.Repository
 import de.ka.jamit.tcalc.repo.RepositoryImpl
 import de.ka.jamit.tcalc.repo.db.AppDatabase
 import de.ka.jamit.tcalc.ui.home.HomeViewModel
-import de.ka.jamit.tcalc.ui.home.add.HomeAddEditDialogViewModel
+import de.ka.jamit.tcalc.ui.home.addedit.HomeAddEditDialogViewModel
 import de.ka.jamit.tcalc.ui.main.MainViewModel
 import de.ka.jamit.tcalc.ui.settings.SettingsViewModel
 import de.ka.jamit.tcalc.utils.CloseEventListener
