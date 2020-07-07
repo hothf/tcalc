@@ -24,7 +24,7 @@
                 android:layout_height="wrap_content"
                 android:background="?attr/selectableItemBackground"
                 android:onClick="@{()->viewModel.onUserClicked()}"
-                android:text="@{viewModel.userText}"/>
+                android:text="@{viewModel.userText}" />
 
         </com.google.android.material.appbar.AppBarLayout>
 
@@ -35,6 +35,15 @@
             android:layout_below="@+id/appbar"
             app:adapter="@{viewModel.adapter}"
             app:layoutManager="@{viewModel.layoutManager()}" />
+
+        <de.ka.jamit.tcalc.utils.EmptyViewLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/resultContainer"
+            app:show="@{viewModel.showEmptyView}"
+            app:setInfoImageResourceId="@{viewModel.emptyViewImageRes}"
+            app:setInfoText="@{viewModel.emptyViewText}"
+            android:layout_below="@+id/appbar" />
 
         <RelativeLayout
             android:id="@+id/resultContainer"

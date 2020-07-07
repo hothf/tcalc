@@ -28,15 +28,17 @@ import timber.log.Timber
 
 class HomeViewModel : BaseViewModel() {
 
-    var loadingVisibility = MutableLiveData<Int>().apply { postValue(View.GONE) }
-    val resultText = MutableLiveData<String>("")
-    val adapter = HomeListAdapter()
-
     private val resourcesProvider: ResourcesProvider by inject()
     private var users: Disposable? = null
     private var userRecords: Disposable? = null
 
+    var emptyViewText = MutableLiveData<String>(resourcesProvider.getString(R.string.home_empty_text))
+    var emptyViewImageRes = MutableLiveData<Int>(R.drawable.ic_home)
+    var loadingVisibility = MutableLiveData<Int>(View.GONE)
+    var showEmptyView = MutableLiveData<Boolean>(false)
+    val resultText = MutableLiveData<String>("")
     val userText = MutableLiveData<String>("")
+    val adapter = HomeListAdapter()
 
     fun onUserClicked() {
         navigateTo(R.id.dialogUser)
@@ -79,6 +81,7 @@ class HomeViewModel : BaseViewModel() {
                                 val items = records.map { record ->
                                     HomeListItemViewModel(record, itemListener)
                                 }
+                                showEmptyView.postValue(items.isEmpty())
                                 adapter.setItems(items)
                                 calc(records)
                             }, { error ->

@@ -6,4 +6,6 @@
 
     <string name="add">Add new</string>
 
+    <string name="home_empty_text">No entries!</string>
+
 </resources>
