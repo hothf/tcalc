@@ -2,7 +2,9 @@ package de.ka.jamit.tcalc.ui.home
 
 import android.os.Bundle
 import android.view.View
+import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.Spinner
 import android.widget.SpinnerAdapter
 import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -28,47 +30,18 @@ class HomeViewModel : BaseViewModel() {
 
     var loadingVisibility = MutableLiveData<Int>().apply { postValue(View.GONE) }
     val resultText = MutableLiveData<String>("")
-    val userPosition = MutableLiveData(-1)
     val adapter = HomeListAdapter()
 
-    private var userRecords: Disposable? = null
-    private var lastPosition: Int = 0
-
-    private var currentUsers = emptyList<UserDao>()
-
-    fun userAdapter(): SpinnerAdapter {
-        val tempUsers = listOf("1dad", "2sdsd", "3ed")
-        val users = tempUsers.toTypedArray()
-        return ArrayAdapter<String>(
-                resourcesProvider.getApplicationContext(),
-                android.R.layout.simple_spinner_item,
-                users).apply {
-            setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        }
-    }
-
-    private val userPositionObserver: (Int) -> Unit = { position ->
-        if (currentUsers.isNotEmpty() && position != lastPosition) {
-            repository.selectUser(currentUsers[position].id)
-
-            userRecords?.let(compositeDisposable::remove)
-            userRecords = repository.observeRecords()
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe({ records ->
-                        Timber.d("||| record: $records")
-                        val items = records.map { record ->
-                            HomeListItemViewModel(record, itemListener)
-                        }
-                        adapter.setItems(items)
-                        calc(records)
-                    }, { error ->
-                        Timber.e(error, "While observing record data.")
-                    }).addTo(compositeDisposable)
-        }
-        lastPosition = position
-    }
     private val resourcesProvider: ResourcesProvider by inject()
+    private var users: Disposable? = null
+    private var userRecords: Disposable? = null
+
+    val userText = MutableLiveData<String>("")
+
+    fun onUserClicked() {
+        navigateTo(R.id.dialogUser)
+    }
+
     private val itemListener: (HomeListItemViewModel) -> Unit = {
         val arguments = Bundle().apply {
             putBoolean(HomeAddEditDialog.UPDATE_KEY, true)
@@ -81,18 +54,36 @@ class HomeViewModel : BaseViewModel() {
     }
 
     init {
-        userPosition.observeForever(userPositionObserver)
+        startObserving()
+    }
 
-        repository.observeUsers()
+    fun update() {
+        startObserving()
+    }
+
+    private fun startObserving() {
+        users?.let(compositeDisposable::remove)
+        users = repository.observeUsers()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ users ->
-                    val wasUsers = currentUsers
-                    currentUsers = users
-                    if (wasUsers.isEmpty()) { // if this is the first time, select it
-                        val position = users.indexOfFirst { it.selected }
-                        userPosition.postValue(position)
-                    }
+
+                    userText.postValue(users.first { it.selected }.name)
+
+                    userRecords?.let(compositeDisposable::remove)
+                    userRecords = repository.observeRecords()
+                            .subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribe({ records ->
+                                Timber.d("||| record: $records")
+                                val items = records.map { record ->
+                                    HomeListItemViewModel(record, itemListener)
+                                }
+                                adapter.setItems(items)
+                                calc(records)
+                            }, { error ->
+                                Timber.e(error, "While observing record data.")
+                            }).addTo(compositeDisposable)
                 }, { error ->
                     Timber.e(error, "While observing user data.")
                 }).addTo(compositeDisposable)
@@ -104,6 +95,7 @@ class HomeViewModel : BaseViewModel() {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ sum ->
+                    Timber.e("!!! calced : $sum")
                     resultText.postValue(sum.toString())
                     loadingVisibility.postValue(View.GONE)
                 }, { error ->
@@ -119,8 +111,12 @@ class HomeViewModel : BaseViewModel() {
         navigateTo(R.id.dialogHomeAdd)
     }
 
+//    fun update(){
+//
+//    }
+
     override fun onCleared() {
-        userPosition.removeObserver(userPositionObserver)
+
         super.onCleared()
     }
 }
