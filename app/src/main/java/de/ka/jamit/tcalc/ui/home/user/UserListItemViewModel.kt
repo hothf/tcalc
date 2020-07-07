@@ -11,11 +11,14 @@ import de.ka.jamit.tcalc.repo.db.UserDao
  * Created by Thomas Hofmann on 07.07.20
  **/
 class UserListItemViewModel(val item: UserDao,
-                            private val listener: ((UserListItemViewModel) -> Unit)? = null) :
+                            private val clickListener: ((UserListItemViewModel) -> Unit)? = null,
+                            private val deletionListener: (() -> Unit)? = null) :
         BaseItemViewModel() {
 
 
     val title = item.name
+
+    val isDefaultItem = item.id == 1L
 
     val checkVisibility = if (item.selected) View.VISIBLE else View.GONE
 
@@ -23,6 +26,11 @@ class UserListItemViewModel(val item: UserDao,
      * Called on a click of the item.
      */
     fun onClick() {
-        listener?.invoke(this)
+        clickListener?.invoke(this)
+    }
+
+    fun onDismissed() {
+        repository.deleteUser(item.id)
+        deletionListener?.invoke()
     }
 }

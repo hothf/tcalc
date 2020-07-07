@@ -7,8 +7,6 @@ import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.DiffUtil
 import de.ka.jamit.tcalc.base.BaseAdapter
 import de.ka.jamit.tcalc.base.BaseViewHolder
-import de.ka.jamit.tcalc.databinding.ItemHomeDefaultBinding
-import de.ka.jamit.tcalc.databinding.ItemHomeHeaderBinding
 import de.ka.jamit.tcalc.databinding.ItemUserDefaultBinding
 
 /**
@@ -20,12 +18,21 @@ class UserListAdapter(list: ArrayList<UserListItemViewModel> = arrayListOf()) :
         BaseAdapter<UserListItemViewModel>(list, UserListAdapterDiffCallback()) {
 
     override fun onItemDismiss(position: Int) {
-//        getItems()[position].onDismissed()
+        getItems()[position].let {
+            if (!it.isDefaultItem) {
+                it.onDismissed()
+            }
+        }
         super.onItemDismiss(position)
     }
 
+    override fun getItemViewType(position: Int): Int {
+        return if (getItems()[position].isDefaultItem) 1 else 0
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder<*> {
-        return UserListViewHolder(ItemUserDefaultBinding.inflate(layoutInflater, parent, false))
+        return if (viewType == 1) UserDefaultListViewHolder(ItemUserDefaultBinding.inflate(layoutInflater, parent, false))
+        else UserListViewHolder(ItemUserDefaultBinding.inflate(layoutInflater, parent, false))
     }
 
     class UserListAdapterDiffCallback : DiffUtil.ItemCallback<UserListItemViewModel>() {
@@ -44,6 +51,13 @@ class UserListAdapter(list: ArrayList<UserListItemViewModel> = arrayListOf()) :
 
 class UserListViewHolder(binding: ItemUserDefaultBinding) : BaseViewHolder<ViewDataBinding>(binding) {
     override var swipeableView: View? = binding.swipeableContainer
+    override var isSwipeable = true
+    override var isDraggable = false
+}
+
+class UserDefaultListViewHolder(binding: ItemUserDefaultBinding) : BaseViewHolder<ViewDataBinding>
+(binding) {
+    override var swipeableView: View? = null
     override var isSwipeable = true
     override var isDraggable = false
 }

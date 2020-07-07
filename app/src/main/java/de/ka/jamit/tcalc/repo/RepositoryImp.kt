@@ -8,6 +8,7 @@ import de.ka.jamit.tcalc.repo.db.UserDao
 import io.objectbox.Box
 import io.objectbox.kotlin.boxFor
 import io.objectbox.query.Query
+import io.objectbox.query.QueryBuilder
 
 import io.objectbox.rx.RxQuery
 import io.reactivex.Observable
@@ -69,6 +70,13 @@ class RepositoryImpl(val app: Application, val db: AppDatabase) : Repository {
     }
 
     override fun deleteUser(id: Long) {
+        selectUser(1) // user 1 is not deleteable!
+        val recordIds = recordDao.query()
+                .equal(RecordDao_.userId, id)
+                .build()
+                .findIds()
+                .toList()
+        recordDao.removeByIds(recordIds)
         userDao.remove(id)
     }
 

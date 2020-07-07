@@ -25,13 +25,17 @@ class UserDialogViewModel : BaseViewModel() {
         handle(Choose())
     }
 
+    private val deletionListener: () -> Unit = {
+        handle(Choose())
+    }
+
     init {
         repository.observeUsers()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ users ->
                     val items = users.map { user ->
-                        UserListItemViewModel(user, itemListener)
+                        UserListItemViewModel(user, itemListener, deletionListener)
                     }
                     adapter.setItems(items)
                 }, { error ->
@@ -43,6 +47,8 @@ class UserDialogViewModel : BaseViewModel() {
 
     fun choose() {
 //        handle(Choose())
+
+        //TODO add a new one
     }
 
     class Choose
