@@ -12,9 +12,9 @@ import de.ka.jamit.tcalc.repo.db.UserDao
  **/
 class UserListItemViewModel(val item: UserDao,
                             private val clickListener: ((UserListItemViewModel) -> Unit)? = null,
+                            private val editListener: ((UserListItemViewModel) -> Unit)? = null,
                             private val deletionListener: (() -> Unit)? = null) :
         BaseItemViewModel() {
-
 
     val title = item.name
 
@@ -22,11 +22,14 @@ class UserListItemViewModel(val item: UserDao,
 
     val checkVisibility = if (item.selected) View.VISIBLE else View.GONE
 
-    /**
-     * Called on a click of the item.
-     */
+    val editVisibility = if (isDefaultItem) View.GONE else View.VISIBLE
+
     fun onClick() {
         clickListener?.invoke(this)
+    }
+
+    fun onEdit() {
+        editListener?.invoke(this)
     }
 
     fun onDismissed() {

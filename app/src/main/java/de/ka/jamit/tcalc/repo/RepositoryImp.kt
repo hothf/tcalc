@@ -66,7 +66,8 @@ class RepositoryImpl(val app: Application, val db: AppDatabase) : Repository {
     }
 
     override fun addUser(name: String) {
-        userDao.put(UserDao(0, name, false))
+        val newId = userDao.put(UserDao(0, name, false))
+        selectUser(newId)
     }
 
     override fun deleteUser(id: Long) {

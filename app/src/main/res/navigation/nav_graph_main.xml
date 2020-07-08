@@ -25,5 +25,10 @@
         android:name="de.ka.jamit.tcalc.ui.home.user.UserDialog"
         android:label="fragment_home_user_dialog"
         tools:layout="@layout/dialog_user" />
+    <dialog
+        android:id="@+id/dialogUserAddEdit"
+        android:name="de.ka.jamit.tcalc.ui.home.user.addedit.UserAddEditDialog"
+        android:label="fragment_user_add_dialog"
+        tools:layout="@layout/dialog_user_addedit" />
 
 </navigation>

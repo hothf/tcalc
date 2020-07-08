@@ -5,8 +5,13 @@ import android.os.Bundle
 import de.ka.jamit.tcalc.R
 import de.ka.jamit.tcalc.base.BaseFragment
 import de.ka.jamit.tcalc.base.events.FragmentResultable
+import de.ka.jamit.tcalc.base.events.NavigateTo
+import de.ka.jamit.tcalc.base.navigate
 import de.ka.jamit.tcalc.databinding.FragmentHomeBinding
+import de.ka.jamit.tcalc.ui.home.addedit.HomeAddEditDialog
 import de.ka.jamit.tcalc.ui.home.user.UserDialog
+import de.ka.jamit.tcalc.ui.home.user.addedit.UserAddEditDialog
+import de.ka.jamit.tcalc.utils.NavigationUtils.navigateTo
 import timber.log.Timber
 
 class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(
@@ -21,5 +26,9 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(
     override fun onFragmentResult(resultBundle: Bundle) {
         Timber.e("!!! result")
         viewModel.update()
+
+        if (resultBundle.containsKey(UserAddEditDialog.UPDATE_KEY)) {
+            navigate(NavigateTo(R.id.dialogUserAddEdit, args = resultBundle))
+        }
     }
 }

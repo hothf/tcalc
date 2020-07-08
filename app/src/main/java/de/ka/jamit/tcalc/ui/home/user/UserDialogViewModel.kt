@@ -1,7 +1,11 @@
 package de.ka.jamit.tcalc.ui.home.user
 
+import android.os.Bundle
 import androidx.recyclerview.widget.LinearLayoutManager
+import de.ka.jamit.tcalc.R
 import de.ka.jamit.tcalc.base.BaseViewModel
+import de.ka.jamit.tcalc.ui.home.addedit.HomeAddEditDialog
+import de.ka.jamit.tcalc.ui.home.user.addedit.UserAddEditDialog
 import de.ka.jamit.tcalc.utils.resources.ResourcesProvider
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.addTo
@@ -25,6 +29,16 @@ class UserDialogViewModel : BaseViewModel() {
         handle(Choose())
     }
 
+    private val editListener: (UserListItemViewModel) -> Unit = {
+        val arguments = Bundle().apply {
+            putBoolean(UserAddEditDialog.UPDATE_KEY, true)
+            putString(UserAddEditDialog.TITLE_KEY, it.item.name)
+            putBoolean(UserAddEditDialog.IS_SELECTED_KEY, it.item.selected)
+            putLong(HomeAddEditDialog.ID_KEY, it.item.id)
+        }
+        handle(UserAddEdit(arguments))
+    }
+
     private val deletionListener: () -> Unit = {
         handle(Choose())
     }
@@ -35,7 +49,7 @@ class UserDialogViewModel : BaseViewModel() {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ users ->
                     val items = users.map { user ->
-                        UserListItemViewModel(user, itemListener, deletionListener)
+                        UserListItemViewModel(user, itemListener, editListener, deletionListener)
                     }
                     adapter.setItems(items)
                 }, { error ->
@@ -46,10 +60,12 @@ class UserDialogViewModel : BaseViewModel() {
     fun layoutManager() = LinearLayoutManager(resourcesProvider.getApplicationContext())
 
     fun choose() {
-//        handle(Choose())
-
-        //TODO add a new one
+        val arguments = Bundle().apply {
+            putBoolean(UserAddEditDialog.UPDATE_KEY, false)
+        }
+        handle(UserAddEdit(arguments))
     }
 
     class Choose
+    class UserAddEdit(val args: Bundle? = null)
 }

@@ -6,6 +6,7 @@ import de.ka.jamit.tcalc.repo.db.AppDatabase
 import de.ka.jamit.tcalc.ui.home.HomeViewModel
 import de.ka.jamit.tcalc.ui.home.addedit.HomeAddEditDialogViewModel
 import de.ka.jamit.tcalc.ui.home.user.UserDialogViewModel
+import de.ka.jamit.tcalc.ui.home.user.addedit.UserAddEditDialogViewModel
 import de.ka.jamit.tcalc.ui.main.MainViewModel
 import de.ka.jamit.tcalc.ui.settings.SettingsViewModel
 import de.ka.jamit.tcalc.utils.CloseEventListener
@@ -26,6 +27,7 @@ val appModule = module {
     viewModel { SettingsViewModel() }
     viewModel { HomeAddEditDialogViewModel() }
     viewModel { UserDialogViewModel() }
+    viewModel { UserAddEditDialogViewModel() }
 
     single { ResourcesProviderImpl(get()) as ResourcesProvider }
     single { GlobalMessageEventListener() }

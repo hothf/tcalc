@@ -22,6 +22,8 @@ class UserDialog : BaseDialogFragment<DialogUserBinding, UserDialogViewModel>(
     override fun onHandle(element: Any?) {
         if (element is UserDialogViewModel.Choose) {
             setFragmentResult(FRAGMENT_RESULT_KEY, Bundle())
+        } else if (element is UserDialogViewModel.UserAddEdit) {
+            setFragmentResult(FRAGMENT_RESULT_KEY, element.args)
         }
     }
 
