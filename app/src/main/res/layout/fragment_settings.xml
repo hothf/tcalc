@@ -25,5 +25,21 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:onClick="@{()->viewModel.onImport()}"
+            android:text="import" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="@{()->viewModel.onExport()}"
+            android:layout_below="@+id/button"
+            android:layout_centerHorizontal="true"
+            android:text="export" />
     </RelativeLayout>
 </layout>

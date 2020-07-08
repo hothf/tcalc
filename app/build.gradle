@@ -99,4 +99,7 @@ dependencies {
 
     // time
     implementation "com.jakewharton.threetenabp:threetenabp:$java_time_abp_version"
+
+    // csv
+    implementation "com.opencsv:opencsv:$csv_version"
 }
