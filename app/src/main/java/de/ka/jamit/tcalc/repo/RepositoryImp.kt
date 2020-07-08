@@ -111,11 +111,16 @@ class RepositoryImpl(val app: Application, val db: AppDatabase) : Repository {
         return RxQuery.observable<RecordDao>(query)
     }
 
-    override fun calc(data: List<RecordDao>): Single<Float> {
+    override fun calc(data: List<RecordDao>): Single<Repository.CalculationResult> {
         return Single.fromCallable {
-            data.fold(0.0f) { total, item ->
-                total + item.value
+            val monthly = data.fold(0.0f) { total, item ->
+                when (item.timeSpan) {
+                    RecordDao.TimeSpan.MONTHLY -> total + item.value
+                    RecordDao.TimeSpan.QUARTERLY -> total + (item.value / 4)
+                    RecordDao.TimeSpan.YEARLY -> total + (item.value / 12)
+                }
             }
+            Repository.CalculationResult(monthly, monthly * 12)
         }
     }
 }

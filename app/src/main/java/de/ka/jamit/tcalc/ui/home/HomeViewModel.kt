@@ -2,16 +2,12 @@ package de.ka.jamit.tcalc.ui.home
 
 import android.os.Bundle
 import android.view.View
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
-import android.widget.Spinner
-import android.widget.SpinnerAdapter
 import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.LinearLayoutManager
 import de.ka.jamit.tcalc.R
 import de.ka.jamit.tcalc.base.BaseViewModel
+import de.ka.jamit.tcalc.repo.Repository
 import de.ka.jamit.tcalc.repo.db.RecordDao
-import de.ka.jamit.tcalc.repo.db.UserDao
 import de.ka.jamit.tcalc.ui.home.addedit.HomeAddEditDialog
 import de.ka.jamit.tcalc.ui.home.list.HomeListAdapter
 import de.ka.jamit.tcalc.ui.home.list.HomeListItemViewModel
@@ -92,34 +88,23 @@ class HomeViewModel : BaseViewModel() {
                 }).addTo(compositeDisposable)
     }
 
-    private fun calc(data: List<RecordDao>) {
-        loadingVisibility.postValue(View.VISIBLE)
-        repository.calc(data)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({ sum ->
-                    Timber.e("!!! calced : $sum")
-                    resultText.postValue(sum.toString())
-                    loadingVisibility.postValue(View.GONE)
-                }, { error ->
-                    Timber.e(error, "While calculating")
-                    loadingVisibility.postValue(View.GONE)
-                }
-                ).addTo(compositeDisposable)
-    }
-
     fun layoutManager() = LinearLayoutManager(resourcesProvider.getApplicationContext())
 
     fun onAddClicked() {
         navigateTo(R.id.dialogHomeAdd)
     }
 
-//    fun update(){
-//
-//    }
-
-    override fun onCleared() {
-
-        super.onCleared()
+    private fun calc(data: List<RecordDao>) {
+        loadingVisibility.postValue(View.VISIBLE)
+        repository.calc(data)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({ result: Repository.CalculationResult ->
+                    resultText.postValue("monthly: ${result.monthlyValue}, yearly: ${result.yearlyValue}")
+                    loadingVisibility.postValue(View.GONE)
+                }, { error ->
+                    Timber.e(error, "While calculating")
+                    loadingVisibility.postValue(View.GONE)
+                }).addTo(compositeDisposable)
     }
 }

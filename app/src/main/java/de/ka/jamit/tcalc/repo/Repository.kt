@@ -35,7 +35,7 @@ interface Repository {
     /**
      * Calculates the sum of the data.
      */
-    fun calc(data: List<RecordDao>): Single<Float>
+    fun calc(data: List<RecordDao>): Single<CalculationResult>
 
     /**
      * Retrieves all users
@@ -66,6 +66,11 @@ interface Repository {
      * Deletes the given user.
      */
     fun deleteUser(id: Long)
+
+    /**
+     * The calculation result.
+     */
+    data class CalculationResult(val monthlyValue: Float, val yearlyValue: Float)
 
 
 }
