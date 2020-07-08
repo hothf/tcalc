@@ -32,6 +32,10 @@ data class RecordDao(
     }
 }
 
+// TODO add categories
+
+// TODO add synchronization
+
 @Keep
 @Entity
 data class UserDao(

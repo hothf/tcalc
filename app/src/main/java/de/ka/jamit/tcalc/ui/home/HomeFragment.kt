@@ -8,10 +8,8 @@ import de.ka.jamit.tcalc.base.events.FragmentResultable
 import de.ka.jamit.tcalc.base.events.NavigateTo
 import de.ka.jamit.tcalc.base.navigate
 import de.ka.jamit.tcalc.databinding.FragmentHomeBinding
-import de.ka.jamit.tcalc.ui.home.addedit.HomeAddEditDialog
 import de.ka.jamit.tcalc.ui.home.user.UserDialog
 import de.ka.jamit.tcalc.ui.home.user.addedit.UserAddEditDialog
-import de.ka.jamit.tcalc.utils.NavigationUtils.navigateTo
 import timber.log.Timber
 
 class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(

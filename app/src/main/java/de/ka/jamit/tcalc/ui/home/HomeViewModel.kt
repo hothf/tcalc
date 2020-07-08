@@ -65,9 +65,9 @@ class HomeViewModel : BaseViewModel() {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ users ->
-
-                    userText.postValue(users.first { it.selected }.name)
-
+                    Timber.e(users.toString())
+                    val selected = users.firstOrNull { it.selected } ?: return@subscribe
+                    userText.postValue(selected.name)
                     userRecords?.let(compositeDisposable::remove)
                     userRecords = repository.observeRecords()
                             .subscribeOn(Schedulers.io())
@@ -83,6 +83,7 @@ class HomeViewModel : BaseViewModel() {
                             }, { error ->
                                 Timber.e(error, "While observing record data.")
                             }).addTo(compositeDisposable)
+
                 }, { error ->
                     Timber.e(error, "While observing user data.")
                 }).addTo(compositeDisposable)
