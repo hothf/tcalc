@@ -8,7 +8,6 @@ import de.ka.jamit.tcalc.repo.db.UserDao
 import io.objectbox.Box
 import io.objectbox.kotlin.boxFor
 import io.objectbox.query.Query
-import io.objectbox.query.QueryBuilder
 
 import io.objectbox.rx.RxQuery
 import io.reactivex.Observable
@@ -29,8 +28,6 @@ class RepositoryImpl(val app: Application, val db: AppDatabase) : Repository {
     init {
         if (userDao.isEmpty) {
             userDao.put(db.defaultUser)
-            userDao.put(UserDao(0, "hehe", false))
-            userDao.put(UserDao(0, "hoho", false))
         }
         if (recordDao.isEmpty) {
             recordDao.put(db.masterData)
@@ -57,7 +54,7 @@ class RepositoryImpl(val app: Application, val db: AppDatabase) : Repository {
         if (currentlySelectedUser == null) {
             currentlySelectedUser = userDao.all.find { it.selected }
         }
-        // intentional force unwrap, there has to be a user!
+        // intentional force unwrap, there has to be a user - always!
         return currentlySelectedUser!!
     }
 
@@ -89,7 +86,7 @@ class RepositoryImpl(val app: Application, val db: AppDatabase) : Repository {
 
     override fun deleteUser(id: Long) {
         if (currentlySelectedUser?.id == id) { // would be not so nice to have nothing selected
-            selectUser(1) // user 1 is not deleteable, so select it now!
+            selectUser(1) // user 1 is not deletable, so select it now!
         }
         val recordIds = recordDao.query()
                 .equal(RecordDao_.userId, id)
@@ -100,13 +97,14 @@ class RepositoryImpl(val app: Application, val db: AppDatabase) : Repository {
         userDao.remove(id)
     }
 
-    override fun addRecord(key: String, value: Float, timeSpan: RecordDao.TimeSpan) {
+    override fun addRecord(key: String, value: Float, timeSpan: RecordDao.TimeSpan, category: RecordDao.Category) {
         getCurrentlySelectedUser().let {
             recordDao.put(RecordDao(
                     id = 0,
                     value = value,
                     key = key,
                     timeSpan = timeSpan,
+                    category = category,
                     userId = it.id))
         }
     }
@@ -115,13 +113,18 @@ class RepositoryImpl(val app: Application, val db: AppDatabase) : Repository {
         recordDao.put(list)
     }
 
-    override fun updateRecord(value: Float, key: String, timeSpan: RecordDao.TimeSpan, id: Long) {
+    override fun updateRecord(value: Float,
+                              key: String,
+                              timeSpan: RecordDao.TimeSpan,
+                              category: RecordDao.Category,
+                              id: Long) {
         recordDao.get(id)?.let {
             recordDao.put(RecordDao(
                     id = id,
                     value = value,
                     key = key,
                     timeSpan = timeSpan,
+                    category = category,
                     userId = it.userId))
         }
     }

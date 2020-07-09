@@ -24,6 +24,7 @@ class HomeAddEditDialogViewModel : BaseViewModel() {
     val keyText = MutableLiveData<String>("")
     val valueText = MutableLiveData<String>("")
     val timeSpanPosition = MutableLiveData(0)
+    val categoryPosition = MutableLiveData(0)
 
     fun timeSpanAdapter(): SpinnerAdapter {
         val names = RecordDao.TimeSpan.values().map { it.name }.toTypedArray()
@@ -38,21 +39,26 @@ class HomeAddEditDialogViewModel : BaseViewModel() {
     fun choose() {
         val value = valueText.value?.toFloat() ?: 0.0f
         val key = keyText.value ?: ""
-        val timeSpan = timeSpanPosition.value?.let {
-            RecordDao.TimeSpan.values()[it]
+        val timeSpan = timeSpanPosition.value?.let { v ->
+            RecordDao.TimeSpan.values().find { v == it.id }
         } ?: RecordDao.TimeSpan.MONTHLY
+        val category = categoryPosition.value?.let { v ->
+            RecordDao.Category.values().find { v == it.id }
+        } ?: RecordDao.Category.COMMON
 
         if (isUpdating) {
             repository.updateRecord(
                     value = value,
                     key = key,
                     timeSpan = timeSpan,
+                    category = category,
                     id = id)
         } else { // is creating a new entry!
             repository.addRecord(
                     key = key,
                     value = value,
-                    timeSpan = timeSpan)
+                    timeSpan = timeSpan,
+                    category = category)
         }
         handle(Choose())
     }
@@ -64,6 +70,7 @@ class HomeAddEditDialogViewModel : BaseViewModel() {
         keyText.postValue(AppDatabase.getTranslatedStringForKey(resourcesProvider, key))
         valueText.postValue(bundle.getFloat(HomeAddEditDialog.VALUE_KEY).toString())
         timeSpanPosition.postValue(bundle.getInt(HomeAddEditDialog.TIMESPAN_KEY))
+        categoryPosition.postValue(bundle.getInt(HomeAddEditDialog.CATEGORY_KEY))
         id = bundle.getLong(HomeAddEditDialog.ID_KEY)
     }
 

@@ -38,11 +38,13 @@ class CSVUtils(private val repository: Repository, private val app: Application)
                     repository.addUser(name) // auto selects this user
 
                     val timeSpanConverter = RecordDao.TimeSpanConverter()
+                    val categoryConverter = RecordDao.CategoryConverter()
                     while (reader.readNext().also { record = it } != null) {
                         val dao = RecordDao(id = 0,
                                 key = record?.get(0) ?: "",
                                 timeSpan = timeSpanConverter.convertToEntityProperty(record?.get(1)?.toInt()),
-                                value = record?.get(2)?.toFloat() ?: 0.0f,
+                                category = categoryConverter.convertToEntityProperty(record?.get(2)?.toInt()),
+                                value = record?.get(3)?.toFloat() ?: 0.0f,
                                 userId = repository.getCurrentlySelectedUser().id)
                         records.add(dao)
                     }
@@ -70,10 +72,12 @@ class CSVUtils(private val repository: Repository, private val app: Application)
                 app.contentResolver.openOutputStream(uri)?.let {
                     val writer = CSVWriter(OutputStreamWriter(it))
                     val timeSpanConverter = RecordDao.TimeSpanConverter()
+                    val categoryConverter = RecordDao.CategoryConverter()
                     records.forEach { record ->
                         val data = arrayOf(
                                 record.key,
                                 timeSpanConverter.convertToDatabaseValue(record.timeSpan).toString(),
+                                categoryConverter.convertToDatabaseValue(record.category).toString(),
                                 record.value.toString())
                         writer.writeNext(data);
                     }

@@ -1,6 +1,8 @@
 package de.ka.jamit.tcalc.repo.db
 
+import androidx.annotation.DrawableRes
 import androidx.annotation.Keep
+import de.ka.jamit.tcalc.R
 import io.objectbox.annotation.Convert
 import io.objectbox.annotation.Entity
 import io.objectbox.annotation.Id
@@ -14,6 +16,8 @@ data class RecordDao(
         val value: Float = 0.0f,
         @Convert(converter = TimeSpanConverter::class, dbType = Int::class)
         val timeSpan: TimeSpan = TimeSpan.MONTHLY,
+        @Convert(converter = CategoryConverter::class, dbType = Int::class)
+        val category: Category = Category.COMMON,
         val userId: Long) {
 
     enum class TimeSpan(val id: Int) {
@@ -30,9 +34,25 @@ data class RecordDao(
             return entry ?: TimeSpan.MONTHLY
         }
     }
-}
 
-// TODO add categories
+    enum class Category(val id: Int, @DrawableRes val resId: Int) {
+        COMMON(0, R.drawable.ic_home),
+        HOUSE(1, R.drawable.ic_home),
+        SAVING(2, R.drawable.ic_home),
+        CAR(3, R.drawable.ic_home)
+    }
+
+    class CategoryConverter : PropertyConverter<Category, Int> {
+        override fun convertToDatabaseValue(entityProperty: Category?): Int {
+            return entityProperty?.id ?: 0
+        }
+
+        override fun convertToEntityProperty(databaseValue: Int?): Category {
+            val entry = Category.values().find { it.id == databaseValue }
+            return entry ?: Category.COMMON
+        }
+    }
+}
 
 @Keep
 @Entity

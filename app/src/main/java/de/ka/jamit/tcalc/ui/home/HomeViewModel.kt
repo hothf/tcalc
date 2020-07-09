@@ -46,6 +46,7 @@ class HomeViewModel : BaseViewModel() {
             putString(HomeAddEditDialog.TITLE_KEY, it.item.key)
             putFloat(HomeAddEditDialog.VALUE_KEY, it.item.value)
             putInt(HomeAddEditDialog.TIMESPAN_KEY, it.item.timeSpan.id)
+            putInt(HomeAddEditDialog.CATEGORY_KEY, it.item.category.id)
             putLong(HomeAddEditDialog.ID_KEY, it.item.id)
         }
         navigateTo(R.id.dialogHomeAdd, args = arguments)
@@ -54,11 +55,7 @@ class HomeViewModel : BaseViewModel() {
     init {
         startObserving()
     }
-
-    fun update() {
-        startObserving()
-    }
-
+    
     private fun startObserving() {
         users?.let(compositeDisposable::remove)
         users = repository.observeUsers()

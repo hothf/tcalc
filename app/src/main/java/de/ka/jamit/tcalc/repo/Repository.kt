@@ -25,7 +25,10 @@ interface Repository {
     /**
      * Saves a new record
      */
-    fun addRecord(key: String, value: Float = 0.0f, timeSpan: RecordDao.TimeSpan = RecordDao.TimeSpan.MONTHLY)
+    fun addRecord(key: String,
+                  value: Float = 0.0f,
+                  timeSpan: RecordDao.TimeSpan = RecordDao.TimeSpan.MONTHLY,
+                  category: RecordDao.Category = RecordDao.Category.COMMON)
 
     /**
      * Adds multiple records at once.
@@ -40,7 +43,11 @@ interface Repository {
     /**
      * Updates a record with the given value.
      */
-    fun updateRecord(value: Float, key: String, timeSpan: RecordDao.TimeSpan, id: Long)
+    fun updateRecord(value: Float,
+                     key: String,
+                     timeSpan: RecordDao.TimeSpan,
+                     category: RecordDao.Category,
+                     id: Long)
 
     /**
      * Calculates the sum of the data.

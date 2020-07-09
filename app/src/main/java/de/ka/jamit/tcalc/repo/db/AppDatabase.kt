@@ -20,18 +20,20 @@ class AppDatabase(private val application: Application) {
     /**
      * Retrieves a default user.
      */
-    val defaultUser = UserDao(id= 0, name = "default", selected = true)
+    val defaultUser = UserDao(id = 0, name = "default", selected = true)
 
     /**
      * All the master data which should only be inserted once into the database.
+     * Please do this after putting the default user, as this data references the first
+     * inserted user.
      */
     val masterData = listOf(
             RecordDao(id = 0, key = "firstVal", value = 0.0f, userId = 1L),
             RecordDao(id = 0, key = "secondVal", value = 0.0f, userId = 1L),
             RecordDao(id = 0, key = "thirdVal", value = 0.0f, userId = 1L),
-            RecordDao(id = 0, key = "fourthVal", value = 0.0f, userId = 2L),
-            RecordDao(id = 0, key = "fifthVal", value = 0.0f, userId = 3L),
-            RecordDao(id = 0, key = "sixthVal", value = 0.0f, userId = 3L),
+            RecordDao(id = 0, key = "fourthVal", value = 0.0f, userId = 1L),
+            RecordDao(id = 0, key = "fifthVal", value = 0.0f, userId = 1L),
+            RecordDao(id = 0, key = "sixthVal", value = 0.0f, userId = 1L),
             RecordDao(id = 0, key = "seventhVal", value = 0.0f, userId = 1L)
     )
 

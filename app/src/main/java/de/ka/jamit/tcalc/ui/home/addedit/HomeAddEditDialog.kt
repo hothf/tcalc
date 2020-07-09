@@ -27,6 +27,7 @@ class HomeAddEditDialog : BaseDialogFragment<DialogHomeAddeditBinding, HomeAddEd
         const val ID_KEY = "_k_id_"
         const val VALUE_KEY = "_k_val_"
         const val TIMESPAN_KEY = "_k_timespan_"
+        const val CATEGORY_KEY = "_k_category"
         const val UPDATE_KEY = "_k_isupdate_"
     }
 }
