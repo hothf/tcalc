@@ -18,9 +18,19 @@ interface Repository {
     fun observeRecords(): Observable<List<RecordDao>>
 
     /**
+     * Retrieves all records of the currently selected user.
+     */
+    fun getAllRecordsOfCurrentlySelectedUser(): List<RecordDao>
+
+    /**
      * Saves a new record
      */
     fun addRecord(key: String, value: Float = 0.0f, timeSpan: RecordDao.TimeSpan = RecordDao.TimeSpan.MONTHLY)
+
+    /**
+     * Adds multiple records at once.
+     */
+    fun addRecords(list: List<RecordDao>)
 
     /**
      * Deletes a given record.

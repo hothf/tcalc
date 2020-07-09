@@ -9,6 +9,9 @@ import de.ka.jamit.tcalc.ui.home.user.UserDialogViewModel
 import de.ka.jamit.tcalc.ui.home.user.addedit.UserAddEditDialogViewModel
 import de.ka.jamit.tcalc.ui.main.MainViewModel
 import de.ka.jamit.tcalc.ui.settings.SettingsViewModel
+import de.ka.jamit.tcalc.ui.settings.exporting.ExportingDialogViewModel
+import de.ka.jamit.tcalc.ui.settings.importing.ImportingDialogViewModel
+import de.ka.jamit.tcalc.utils.CSVUtils
 import de.ka.jamit.tcalc.utils.CloseEventListener
 import de.ka.jamit.tcalc.utils.GlobalMessageEventListener
 import de.ka.jamit.tcalc.utils.resources.ResourcesProvider
@@ -28,10 +31,13 @@ val appModule = module {
     viewModel { HomeAddEditDialogViewModel() }
     viewModel { UserDialogViewModel() }
     viewModel { UserAddEditDialogViewModel() }
+    viewModel { ImportingDialogViewModel() }
+    viewModel { ExportingDialogViewModel() }
 
     single { ResourcesProviderImpl(get()) as ResourcesProvider }
     single { GlobalMessageEventListener() }
     single { CloseEventListener() }
+    single { CSVUtils(get(), get()) }
 
     single { AppDatabase(get()) }
     single { RepositoryImpl(get(), get()) as Repository }

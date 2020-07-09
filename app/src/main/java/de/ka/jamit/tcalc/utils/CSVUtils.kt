@@ -1,10 +1,13 @@
 package de.ka.jamit.tcalc.utils
 
-import android.os.Environment
-import android.widget.Toast
+import android.app.Application
+import android.net.Uri
 import com.opencsv.CSVReader
-import java.io.File
-import java.io.FileReader
+import com.opencsv.CSVWriter
+import de.ka.jamit.tcalc.repo.Repository
+import de.ka.jamit.tcalc.repo.db.RecordDao
+import io.reactivex.Completable
+import java.io.*
 
 
 /**
@@ -12,20 +15,63 @@ import java.io.FileReader
  *
  * Created by Thomas Hofmann on 08.07.20
  **/
-class CSVUtils {
+class CSVUtils(private val repository: Repository, private val app: Application) {
 
-    fun importCSV(){
-//        try {
-//            val csvfile = File(Environment.getExternalStorageDirectory().toString() + "/csvfile.csv")
-//            val reader = CSVReader(FileReader(csvfile.getAbsolutePath()))
-//            var nextLine: Array<String>
-//            while (reader.readNext().also { nextLine = it } != null) {
-//                // nextLine[] is an array of values from the line
-//                println(nextLine[0] + nextLine[1] + "etc...")
-//            }
-//        } catch (e: Exception) {
-//            e.printStackTrace()
-//            Toast.makeText(this, "The specified file was not found", Toast.LENGTH_SHORT).show()
-//        }
+    /**
+     * Imports a csv file into the database. Please consider to have this executed in a non-blocking fashion.
+     */
+    fun importCSV(uri: Uri): Completable {
+        return Completable.create { emitter ->
+            try {
+                app.contentResolver.openInputStream(uri)?.let { inputStream ->
+                    val reader = CSVReader(InputStreamReader(inputStream))
+                    val records = mutableListOf<RecordDao>()
+                    var record: Array<String?>?
+
+                    repository.addUser("imported User")
+
+                    while (reader.readNext().also { record = it } != null) {
+                        val dao = RecordDao(id = 0,
+                                key = record?.get(0) ?: "",
+                                timeSpan = RecordDao.TimeSpan.MONTHLY, // TODO make this correctly!
+                                value = record?.get(2)?.toFloat() ?: 0.0f,
+                                userId = repository.getCurrentlySelectedUser().id)
+                        records.add(dao)
+                    }
+                    reader.close()
+
+                    repository.addRecords(records)
+                }
+                emitter.onComplete()
+            } catch (exception: Exception) {
+                emitter.onError(exception)
+            }
+        }
+    }
+
+    /**
+     * Exports a csv file.
+     */
+    fun exportCSV(uri: Uri): Completable {
+        return Completable.create { emitter ->
+            try {
+                val records = repository.getAllRecordsOfCurrentlySelectedUser()
+
+                app.contentResolver.openOutputStream(uri)?.let {
+                    val writer = CSVWriter(OutputStreamWriter(it))
+                    records.forEach { record ->
+                        val data = arrayOf(
+                                record.key,
+                                record.timeSpan.toString(),
+                                record.value.toString())
+                        writer.writeNext(data);
+                    }
+                    writer.close()
+                }
+                emitter.onComplete()
+            } catch (exception: Exception) {
+                emitter.onError(exception)
+            }
+        }
     }
 }

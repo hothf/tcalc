@@ -30,5 +30,15 @@
         android:name="de.ka.jamit.tcalc.ui.home.user.addedit.UserAddEditDialog"
         android:label="fragment_user_add_dialog"
         tools:layout="@layout/dialog_user_addedit" />
+    <dialog
+        android:id="@+id/dialogImport"
+        android:name="de.ka.jamit.tcalc.ui.settings.importing.ImportingDialog"
+        android:label="fragment_import_dialog"
+        tools:layout="@layout/dialog_importing" />
+    <dialog
+        android:id="@+id/dialogExport"
+        android:name="de.ka.jamit.tcalc.ui.settings.exporting.ExportingDialog"
+        android:label="fragment_export_dialog"
+        tools:layout="@layout/dialog_exporting" />
 
 </navigation>

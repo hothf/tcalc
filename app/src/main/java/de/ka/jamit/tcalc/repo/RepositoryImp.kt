@@ -40,6 +40,17 @@ class RepositoryImpl(val app: Application, val db: AppDatabase) : Repository {
         return RxQuery.observable<UserDao>(query)
     }
 
+    override fun getAllRecordsOfCurrentlySelectedUser(): List<RecordDao> {
+        currentlySelectedUser?.id?.let {
+            return recordDao.query()
+                    .equal(RecordDao_.userId, it)
+                    .build()
+                    .find()
+                    .toList()
+        }
+        return emptyList()
+    }
+
     override fun getCurrentlySelectedUser(): UserDao {
         if (currentlySelectedUser == null) {
             currentlySelectedUser = userDao.all.find { it.selected }
@@ -90,6 +101,10 @@ class RepositoryImpl(val app: Application, val db: AppDatabase) : Repository {
                     timeSpan = timeSpan,
                     userId = it.id))
         }
+    }
+
+    override fun addRecords(list: List<RecordDao>) {
+        recordDao.put(list)
     }
 
     override fun updateRecord(value: Float, key: String, timeSpan: RecordDao.TimeSpan, id: Long) {
