@@ -4,10 +4,12 @@ import android.app.Application
 import android.net.Uri
 import com.opencsv.CSVReader
 import com.opencsv.CSVWriter
+import de.ka.jamit.tcalc.R
 import de.ka.jamit.tcalc.repo.Repository
 import de.ka.jamit.tcalc.repo.db.RecordDao
 import io.reactivex.Completable
-import java.io.*
+import java.io.InputStreamReader
+import java.io.OutputStreamWriter
 
 
 /**
@@ -28,7 +30,12 @@ class CSVUtils(private val repository: Repository, private val app: Application)
                     val records = mutableListOf<RecordDao>()
                     var record: Array<String?>?
 
-                    repository.addUser("imported User")
+                    var name = app.resources.getString(R.string.import_fallback_name)
+                    val cut: Int? = uri.path?.lastIndexOf('/')
+                    if (cut != null && cut != -1) {
+                        name = uri.path?.substring(cut + 1)?.substringBefore(".") ?: name
+                    }
+                    repository.addUser(name)
 
                     while (reader.readNext().also { record = it } != null) {
                         val dao = RecordDao(id = 0,
@@ -41,6 +48,8 @@ class CSVUtils(private val repository: Repository, private val app: Application)
                     reader.close()
 
                     repository.addRecords(records)
+
+                    repository.lastImportResult = Repository.ImportResult(name, records.size)
                 }
                 emitter.onComplete()
             } catch (exception: Exception) {

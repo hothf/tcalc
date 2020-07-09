@@ -1,5 +1,6 @@
 package de.ka.jamit.tcalc.ui.settings.importing
 
+import android.os.Handler
 import de.ka.jamit.tcalc.R
 import de.ka.jamit.tcalc.base.BaseDialogFragment
 import de.ka.jamit.tcalc.databinding.DialogImportingBinding
@@ -18,12 +19,19 @@ class ImportingDialog : BaseDialogFragment<DialogImportingBinding, ImportingDial
 
     override fun onHandle(element: Any?) {
         if (element is ImportingDialogViewModel.Completed) {
-            dismissAllowingStateLoss()
+            if (element.lastImportResult != null) {
+                Handler().postDelayed({
+                    dismissAllowingStateLoss()
+                }, SUCCESS_DIsMISS_DELAY_MS)
+            } else {
+                dismissAllowingStateLoss()
+            }
         }
     }
 
     companion object {
         const val URI_KEY = "_k_uri"
+        const val SUCCESS_DIsMISS_DELAY_MS = 4000L
     }
 }
 

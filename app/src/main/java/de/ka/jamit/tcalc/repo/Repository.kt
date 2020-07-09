@@ -3,14 +3,14 @@ package de.ka.jamit.tcalc.repo
 import de.ka.jamit.tcalc.repo.db.RecordDao
 import de.ka.jamit.tcalc.repo.db.UserDao
 import io.reactivex.Observable
-import io.reactivex.Observer
 import io.reactivex.Single
-import retrofit2.Response
 
 /**
  * The interface for the abstraction of the data sources of the app.
  */
 interface Repository {
+
+    var lastImportResult: ImportResult?
 
     /**
      * Retrieves all records
@@ -81,6 +81,11 @@ interface Repository {
      * The calculation result.
      */
     data class CalculationResult(val monthlyValue: Float, val yearlyValue: Float)
+
+    /**
+     * Represents an import result
+     */
+    data class ImportResult(val name: String, val recordCount: Int)
 
 
 }

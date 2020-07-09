@@ -5,8 +5,11 @@ import android.os.Bundle
 import android.view.View
 import androidx.core.net.toUri
 import androidx.lifecycle.MutableLiveData
+import de.ka.jamit.tcalc.R
 import de.ka.jamit.tcalc.base.BaseViewModel
+import de.ka.jamit.tcalc.repo.Repository
 import de.ka.jamit.tcalc.utils.CSVUtils
+import de.ka.jamit.tcalc.utils.resources.ResourcesProvider
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.schedulers.Schedulers
@@ -21,9 +24,12 @@ import timber.log.Timber
 class ImportingDialogViewModel : BaseViewModel() {
 
     private val csvUtils: CSVUtils by inject()
+    private val resourcesProvider: ResourcesProvider by inject()
 
     val errorVisibility = MutableLiveData<Int>(View.GONE)
     val loadingVisibility = MutableLiveData<Int>(View.GONE)
+    val successVisibility = MutableLiveData<Int>(View.GONE)
+    val lastImportText = MutableLiveData<String>("")
 
     private var uri: Uri? = null
 
@@ -35,6 +41,7 @@ class ImportingDialogViewModel : BaseViewModel() {
     }
 
     private fun import() {
+        successVisibility.postValue(View.GONE)
         errorVisibility.postValue(View.GONE)
         loadingVisibility.postValue(View.VISIBLE)
         uri?.let {
@@ -42,7 +49,14 @@ class ImportingDialogViewModel : BaseViewModel() {
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe({
-                        handle(Completed())
+                        val lastResult = repository.lastImportResult
+                        if (lastResult != null) {
+                            loadingVisibility.postValue(View.GONE)
+                            successVisibility.postValue(View.VISIBLE)
+                            lastImportText.postValue(resourcesProvider.getString(
+                                    R.string.import_success_text, lastResult.name, lastResult.recordCount))
+                        }
+                        handle(Completed(lastResult))
                     }, { error ->
                         loadingVisibility.postValue(View.GONE)
                         errorVisibility.postValue(View.VISIBLE)
@@ -59,5 +73,5 @@ class ImportingDialogViewModel : BaseViewModel() {
         handle(Completed())
     }
 
-    class Completed
+    class Completed(val lastImportResult: Repository.ImportResult? = null)
 }

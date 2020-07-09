@@ -36,5 +36,26 @@
             android:text="retry"
             android:visibility="@{viewModel.errorVisibility}" />
 
+        <ImageView
+            android:layout_width="match_parent"
+            android:src="@android:drawable/checkbox_on_background"
+            android:layout_centerHorizontal="true"
+            android:layout_above="@+id/helper"
+            android:visibility="@{viewModel.successVisibility}"
+            android:layout_height="wrap_content" />
+
+        <View
+            android:id="@+id/helper"
+            android:layout_width="1dp"
+            android:layout_centerInParent="true"
+            android:layout_height="1dp" />
+
+        <TextView
+            android:layout_below="@+id/helper"
+            android:visibility="@{viewModel.successVisibility}"
+            android:text="@{viewModel.lastImportText}"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
     </RelativeLayout>
 </layout>

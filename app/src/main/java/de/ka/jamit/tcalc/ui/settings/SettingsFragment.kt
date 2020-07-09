@@ -10,56 +10,35 @@ import de.ka.jamit.tcalc.base.navigate
 import de.ka.jamit.tcalc.databinding.FragmentSettingsBinding
 import de.ka.jamit.tcalc.ui.settings.exporting.ExportingDialog
 import de.ka.jamit.tcalc.ui.settings.importing.ImportingDialog
-import timber.log.Timber
 
 
 class SettingsFragment :
         BaseFragment<FragmentSettingsBinding, SettingsViewModel>(R.layout.fragment_settings, SettingsViewModel::class) {
-
 
     override fun onHandle(element: Any?) {
         super.onHandle(element)
         if (element is SettingsViewModel.Import) {
             import()
         } else if (element is SettingsViewModel.Export) {
-            export()
+            export(element.name)
         }
-    }
-
-
-    private val importIntent = registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
-        Timber.e("!!! uri import :$uri")
-        // TODO parse file from uri  and persist it in db if right format and anything
-        uri?.let {
-            val arguments = Bundle().apply {
-                putString(ImportingDialog.URI_KEY, uri.toString())
-            }
-            navigate(NavigateTo(R.id.dialogImport, args = arguments))
-        }
-
     }
 
     private fun import() {
-        importIntent.launch("*/*")
-    }
-
-    private val exportIntent = registerForActivityResult(ActivityResultContracts.CreateDocument()) { uri: Uri? ->
-        Timber.e("!!! uri export :$uri")
-        // TODO load current content from database and stream it to a file
-        // save a file with the given uri
-        uri?.let {
-            val arguments = Bundle().apply {
-                putString(ExportingDialog.URI_KEY, uri.toString())
+        registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
+            uri?.let {
+                val arguments = Bundle().apply { putString(ImportingDialog.URI_KEY, uri.toString()) }
+                navigate(NavigateTo(R.id.dialogImport, args = arguments))
             }
-            navigate(NavigateTo(R.id.dialogExport, args = arguments))
-        }
-
+        }.launch("*/*")
     }
 
-
-    private fun export() {
-        exportIntent.launch("export.csv")
+    private fun export(name: String) {
+        registerForActivityResult(ActivityResultContracts.CreateDocument()) { uri: Uri? ->
+            uri?.let {
+                val arguments = Bundle().apply { putString(ExportingDialog.URI_KEY, uri.toString()) }
+                navigate(NavigateTo(R.id.dialogExport, args = arguments))
+            }
+        }.launch("$name.csv")
     }
 }
-
-

@@ -7,6 +7,10 @@
     <string name="add">Add new</string>
     <string name="share_export">Share your export</string>
 
+    <string name="export_fallback_name">Export</string>
+    <string name="import_fallback_name">Imported User</string>
+    <string name="import_success_text">Imported %s successfully with %d entries!</string>
+
     <string name="home_empty_text">No entries!</string>
 
 </resources>

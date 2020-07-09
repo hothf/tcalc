@@ -24,6 +24,8 @@ class RepositoryImpl(val app: Application, val db: AppDatabase) : Repository {
     private val userDao: Box<UserDao> = db.get().boxFor()
     private var currentlySelectedUser: UserDao? = null
 
+    override var lastImportResult: Repository.ImportResult? = null
+
     init {
         if (userDao.isEmpty) {
             userDao.put(db.defaultUser)
