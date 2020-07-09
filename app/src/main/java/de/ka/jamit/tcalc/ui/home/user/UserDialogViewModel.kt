@@ -26,7 +26,6 @@ class UserDialogViewModel : BaseViewModel() {
 
     private val itemListener: (UserListItemViewModel) -> Unit = {
         repository.selectUser(it.item.id)
-        handle(Choose())
     }
 
     private val editListener: (UserListItemViewModel) -> Unit = {
@@ -36,11 +35,11 @@ class UserDialogViewModel : BaseViewModel() {
             putBoolean(UserAddEditDialog.IS_SELECTED_KEY, it.item.selected)
             putLong(HomeAddEditDialog.ID_KEY, it.item.id)
         }
-        handle(UserAddEdit(arguments))
+        navigateTo(R.id.dialogUserAddEdit, args = arguments)
     }
 
     private val deletionListener: () -> Unit = {
-        handle(Choose())
+        // not needed right now
     }
 
     init {
@@ -59,13 +58,13 @@ class UserDialogViewModel : BaseViewModel() {
 
     fun layoutManager() = LinearLayoutManager(resourcesProvider.getApplicationContext())
 
-    fun choose() {
-        val arguments = Bundle().apply {
-            putBoolean(UserAddEditDialog.UPDATE_KEY, false)
-        }
-        handle(UserAddEdit(arguments))
+    fun onClose() {
+        handle(Close())
     }
 
-    class Choose
-    class UserAddEdit(val args: Bundle? = null)
+    fun onChoose() {
+        navigateTo(R.id.dialogUserAddEdit)
+    }
+
+    class Close
 }

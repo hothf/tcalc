@@ -25,7 +25,7 @@ class ExportingDialog : BaseDialogFragment<DialogExportingBinding, ExportingDial
                     putExtra(Intent.EXTRA_STREAM, it)
                     type = "text/plain"
                 }
-                startActivity(Intent.createChooser(shareIntent, "share"))
+                startActivity(Intent.createChooser(shareIntent, resources.getString(R.string.share_export)))
             }
             dismissAllowingStateLoss()
         }

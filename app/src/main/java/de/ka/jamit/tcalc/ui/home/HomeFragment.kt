@@ -15,18 +15,18 @@ import timber.log.Timber
 class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(
         R.layout.fragment_home,
         HomeViewModel::class
-), FragmentResultable {
+) {
 
-    override fun getResultRequestKey(): String {
-        return UserDialog.FRAGMENT_RESULT_KEY
-    }
-
-    override fun onFragmentResult(resultBundle: Bundle) {
-        Timber.e("!!! result")
-        viewModel.update()
-
-        if (resultBundle.containsKey(UserAddEditDialog.UPDATE_KEY)) {
-            navigate(NavigateTo(R.id.dialogUserAddEdit, args = resultBundle))
-        }
-    }
+//    override fun getResultRequestKey(): String {
+//        return UserDialog.FRAGMENT_RESULT_KEY
+//    }
+//
+//    override fun onFragmentResult(resultBundle: Bundle) {
+//        Timber.e("!!! result")
+//        viewModel.update()
+//
+//        if (resultBundle.containsKey(UserAddEditDialog.UPDATE_KEY)) {
+//            navigate(NavigateTo(R.id.dialogUserAddEdit, args = resultBundle))
+//        }
+//    }
 }

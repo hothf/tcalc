@@ -4,7 +4,10 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import androidx.fragment.app.Fragment
+import androidx.navigation.NavController
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.NavHostFragment
+import de.ka.jamit.tcalc.R
 import de.ka.jamit.tcalc.base.events.NavigateTo
 import de.ka.jamit.tcalc.base.events.Open
 import de.ka.jamit.tcalc.utils.NavigationUtils
@@ -26,7 +29,7 @@ interface BaseComposable {
     /**
      * Called when the composition of binding has been done. Useful for additional view state manipulations.
      */
-    fun <T>onComposed(binding: T, savedInstanceState: Bundle?)
+    fun <T> onComposed(binding: T, savedInstanceState: Bundle?)
 
     /**
      * Called when a generic element should be handled.
@@ -63,12 +66,17 @@ fun Fragment.getBaseActivity(): BaseActivity<*, *>? {
  * Navigates to the specified destination defined in [navigateTo].
  */
 fun Fragment.navigate(navigateTo: NavigateTo) {
-    val navController = view?.findNavController()
+    val navController = try {
+        view?.findNavController()
+    } catch (exception: Exception) {
+        Timber.e(exception, "While trying to find nav controller, using parent fragment manager instead")
+        val host: Fragment? = parentFragmentManager.findFragmentById(R.id.main_nav_host_fragment)
+        host?.let(NavHostFragment::findNavController)
+    }
 
     if (navController == null) {
         Timber.e("Could not find nav controller!")
-        return
+    } else {
+        NavigationUtils.navigateTo(navController, navigateTo)
     }
-
-    NavigationUtils.navigateTo(navController, navigateTo)
 }

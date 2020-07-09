@@ -10,31 +10,43 @@
             type="de.ka.jamit.tcalc.ui.home.user.UserDialogViewModel" />
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <de.ka.jamit.tcalc.utils.AutoReleaseRecyclerView
+        <Button
+            android:id="@+id/closeButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintBottom_toTopOf="@+id/button"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:adapter="@{viewModel.adapter}"
-            app:layoutManager="@{viewModel.layoutManager()}"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:onClick="@{()->viewModel.onClose()}"
+            android:text="close" />
+
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/addButton"
+            android:layout_below="@+id/closeButton">
+
+            <de.ka.jamit.tcalc.utils.AutoReleaseRecyclerView
+                android:id="@+id/userRecycler"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:adapter="@{viewModel.adapter}"
+                app:layoutManager="@{viewModel.layoutManager()}" />
+
+        </androidx.core.widget.NestedScrollView>
 
         <Button
-            android:id="@+id/button"
+            android:id="@+id/addButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
             android:layout_marginBottom="48dp"
-            android:onClick="@{()->viewModel.choose()}"
-            android:text="add"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.498"
-            app:layout_constraintStart_toStartOf="parent" />
+            android:onClick="@{()->viewModel.onChoose()}"
+            android:text="add" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </RelativeLayout>
 </layout>

@@ -1,11 +1,13 @@
 package de.ka.jamit.tcalc.ui.home.user
 
-import android.content.DialogInterface
 import android.os.Bundle
-import androidx.fragment.app.setFragmentResult
+import android.view.View
+import android.view.View.OnTouchListener
 import de.ka.jamit.tcalc.R
 import de.ka.jamit.tcalc.base.BaseDialogFragment
 import de.ka.jamit.tcalc.databinding.DialogUserBinding
+import kotlinx.android.synthetic.main.dialog_user.view.*
+
 
 /**
  * A bottom sheet for adding a new value.
@@ -19,16 +21,21 @@ class UserDialog : BaseDialogFragment<DialogUserBinding, UserDialogViewModel>(
         cancellable = true
 ) {
 
-    override fun onHandle(element: Any?) {
-        if (element is UserDialogViewModel.Choose) {
-            setFragmentResult(FRAGMENT_RESULT_KEY, Bundle())
-        } else if (element is UserDialogViewModel.UserAddEdit) {
-            setFragmentResult(FRAGMENT_RESULT_KEY, element.args)
-        }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+//        view.userRecycler.setOnTouchListener { v, event ->
+//            v.parent.requestDisallowInterceptTouchEvent(true)
+//            v.onTouchEvent(event)
+//            true
+//        }
     }
 
-    companion object {
-        const val FRAGMENT_RESULT_KEY = "usr_d_key"
+    override fun onHandle(element: Any?) {
+        if (element is UserDialogViewModel.Close) {
+            dismissAllowingStateLoss()
+        }
     }
 }
 
