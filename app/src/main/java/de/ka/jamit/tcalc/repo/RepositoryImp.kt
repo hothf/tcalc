@@ -82,7 +82,9 @@ class RepositoryImpl(val app: Application, val db: AppDatabase) : Repository {
     }
 
     override fun deleteUser(id: Long) {
-        selectUser(1) // user 1 is not deleteable!
+        if (currentlySelectedUser?.id == id) { // would be not so nice to have nothing selected
+            selectUser(1) // user 1 is not deleteable, so select it now!
+        }
         val recordIds = recordDao.query()
                 .equal(RecordDao_.userId, id)
                 .build()
