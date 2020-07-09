@@ -74,7 +74,11 @@ class RepositoryImpl(val app: Application, val db: AppDatabase) : Repository {
 
     override fun updateUser(id: Long, name: String, selected: Boolean) {
         userDao.get(id)?.let {
-            userDao.put(UserDao(id = id, name = name, selected = selected))
+            val user = UserDao(id = id, name = name, selected = selected)
+            userDao.put(user)
+            if (id == currentlySelectedUser?.id) {
+                currentlySelectedUser = user
+            }
         }
     }
 

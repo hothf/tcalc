@@ -35,12 +35,13 @@ class CSVUtils(private val repository: Repository, private val app: Application)
                     if (cut != null && cut != -1) {
                         name = uri.path?.substring(cut + 1)?.substringBefore(".") ?: name
                     }
-                    repository.addUser(name)
+                    repository.addUser(name) // auto selects this user
 
+                    val timeSpanConverter = RecordDao.TimeSpanConverter()
                     while (reader.readNext().also { record = it } != null) {
                         val dao = RecordDao(id = 0,
                                 key = record?.get(0) ?: "",
-                                timeSpan = RecordDao.TimeSpan.MONTHLY, // TODO make this correctly!
+                                timeSpan = timeSpanConverter.convertToEntityProperty(record?.get(1)?.toInt()),
                                 value = record?.get(2)?.toFloat() ?: 0.0f,
                                 userId = repository.getCurrentlySelectedUser().id)
                         records.add(dao)
@@ -68,10 +69,11 @@ class CSVUtils(private val repository: Repository, private val app: Application)
 
                 app.contentResolver.openOutputStream(uri)?.let {
                     val writer = CSVWriter(OutputStreamWriter(it))
+                    val timeSpanConverter = RecordDao.TimeSpanConverter()
                     records.forEach { record ->
                         val data = arrayOf(
                                 record.key,
-                                record.timeSpan.toString(),
+                                timeSpanConverter.convertToDatabaseValue(record.timeSpan).toString(),
                                 record.value.toString())
                         writer.writeNext(data);
                     }
