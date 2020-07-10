@@ -27,7 +27,7 @@ class HomeAddEditDialogViewModel : BaseViewModel() {
     val valueText = MutableLiveData<String>("")
     val timeSpanPosition = MutableLiveData(0)
     val categoryPosition = MutableLiveData(0)
-    val categoryImage = MutableLiveData<Int>(R.drawable.ic_settings)
+    val categoryImage = MutableLiveData<Int>(RecordDao.Category.COMMON.resId)
 
     fun timeSpanAdapter(): SpinnerAdapter {
         val names = RecordDao.TimeSpan.values().map { it.name }.toTypedArray()
