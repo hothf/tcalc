@@ -100,7 +100,10 @@ class HomeViewModel : BaseViewModel() {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ result: Repository.CalculationResult ->
-                    resultText.postValue("monthly: ${result.monthlyValue}, yearly: ${result.yearlyValue}")
+                    resultText.postValue(
+                            "output: monthly: ${result.monthlyOutput}, yearly: ${result.yearlyOutput} \n " +
+                                    "income: monthly: ${result.monthlyIncome}, yearly: ${result.yearlyIncome} \n " +
+                                    "difference: ${result.monthlyDifference}, yearly: ${result.yearlyDifference}")
                     loadingVisibility.postValue(View.GONE)
                 }, { error ->
                     Timber.e(error, "While calculating")

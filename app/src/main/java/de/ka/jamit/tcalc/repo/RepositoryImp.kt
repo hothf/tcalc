@@ -12,6 +12,7 @@ import io.objectbox.query.Query
 import io.objectbox.rx.RxQuery
 import io.reactivex.Observable
 import io.reactivex.Single
+import kotlin.math.abs
 
 
 /**
@@ -151,16 +152,31 @@ class RepositoryImpl(val app: Application, val db: AppDatabase) : Repository {
 
     override fun calc(data: List<RecordDao>): Single<Repository.CalculationResult> {
         return Single.fromCallable {
-            val monthly = data
-                    .filter { it.isConsidered }
+            val monthlyOutput = data
+                    .filter { it.isConsidered && !it.isIncome }
                     .fold(0.0f) { total, item ->
                         when (item.timeSpan) {
                             RecordDao.TimeSpan.MONTHLY -> total + item.value
-                            RecordDao.TimeSpan.QUARTERLY -> total + (item.value / 4)
+                            RecordDao.TimeSpan.QUARTERLY -> total + (item.value / 3)
                             RecordDao.TimeSpan.YEARLY -> total + (item.value / 12)
                         }
                     }
-            Repository.CalculationResult(monthly, monthly * 12)
+            val monthlyInput = data
+                    .filter { it.isConsidered && it.isIncome }
+                    .fold(0.0f) { total, item ->
+                        when (item.timeSpan) {
+                            RecordDao.TimeSpan.MONTHLY -> total + item.value
+                            RecordDao.TimeSpan.QUARTERLY -> total + (item.value / 3)
+                            RecordDao.TimeSpan.YEARLY -> total + (item.value / 12)
+                        }
+                    }
+            Repository.CalculationResult(
+                    monthlyOutput = monthlyOutput,
+                    yearlyOutput = monthlyOutput * 12,
+                    monthlyIncome = monthlyInput,
+                    yearlyIncome = monthlyInput * 12,
+                    monthlyDifference = abs(monthlyInput - monthlyOutput),
+                    yearlyDifference = abs(monthlyInput - monthlyOutput) * 12)
         }
     }
 }

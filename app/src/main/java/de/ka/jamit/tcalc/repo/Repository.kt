@@ -91,12 +91,15 @@ interface Repository {
     /**
      * The calculation result.
      */
-    data class CalculationResult(val monthlyValue: Float, val yearlyValue: Float)
+    data class CalculationResult(val monthlyOutput: Float,
+                                 val yearlyOutput: Float,
+                                 val monthlyIncome: Float,
+                                 val yearlyIncome: Float,
+                                 val monthlyDifference: Float,
+                                 val yearlyDifference: Float)
 
     /**
      * Represents an import result
      */
     data class ImportResult(val name: String, val recordCount: Int)
-
-
 }
