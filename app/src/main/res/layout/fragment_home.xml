@@ -3,6 +3,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <data>
+
+        <variable
+            name="viewModel"
+            type="de.ka.jamit.tcalc.ui.home.HomeViewModel" />
+
+    </data>
+
     <RelativeLayout
         android:id="@+id/main"
         android:layout_width="match_parent"
@@ -40,46 +48,53 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_above="@+id/resultContainer"
-            app:show="@{viewModel.showEmptyView}"
+            android:layout_below="@+id/appbar"
             app:setInfoImageResourceId="@{viewModel.emptyViewImageRes}"
             app:setInfoText="@{viewModel.emptyViewText}"
-            android:layout_below="@+id/appbar" />
+            app:show="@{viewModel.showEmptyView}" />
+
 
         <RelativeLayout
             android:id="@+id/resultContainer"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/default_86"
             android:layout_alignParentBottom="true"
-            android:layout_marginBottom="@dimen/navBarHeight">
+            android:layout_marginBottom="@dimen/navBarHeight"
+
+            >
 
 
             <ProgressBar
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
+                android:layout_alignBottom="@+id/sumText"
+                android:layout_centerHorizontal="true"
                 android:visibility="@{viewModel.loadingVisibility}" />
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@{viewModel.resultText}" />
+                android:id="@+id/sumText"
+                style="@style/textDefault.bold"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/default_54"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:background="@color/defaultBackgroundSecondary"
+
+                android:gravity="center"
+                android:text="@{viewModel.resultText}"
+                tools:text="monthly: 12, yearly: 20" />
 
             <Button
                 android:id="@+id/addButton"
+                style="@style/ButtonStyle.Bordered"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
+                android:layout_centerHorizontal="true"
+
+                android:layout_marginBottom="@dimen/default_24"
                 android:onClick="@{()->viewModel.onAddClicked()}"
                 android:text="add" />
 
         </RelativeLayout>
     </RelativeLayout>
-
-    <data>
-
-        <variable
-            name="viewModel"
-            type="de.ka.jamit.tcalc.ui.home.HomeViewModel" />
-
-    </data>
 </layout>

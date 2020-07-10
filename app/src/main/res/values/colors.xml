@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#272af7</color>
-    <color name="colorPrimaryDark">#040693</color>
-    <color name="colorAccent">#4B92E3</color>
+    <color name="colorPrimary">#34ebc6</color>
+    <color name="colorPrimaryDark">#27b094</color>
+    <color name="colorAccent">#1f8f45</color>
     <color name="colorHighlight">@color/colorAccent</color>
 
     <color name="defaultBackgroundPrimary">#ffffff</color>
@@ -23,6 +23,7 @@
     <color name="fontNav">#232323</color>
     <color name="fontTitle">#333333</color>
     <color name="fontDefault">#6B6F88</color>
+    <color name="fontHint">#8B8Fa8</color>
     <color name="fontDisabled">#33888888</color>
     <color name="fontDefaultInverted">#ffffff</color>
 </resources>
