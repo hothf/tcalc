@@ -72,7 +72,6 @@ class HomeAddEditDialogViewModel : BaseViewModel() {
         val isValid = keyValidator.isValid(keyText.value) and valueValidator.isValid(valueText.value)
         if (!isValid) return
 
-
         val value = valueText.value?.toFloat() ?: 0.0f
         val key = keyText.value ?: ""
         val timeSpan = timeSpanPosition.value?.let { v ->
