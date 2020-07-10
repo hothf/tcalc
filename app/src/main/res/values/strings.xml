@@ -7,6 +7,9 @@
     <string name="add">Add new</string>
     <string name="share_export">Share your export</string>
 
+    <string name="record_key_hint">Entry</string>
+    <string name="record_value_hint">0.0</string>
+
     <string name="export_fallback_name">Export</string>
     <string name="import_fallback_name">Imported User</string>
     <string name="import_success_text">Imported %s successfully with %d entries!</string>
