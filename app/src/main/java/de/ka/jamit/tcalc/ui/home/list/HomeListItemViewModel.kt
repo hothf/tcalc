@@ -1,5 +1,6 @@
 package de.ka.jamit.tcalc.ui.home.list
 
+import de.ka.jamit.tcalc.R
 import de.ka.jamit.tcalc.base.BaseItemViewModel
 import de.ka.jamit.tcalc.repo.db.AppDatabase
 import de.ka.jamit.tcalc.repo.db.RecordDao
@@ -18,8 +19,10 @@ class HomeListItemViewModel(val item: RecordDao,
 
     val isHeader = listener == null
     val title = AppDatabase.getTranslatedStringForKey(resourcesProvider, item.key)
+    val alpha = if (item.isConsidered) 1.0f else 0.5f
     val value = item.value.toString()
     val timeSpan = item.timeSpan.name
+    val valueTextColor = if (item.isIncome) resourcesProvider.getColor(R.color.fontColorPositive) else resourcesProvider.getColor(R.color.fontColorNegative)
 
     /**
      * Called on a click of the item.
@@ -31,7 +34,7 @@ class HomeListItemViewModel(val item: RecordDao,
     /**
      * Called on a dismiss of the item (when being deleted for example).
      */
-    fun onDismissed(){
+    fun onDismissed() {
         repository.deleteRecord(item.id)
     }
 }

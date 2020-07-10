@@ -23,12 +23,14 @@ interface Repository {
     fun getAllRecordsOfCurrentlySelectedUser(): List<RecordDao>
 
     /**
-     * Saves a new record
+     * Saves a new record.
      */
     fun addRecord(key: String,
                   value: Float = 0.0f,
                   timeSpan: RecordDao.TimeSpan = RecordDao.TimeSpan.MONTHLY,
-                  category: RecordDao.Category = RecordDao.Category.COMMON)
+                  category: RecordDao.Category = RecordDao.Category.COMMON,
+                  isConsidered: Boolean,
+                  isIncome: Boolean)
 
     /**
      * Adds multiple records at once.
@@ -47,6 +49,8 @@ interface Repository {
                      key: String,
                      timeSpan: RecordDao.TimeSpan,
                      category: RecordDao.Category,
+                     isConsidered: Boolean,
+                     isIncome: Boolean,
                      id: Long)
 
     /**

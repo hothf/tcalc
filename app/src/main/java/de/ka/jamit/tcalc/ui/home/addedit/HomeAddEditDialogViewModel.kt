@@ -28,6 +28,8 @@ class HomeAddEditDialogViewModel : BaseViewModel() {
     val timeSpanPosition = MutableLiveData(0)
     val categoryPosition = MutableLiveData(0)
     val categoryImage = MutableLiveData<Int>(RecordDao.Category.COMMON.resId)
+    val consideredCheck = MutableLiveData<Boolean>(true)
+    val incomeCheck = MutableLiveData<Boolean>(false)
 
     fun timeSpanAdapter(): SpinnerAdapter {
         val names = RecordDao.TimeSpan.values().map { it.name }.toTypedArray()
@@ -39,7 +41,7 @@ class HomeAddEditDialogViewModel : BaseViewModel() {
         }
     }
 
-    fun updateCategory(id: Int){
+    fun updateCategory(id: Int) {
         categoryPosition.postValue(id)
         val categoryImageRes = RecordDao.Category.values().find { id == it.id }
                 ?: RecordDao.Category.COMMON
@@ -55,6 +57,8 @@ class HomeAddEditDialogViewModel : BaseViewModel() {
         val category = categoryPosition.value?.let { v ->
             RecordDao.Category.values().find { v == it.id }
         } ?: RecordDao.Category.COMMON
+        val isConsidered = consideredCheck.value ?: true
+        val isIncome = incomeCheck.value ?: false
 
         if (isUpdating) {
             repository.updateRecord(
@@ -62,13 +66,17 @@ class HomeAddEditDialogViewModel : BaseViewModel() {
                     key = key,
                     timeSpan = timeSpan,
                     category = category,
+                    isConsidered = isConsidered,
+                    isIncome = isIncome,
                     id = id)
         } else { // is creating a new entry!
             repository.addRecord(
                     key = key,
                     value = value,
                     timeSpan = timeSpan,
-                    category = category)
+                    category = category,
+                    isConsidered = isConsidered,
+                    isIncome = isIncome)
         }
         handle(Choose())
     }
@@ -89,6 +97,8 @@ class HomeAddEditDialogViewModel : BaseViewModel() {
         timeSpanPosition.postValue(bundle.getInt(HomeAddEditDialog.TIMESPAN_KEY))
         val category = bundle.getInt(HomeAddEditDialog.CATEGORY_KEY)
         updateCategory(category)
+        consideredCheck.postValue(bundle.getBoolean(HomeAddEditDialog.CONSIDERED_KEY))
+        incomeCheck.postValue(bundle.getBoolean(HomeAddEditDialog.INCOME_KEY))
         id = bundle.getLong(HomeAddEditDialog.ID_KEY)
     }
 

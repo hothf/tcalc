@@ -5,7 +5,7 @@
   "entities": [
     {
       "id": "3:2102197368772465985",
-      "lastPropertyId": "6:3266688976521394936",
+      "lastPropertyId": "8:6829942135681127047",
       "name": "RecordDao",
       "properties": [
         {
@@ -42,6 +42,18 @@
           "name": "category",
           "type": 5,
           "flags": 2
+        },
+        {
+          "id": "7:8844950188993647429",
+          "name": "isConsidered",
+          "type": 1,
+          "flags": 4
+        },
+        {
+          "id": "8:6829942135681127047",
+          "name": "isIncome",
+          "type": 1,
+          "flags": 4
         }
       ],
       "relations": []

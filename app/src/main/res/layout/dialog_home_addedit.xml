@@ -80,5 +80,26 @@
             app:setImageResource="@{viewModel.categoryImage}"
             tools:srcCompat="@tools:sample/avatars" />
 
+        <Switch
+            android:id="@+id/switch1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:text="Income"
+            android:checked="@={viewModel.incomeCheck}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/editText2" />
+
+        <Switch
+            android:id="@+id/switch2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="@={viewModel.consideredCheck}"
+            android:text="Considered"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/switch1" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

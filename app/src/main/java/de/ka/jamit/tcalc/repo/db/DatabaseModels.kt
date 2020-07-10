@@ -18,6 +18,8 @@ data class RecordDao(
         val timeSpan: TimeSpan = TimeSpan.MONTHLY,
         @Convert(converter = CategoryConverter::class, dbType = Int::class)
         val category: Category = Category.COMMON,
+        val isConsidered: Boolean = true,
+        val isIncome: Boolean = false,
         val userId: Long) {
 
     enum class TimeSpan(val id: Int) {

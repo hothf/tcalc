@@ -97,7 +97,12 @@ class RepositoryImpl(val app: Application, val db: AppDatabase) : Repository {
         userDao.remove(id)
     }
 
-    override fun addRecord(key: String, value: Float, timeSpan: RecordDao.TimeSpan, category: RecordDao.Category) {
+    override fun addRecord(key: String,
+                           value: Float,
+                           timeSpan: RecordDao.TimeSpan,
+                           category: RecordDao.Category,
+                           isConsidered: Boolean,
+                           isIncome: Boolean) {
         getCurrentlySelectedUser().let {
             recordDao.put(RecordDao(
                     id = 0,
@@ -105,6 +110,8 @@ class RepositoryImpl(val app: Application, val db: AppDatabase) : Repository {
                     key = key,
                     timeSpan = timeSpan,
                     category = category,
+                    isConsidered = isConsidered,
+                    isIncome = isIncome,
                     userId = it.id))
         }
     }
@@ -117,6 +124,8 @@ class RepositoryImpl(val app: Application, val db: AppDatabase) : Repository {
                               key: String,
                               timeSpan: RecordDao.TimeSpan,
                               category: RecordDao.Category,
+                              isConsidered: Boolean,
+                              isIncome: Boolean,
                               id: Long) {
         recordDao.get(id)?.let {
             recordDao.put(RecordDao(
@@ -125,6 +134,8 @@ class RepositoryImpl(val app: Application, val db: AppDatabase) : Repository {
                     key = key,
                     timeSpan = timeSpan,
                     category = category,
+                    isConsidered = isConsidered,
+                    isIncome = isIncome,
                     userId = it.userId))
         }
     }
@@ -140,13 +151,15 @@ class RepositoryImpl(val app: Application, val db: AppDatabase) : Repository {
 
     override fun calc(data: List<RecordDao>): Single<Repository.CalculationResult> {
         return Single.fromCallable {
-            val monthly = data.fold(0.0f) { total, item ->
-                when (item.timeSpan) {
-                    RecordDao.TimeSpan.MONTHLY -> total + item.value
-                    RecordDao.TimeSpan.QUARTERLY -> total + (item.value / 4)
-                    RecordDao.TimeSpan.YEARLY -> total + (item.value / 12)
-                }
-            }
+            val monthly = data
+                    .filter { it.isConsidered }
+                    .fold(0.0f) { total, item ->
+                        when (item.timeSpan) {
+                            RecordDao.TimeSpan.MONTHLY -> total + item.value
+                            RecordDao.TimeSpan.QUARTERLY -> total + (item.value / 4)
+                            RecordDao.TimeSpan.YEARLY -> total + (item.value / 12)
+                        }
+                    }
             Repository.CalculationResult(monthly, monthly * 12)
         }
     }

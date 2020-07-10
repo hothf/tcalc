@@ -44,7 +44,9 @@ class CSVUtils(private val repository: Repository, private val app: Application)
                                 key = record?.get(0) ?: "",
                                 timeSpan = timeSpanConverter.convertToEntityProperty(record?.get(1)?.toInt()),
                                 category = categoryConverter.convertToEntityProperty(record?.get(2)?.toInt()),
-                                value = record?.get(3)?.toFloat() ?: 0.0f,
+                                isConsidered = record?.get(3)?.toBoolean() ?: true,
+                                isIncome = record?.get(4)?.toBoolean() ?: false,
+                                value = record?.get(5)?.toFloat() ?: 0.0f,
                                 userId = repository.getCurrentlySelectedUser().id)
                         records.add(dao)
                     }
@@ -78,6 +80,8 @@ class CSVUtils(private val repository: Repository, private val app: Application)
                                 record.key,
                                 timeSpanConverter.convertToDatabaseValue(record.timeSpan).toString(),
                                 categoryConverter.convertToDatabaseValue(record.category).toString(),
+                                record.isConsidered.toString(),
+                                record.isIncome.toString(),
                                 record.value.toString())
                         writer.writeNext(data);
                     }

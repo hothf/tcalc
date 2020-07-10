@@ -26,4 +26,7 @@
     <color name="fontHint">#8B8Fa8</color>
     <color name="fontDisabled">#33888888</color>
     <color name="fontDefaultInverted">#ffffff</color>
+
+    <color name="fontColorPositive">#1f8f45</color>
+    <color name="fontColorNegative">#f11100</color>
 </resources>

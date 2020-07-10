@@ -32,6 +32,8 @@ class HomeAddEditDialog : BaseDialogFragment<DialogHomeAddeditBinding, HomeAddEd
         const val TIMESPAN_KEY = "_k_timespan_"
         const val CATEGORY_KEY = "_k_category"
         const val UPDATE_KEY = "_k_isupdate_"
+        const val CONSIDERED_KEY = "_k_consid"
+        const val INCOME_KEY = "_k_income"
     }
 
     override fun getResultRequestKey(): String {

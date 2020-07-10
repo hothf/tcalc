@@ -47,6 +47,8 @@ class HomeViewModel : BaseViewModel() {
             putFloat(HomeAddEditDialog.VALUE_KEY, it.item.value)
             putInt(HomeAddEditDialog.TIMESPAN_KEY, it.item.timeSpan.id)
             putInt(HomeAddEditDialog.CATEGORY_KEY, it.item.category.id)
+            putBoolean(HomeAddEditDialog.CONSIDERED_KEY, it.item.isConsidered)
+            putBoolean(HomeAddEditDialog.INCOME_KEY, it.item.isIncome)
             putLong(HomeAddEditDialog.ID_KEY, it.item.id)
         }
         navigateTo(R.id.dialogHomeAdd, args = arguments)
