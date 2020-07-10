@@ -14,6 +14,7 @@ import android.widget.FrameLayout
 import androidx.annotation.LayoutRes
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.setFragmentResult
+import androidx.fragment.app.setFragmentResultListener
 import androidx.lifecycle.Observer
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -60,6 +61,15 @@ abstract class BaseDialogFragment<out T : ViewDataBinding, E : BaseViewModel>(
         super.onCreateView(inflater, container, savedInstanceState)
 
         return createView(inflater, container, savedInstanceState)
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        if (this is FragmentResultable) {
+            setFragmentResultListener(getResultRequestKey()) { _, bundle ->
+                this.onFragmentResult(bundle)
+            }
+        }
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?) = when (dialogMode) {

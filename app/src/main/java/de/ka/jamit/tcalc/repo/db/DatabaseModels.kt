@@ -37,8 +37,8 @@ data class RecordDao(
 
     enum class Category(val id: Int, @DrawableRes val resId: Int) {
         COMMON(0, R.drawable.ic_home),
-        HOUSE(1, R.drawable.ic_home),
-        SAVING(2, R.drawable.ic_home),
+        HOUSE(1, R.drawable.ic_profile),
+        SAVING(2, R.drawable.ic_settings),
         CAR(3, R.drawable.ic_home)
     }
 

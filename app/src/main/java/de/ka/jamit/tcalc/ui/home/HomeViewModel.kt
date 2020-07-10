@@ -55,7 +55,7 @@ class HomeViewModel : BaseViewModel() {
     init {
         startObserving()
     }
-    
+
     private fun startObserving() {
         users?.let(compositeDisposable::remove)
         users = repository.observeUsers()

@@ -4,9 +4,11 @@ import android.os.Bundle
 import android.widget.ArrayAdapter
 import android.widget.SpinnerAdapter
 import androidx.lifecycle.MutableLiveData
+import de.ka.jamit.tcalc.R
 import de.ka.jamit.tcalc.base.BaseViewModel
 import de.ka.jamit.tcalc.repo.db.AppDatabase
 import de.ka.jamit.tcalc.repo.db.RecordDao
+import de.ka.jamit.tcalc.ui.home.category.CategoryDialog
 import de.ka.jamit.tcalc.utils.resources.ResourcesProvider
 import org.koin.core.inject
 
@@ -25,6 +27,7 @@ class HomeAddEditDialogViewModel : BaseViewModel() {
     val valueText = MutableLiveData<String>("")
     val timeSpanPosition = MutableLiveData(0)
     val categoryPosition = MutableLiveData(0)
+    val categoryImage = MutableLiveData<Int>(R.drawable.ic_settings)
 
     fun timeSpanAdapter(): SpinnerAdapter {
         val names = RecordDao.TimeSpan.values().map { it.name }.toTypedArray()
@@ -34,6 +37,13 @@ class HomeAddEditDialogViewModel : BaseViewModel() {
                 names).apply {
             setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         }
+    }
+
+    fun updateCategory(id: Int){
+        categoryPosition.postValue(id)
+        val categoryImageRes = RecordDao.Category.values().find { id == it.id }
+                ?: RecordDao.Category.COMMON
+        categoryImage.postValue(categoryImageRes.resId)
     }
 
     fun choose() {
@@ -63,6 +73,13 @@ class HomeAddEditDialogViewModel : BaseViewModel() {
         handle(Choose())
     }
 
+    fun onCategory() {
+        categoryPosition.value?.let {
+            val arguments = Bundle().apply { putInt(CategoryDialog.ID_KEY, it) }
+            navigateTo(R.id.dialogCategory, args = arguments)
+        }
+    }
+
     override fun onArgumentsReceived(bundle: Bundle) {
         super.onArgumentsReceived(bundle)
         isUpdating = bundle.getBoolean(HomeAddEditDialog.UPDATE_KEY, false)
@@ -70,9 +87,11 @@ class HomeAddEditDialogViewModel : BaseViewModel() {
         keyText.postValue(AppDatabase.getTranslatedStringForKey(resourcesProvider, key))
         valueText.postValue(bundle.getFloat(HomeAddEditDialog.VALUE_KEY).toString())
         timeSpanPosition.postValue(bundle.getInt(HomeAddEditDialog.TIMESPAN_KEY))
-        categoryPosition.postValue(bundle.getInt(HomeAddEditDialog.CATEGORY_KEY))
+        val category = bundle.getInt(HomeAddEditDialog.CATEGORY_KEY)
+        updateCategory(category)
         id = bundle.getLong(HomeAddEditDialog.ID_KEY)
     }
+
 
     class Choose
 }

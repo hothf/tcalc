@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="de.ka.jamit.tcalc.ui.home.category.CategoryListItemViewModel" />
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:background="?android:attr/selectableItemBackground"
+        android:onClick="@{()->viewModel.onClick()}">
+
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#ff0000" />
+
+        <RelativeLayout
+            android:id="@+id/swipeableContainer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/cardview_light_background">
+
+
+            <ImageView
+                android:id="@+id/title"
+                style="@style/textDefault.bold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/default_8"
+                app:setImageResource="@{viewModel.categoryImage}"
+                tools:text="Item title" />
+
+            <View
+                android:visibility="@{viewModel.selectedVisibility}"
+                android:layout_width="50dp"
+                android:background="#55000000"
+                android:layout_height="50dp" />
+
+
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+</layout>

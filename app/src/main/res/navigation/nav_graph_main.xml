@@ -40,5 +40,10 @@
         android:name="de.ka.jamit.tcalc.ui.settings.exporting.ExportingDialog"
         android:label="fragment_export_dialog"
         tools:layout="@layout/dialog_exporting" />
+    <dialog
+        android:id="@+id/dialogCategory"
+        android:name="de.ka.jamit.tcalc.ui.home.category.CategoryDialog"
+        android:label="fragment_category_dialog"
+        tools:layout="@layout/dialog_category" />
 
 </navigation>
