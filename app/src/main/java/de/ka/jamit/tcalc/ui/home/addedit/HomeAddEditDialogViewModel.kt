@@ -9,6 +9,8 @@ import de.ka.jamit.tcalc.base.BaseViewModel
 import de.ka.jamit.tcalc.repo.db.AppDatabase
 import de.ka.jamit.tcalc.repo.db.RecordDao
 import de.ka.jamit.tcalc.ui.home.category.CategoryDialog
+import de.ka.jamit.tcalc.utils.InputValidator
+import de.ka.jamit.tcalc.utils.ValidationRules
 import de.ka.jamit.tcalc.utils.resources.ResourcesProvider
 import org.koin.core.inject
 
@@ -20,6 +22,7 @@ import org.koin.core.inject
 class HomeAddEditDialogViewModel : BaseViewModel() {
 
     private val resourcesProvider: ResourcesProvider by inject()
+    private val inputValidator: InputValidator by inject()
     private var isUpdating = false
     private var id: Long = 0L
 
@@ -27,9 +30,24 @@ class HomeAddEditDialogViewModel : BaseViewModel() {
     val valueText = MutableLiveData<String>("")
     val timeSpanPosition = MutableLiveData(0)
     val categoryPosition = MutableLiveData(0)
+    val keyError = MutableLiveData<String?>(null)
+    val valueError = MutableLiveData<String?>(null)
     val categoryImage = MutableLiveData<Int>(RecordDao.Category.COMMON.resId)
     val consideredCheck = MutableLiveData<Boolean>(true)
     val incomeCheck = MutableLiveData<Boolean>(false)
+
+    private val keyValidator = inputValidator.Validator(
+            InputValidator.ValidatorConfig(
+                    keyError,
+                    listOf(ValidationRules.NOT_EMPTY, ValidationRules.MIN_4)
+            )
+    )
+    private val valueValidator = inputValidator.Validator(
+            InputValidator.ValidatorConfig(
+                    valueError,
+                    listOf(ValidationRules.NOT_EMPTY, ValidationRules.IS_FLOAT)
+            )
+    )
 
     fun timeSpanAdapter(): SpinnerAdapter {
         val names = RecordDao.TimeSpan.values().map { it.name }.toTypedArray()
@@ -49,6 +67,10 @@ class HomeAddEditDialogViewModel : BaseViewModel() {
     }
 
     fun choose() {
+        val isValid = keyValidator.isValid(keyText.value) and valueValidator.isValid(valueText.value)
+        if (!isValid) return
+
+
         val value = valueText.value?.toFloat() ?: 0.0f
         val key = keyText.value ?: ""
         val timeSpan = timeSpanPosition.value?.let { v ->

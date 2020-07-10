@@ -13,4 +13,9 @@
 
     <string name="home_empty_text">No entries!</string>
 
+    <string name="error_input_empty">Please enter something</string>
+    <string name="error_input_not_float">Please enter a valid number</string>
+    <string name="error_input_too_small">Please use at least %s characters</string>
+    <string name="error_input_too_long">Please use a maximum of %s characters</string>
+
 </resources>

@@ -15,6 +15,7 @@ import de.ka.jamit.tcalc.ui.settings.importing.ImportingDialogViewModel
 import de.ka.jamit.tcalc.utils.CSVUtils
 import de.ka.jamit.tcalc.utils.CloseEventListener
 import de.ka.jamit.tcalc.utils.GlobalMessageEventListener
+import de.ka.jamit.tcalc.utils.InputValidator
 import de.ka.jamit.tcalc.utils.resources.ResourcesProvider
 import de.ka.jamit.tcalc.utils.resources.ResourcesProviderImpl
 import org.koin.androidx.viewmodel.dsl.viewModel
@@ -40,6 +41,7 @@ val appModule = module {
     single { GlobalMessageEventListener() }
     single { CloseEventListener() }
     single { CSVUtils(get(), get()) }
+    single { InputValidator(get()) }
 
     single { AppDatabase(get()) }
     single { RepositoryImpl(get(), get()) as Repository }
