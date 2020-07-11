@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="viewModel"
             type="de.ka.jamit.tcalc.ui.main.MainViewModel" />
@@ -24,8 +25,8 @@
             app:navGraph="@navigation/nav_graph_main" />
 
         <com.google.android.material.bottomnavigation.BottomNavigationView
-            style="@style/bottomNavigation"
             android:id="@+id/bottom_navigation"
+            style="@style/bottomNavigation"
             android:layout_width="match_parent"
             android:layout_height="@dimen/navBarHeight"
             app:layout_anchor="@+id/main_nav_host_fragment"

@@ -50,11 +50,16 @@
     </style>
 
     <style name="ButtonStyle.Bordered" parent="@style/Widget.MaterialComponents.Button">
-        <item name="cornerRadius">@dimen/default_4</item>
         <item name="shapeAppearance">@style/cardShape</item>
         <item name="android:textAllCaps">false</item>
         <item name="android:textSize">@dimen/font_default_size</item>
         <item name="android:textColor">@color/fontDefaultInverted</item>
+    </style>
+
+    <style name="FabButtonStyle" parent="@style/Widget.MaterialComponents.FloatingActionButton">
+        <item name="shapeAppearance">@style/cardShape</item>
+        <item name="backgroundTint">@color/colorAccent</item>
+        <item name="tint">@color/defaultBackgroundPrimary</item>
     </style>
 
     <style name="cardShape" parent="ShapeAppearance.MaterialComponents.MediumComponent">
@@ -67,7 +72,15 @@
 
     <style name="textDefault" parent="TextAppearance.AppCompat">
         <item name="android:textSize">@dimen/font_max_size</item>
-        <item name="android:textColor">@color/colorAccent</item>
+        <item name="android:textColor">@color/fontDefault</item>
+    </style>
+
+    <style name="textDefault.small" parent="textDefault">
+        <item name="android:textSize">@dimen/font_min_size</item>
+    </style>
+
+    <style name="textDefault.small.bold" parent="textDefault.small">
+        <item name="android:textStyle">bold</item>
     </style>
 
     <style name="textDefault.bold" parent="textDefault">

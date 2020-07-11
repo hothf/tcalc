@@ -175,8 +175,8 @@ class RepositoryImpl(val app: Application, val db: AppDatabase) : Repository {
                     yearlyOutput = monthlyOutput * 12,
                     monthlyIncome = monthlyInput,
                     yearlyIncome = monthlyInput * 12,
-                    monthlyDifference = abs(monthlyInput - monthlyOutput),
-                    yearlyDifference = abs(monthlyInput - monthlyOutput) * 12)
+                    monthlyDifference = (monthlyInput - monthlyOutput),
+                    yearlyDifference = (monthlyInput - monthlyOutput) * 12)
         }
     }
 }

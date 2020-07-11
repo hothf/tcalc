@@ -11,7 +11,7 @@
 
     </data>
 
-    <RelativeLayout
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:id="@+id/main"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -19,82 +19,250 @@
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/appbar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:background="@color/defaultBackgroundPrimary">
 
             <androidx.appcompat.widget.Toolbar
                 android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                app:layout_scrollFlags="scroll|enterAlways" />
+                android:layout_height="@dimen/default_76"
+                app:layout_scrollFlags="scroll|enterAlways">
 
-            <TextView
-                android:id="@+id/timespanSpinner"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="?attr/selectableItemBackground"
-                android:onClick="@{()->viewModel.onUserClicked()}"
-                android:text="@{viewModel.userText}" />
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/default_36"
+                    android:layout_marginEnd="@dimen/default_36"
+                    android:background="@drawable/bg_bordered_cornered">
 
+                    <TextView
+                        android:id="@+id/userText"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/default_54"
+                        android:layout_centerHorizontal="true"
+                        android:background="?attr/selectableItemBackground"
+                        android:ellipsize="end"
+                        android:gravity="center"
+                        android:onClick="@{()->viewModel.onUserClicked()}"
+                        android:paddingStart="@dimen/default_16"
+                        android:paddingEnd="@dimen/default_16"
+                        android:singleLine="true"
+                        android:text="@{viewModel.userText}"
+                        tools:text="Username" />
+
+                    <ImageView
+                        android:id="@+id/userDrop"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:src="@drawable/ic_dropdown"
+                        android:tint="@color/fontDefault" />
+
+                </RelativeLayout>
+            </androidx.appcompat.widget.Toolbar>
         </com.google.android.material.appbar.AppBarLayout>
 
         <de.ka.jamit.tcalc.utils.AutoReleaseRecyclerView
+            android:id="@+id/homeRecycler"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_above="@+id/resultContainer"
-            android:layout_below="@+id/appbar"
+            android:layout_below="@+id/userText"
+            android:layout_gravity="bottom"
+            android:paddingBottom="@dimen/default_156"
             app:adapter="@{viewModel.adapter}"
-            app:layoutManager="@{viewModel.layoutManager()}" />
+            app:layoutManager="@{viewModel.layoutManager()}"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
-        <de.ka.jamit.tcalc.utils.EmptyViewLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_above="@+id/resultContainer"
-            android:layout_below="@+id/appbar"
-            app:setInfoImageResourceId="@{viewModel.emptyViewImageRes}"
-            app:setInfoText="@{viewModel.emptyViewText}"
-            app:show="@{viewModel.showEmptyView}" />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+
+            >
+
+            <de.ka.jamit.tcalc.utils.EmptyViewLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                app:setInfoImageResourceId="@{viewModel.emptyViewImageRes}"
+                app:setInfoText="@{viewModel.emptyViewText}"
+                app:show="@{viewModel.showEmptyView}" />
+
+        </RelativeLayout>
 
 
         <RelativeLayout
             android:id="@+id/resultContainer"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/default_86"
-            android:layout_alignParentBottom="true"
-            android:layout_marginBottom="@dimen/navBarHeight"
+            android:layout_height="@dimen/default_100"
+            android:layout_gravity="bottom"
+            android:layout_marginBottom="@dimen/navBarHeight">
 
-            >
+            <View
+                android:id="@+id/resultShadow"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/default_4"
+                android:layout_alignParentTop="true"
+                android:background="@drawable/bg_shadow_top" />
+
+            <TableLayout
+                android:id="@+id/resultTable"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/resultShadow"
+                android:layout_centerInParent="true"
+                android:background="@color/defaultBackgroundPrimary"
+                android:gravity="center_horizontal|bottom"
+                android:paddingStart="@dimen/default_8"
+                android:paddingEnd="@dimen/default_8"
+                android:paddingBottom="@dimen/default_4"
+                android:stretchColumns="*">
+
+                <TableRow android:visibility="@{viewModel.resultVisibility}">
+
+                    <ImageView
+                        android:layout_width="@dimen/default_24"
+                        android:layout_height="@dimen/default_24"
+                        android:src="@drawable/ic_add"
+                        android:tint="@color/fontColorPositive" />
+
+                    <TextView
+                        style="@style/textDefault.small"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:text="@string/home_result_monthly"
+                        tools:text="monthly" />
+
+                    <TextView
+                        style="@style/textDefault.small.bold"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical|start"
+                        android:text="@{viewModel.resultMonthlyIncomeText}"
+                        tools:text="123" />
+
+                    <TextView
+                        style="@style/textDefault.small"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:text="@string/home_result_yearly"
+                        tools:text="yearly" />
+
+                    <TextView
+                        style="@style/textDefault.small.bold"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical|start"
+                        android:text="@{viewModel.resultYearlyIncomeText}"
+                        tools:text="345" />
+                </TableRow>
+
+                <TableRow android:visibility="@{viewModel.resultVisibility}">
+
+                    <ImageView
+                        android:layout_width="@dimen/default_24"
+                        android:layout_height="@dimen/default_24"
+                        android:src="@drawable/ic_remove"
+                        android:tint="@color/fontColorNegative" />
+
+                    <TextView
+                        style="@style/textDefault.small"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:text="@string/home_result_monthly"
+                        tools:text="monthly" />
+
+                    <TextView
+                        style="@style/textDefault.small.bold"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical|start"
+                        android:text="@{viewModel.resultMonthlyOutputText}"
+                        tools:text="123" />
+
+                    <TextView
+                        style="@style/textDefault.small"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:text="@string/home_result_yearly"
+                        tools:text="yearly" />
+
+                    <TextView
+                        style="@style/textDefault.small.bold"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical|start"
+                        android:text="@{viewModel.resultYearlyOutputText}"
+                        tools:text="345" />
+                </TableRow>
+
+                <TableRow android:visibility="@{viewModel.resultVisibility}">
+
+                    <ImageView
+                        android:layout_width="@dimen/default_24"
+                        android:layout_height="@dimen/default_24"
+                        android:src="@drawable/ic_delta"
+                        android:tint="@color/fontDefault" />
+
+                    <TextView
+                        style="@style/textDefault.small"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:text="@string/home_result_monthly"
+                        tools:text="monthly" />
+
+                    <TextView
+                        style="@style/textDefault.small.bold"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical|start"
+                        android:text="@{viewModel.resultMonthlyDeltaText}"
+                        android:textColor="@{viewModel.deltaTextColor}"
+                        tools:text="123" />
+
+                    <TextView
+                        style="@style/textDefault.small"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:text="@string/home_result_yearly"
+                        tools:text="yearly" />
+
+                    <TextView
+                        style="@style/textDefault.small.bold"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical|start"
+                        android:text="@{viewModel.resultYearlyDeltaText}"
+                        android:textColor="@{viewModel.deltaTextColor}"
+                        tools:text="345" />
+                </TableRow>
+
+
+            </TableLayout>
 
 
             <ProgressBar
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignBottom="@+id/sumText"
+                android:layout_alignTop="@+id/resultTable"
+                android:layout_alignBottom="@+id/resultTable"
                 android:layout_centerHorizontal="true"
                 android:visibility="@{viewModel.loadingVisibility}" />
-
-            <TextView
-                android:id="@+id/sumText"
-                style="@style/textDefault.bold"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/default_54"
-                android:layout_alignParentBottom="true"
-                android:layout_centerHorizontal="true"
-                android:background="@color/defaultBackgroundSecondary"
-
-                android:gravity="center"
-                android:text="@{viewModel.resultText}"
-                tools:text="monthly: 12, yearly: 20" />
-
-            <Button
-                android:id="@+id/addButton"
-                style="@style/ButtonStyle.Bordered"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-
-                android:layout_marginBottom="@dimen/default_24"
-                android:onClick="@{()->viewModel.onAddClicked()}"
-                android:text="add" />
-
         </RelativeLayout>
-    </RelativeLayout>
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/addButton"
+            style="@style/FabButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="@{()->viewModel.onAddClicked()}"
+            android:src="@drawable/ic_add"
+            app:layout_anchor="@+id/resultContainer"
+            app:layout_anchorGravity="center_horizontal" />
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

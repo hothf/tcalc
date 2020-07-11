@@ -28,11 +28,18 @@ class HomeViewModel : BaseViewModel() {
     private var users: Disposable? = null
     private var userRecords: Disposable? = null
 
-    var emptyViewText = MutableLiveData<String>(resourcesProvider.getString(R.string.home_empty_text))
-    var emptyViewImageRes = MutableLiveData<Int>(R.drawable.ic_home)
-    var loadingVisibility = MutableLiveData<Int>(View.GONE)
-    var showEmptyView = MutableLiveData<Boolean>(false)
-    val resultText = MutableLiveData<String>("")
+    val emptyViewText = MutableLiveData<String>(resourcesProvider.getString(R.string.home_empty_text))
+    val deltaTextColor = MutableLiveData<Int>(resourcesProvider.getColor(R.color.fontDefault))
+    val emptyViewImageRes = MutableLiveData<Int>(R.drawable.ic_home)
+    val loadingVisibility = MutableLiveData<Int>(View.GONE)
+    val resultVisibility = MutableLiveData<Int>(View.GONE)
+    val showEmptyView = MutableLiveData<Boolean>(false)
+    val resultMonthlyIncomeText = MutableLiveData<String>("")
+    val resultYearlyIncomeText = MutableLiveData<String>("")
+    val resultMonthlyOutputText = MutableLiveData<String>("")
+    val resultYearlyOutputText = MutableLiveData<String>("")
+    val resultMonthlyDeltaText = MutableLiveData<String>("")
+    val resultYearlyDeltaText = MutableLiveData<String>("")
     val userText = MutableLiveData<String>("")
     val adapter = HomeListAdapter()
 
@@ -95,19 +102,46 @@ class HomeViewModel : BaseViewModel() {
     }
 
     private fun calc(data: List<RecordDao>) {
+        resultVisibility.postValue(View.GONE)
         loadingVisibility.postValue(View.VISIBLE)
         repository.calc(data)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ result: Repository.CalculationResult ->
-                    resultText.postValue(
-                            "output: monthly: ${result.monthlyOutput}, yearly: ${result.yearlyOutput} \n " +
-                                    "income: monthly: ${result.monthlyIncome}, yearly: ${result.yearlyIncome} \n " +
-                                    "difference: ${result.monthlyDifference}, yearly: ${result.yearlyDifference}")
+                    // TODO get unit from repository or elsewhere!
+                    Timber.e("wat::: ${result.monthlyIncome}")
+                    resultMonthlyIncomeText.postValue(
+                            String.format(resourcesProvider.getString(R.string.home_result_format),
+                                    result.monthlyIncome, "€"))
+                    resultMonthlyOutputText.postValue(
+                            String.format(resourcesProvider.getString(R.string.home_result_format),
+                                    result.monthlyOutput, "€"))
+                    resultMonthlyDeltaText.postValue(
+                            String.format(resourcesProvider.getString(R.string.home_result_format),
+                                    result.monthlyDifference, "€"))
+
+                    resultYearlyIncomeText.postValue(
+                            String.format(resourcesProvider.getString(R.string.home_result_format),
+                                    result.yearlyIncome, "€"))
+                    resultYearlyOutputText.postValue(
+                            String.format(resourcesProvider.getString(R.string.home_result_format),
+                                    result.yearlyOutput, "€"))
+                    resultYearlyDeltaText.postValue(
+                            String.format(resourcesProvider.getString(R.string.home_result_format),
+                                    result.yearlyDifference, "€"))
+
+                    if (result.monthlyDifference < 0) {
+                        deltaTextColor.postValue(resourcesProvider.getColor(R.color.fontColorNegative))
+                    } else {
+                        deltaTextColor.postValue(resourcesProvider.getColor(R.color.fontColorPositive))
+                    }
+
                     loadingVisibility.postValue(View.GONE)
+                    resultVisibility.postValue(View.VISIBLE)
                 }, { error ->
                     Timber.e(error, "While calculating")
                     loadingVisibility.postValue(View.GONE)
+                    resultVisibility.postValue(View.VISIBLE)
                 }).addTo(compositeDisposable)
     }
 }

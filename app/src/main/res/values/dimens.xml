@@ -30,9 +30,11 @@
     <dimen name="default_76">76dp</dimen>
     <dimen name="default_86">86dp</dimen>
     <dimen name="default_90">90dp</dimen>
+    <dimen name="default_100">100dp</dimen>
     <dimen name="default_112">112dp</dimen>
     <dimen name="default_124">124dp</dimen>
     <dimen name="default_134">134dp</dimen>
+    <dimen name="default_156">156dp</dimen>
 
     <dimen name="font_min_size">11sp</dimen>
     <dimen name="font_default_size">14sp</dimen>
