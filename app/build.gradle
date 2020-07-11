@@ -102,4 +102,7 @@ dependencies {
 
     // csv
     implementation "com.opencsv:opencsv:$csv_version"
+
+    // recyclerview animations
+    implementation "jp.wasabeef:recyclerview-animators:$rv_animations_version"
 }

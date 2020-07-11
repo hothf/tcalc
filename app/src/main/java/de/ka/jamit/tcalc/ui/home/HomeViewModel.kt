@@ -18,6 +18,7 @@ import io.reactivex.disposables.Disposable
 
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.schedulers.Schedulers
+import jp.wasabeef.recyclerview.animators.SlideInDownAnimator
 import org.koin.core.inject
 import timber.log.Timber
 
@@ -42,6 +43,8 @@ class HomeViewModel : BaseViewModel() {
     val resultYearlyDeltaText = MutableLiveData<String>("")
     val userText = MutableLiveData<String>("")
     val adapter = HomeListAdapter()
+
+    fun itemAnimator() = SlideInDownAnimator()
 
     fun onUserClicked() {
         navigateTo(R.id.dialogUser)

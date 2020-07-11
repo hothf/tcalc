@@ -69,6 +69,7 @@
             android:layout_below="@+id/userText"
             android:layout_gravity="bottom"
             android:paddingBottom="@dimen/default_156"
+            app:setItemAnimator="@{viewModel.itemAnimator}"
             app:adapter="@{viewModel.adapter}"
             app:layoutManager="@{viewModel.layoutManager()}"
             app:layout_behavior="@string/appbar_scrolling_view_behavior" />
