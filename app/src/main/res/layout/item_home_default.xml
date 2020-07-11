@@ -48,14 +48,10 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:foreground="@drawable/rounded_button_transculent_selector"
-                android:onClick="@{()->viewModel.onClick()}" />
-
-            <View
-                android:layout_width="match_parent"
                 android:alpha="@{viewModel.alpha}"
                 android:background="@color/defaultBackgroundSecondary"
-                android:layout_height="match_parent" />
+                android:foreground="@drawable/rounded_button_transculent_selector"
+                android:onClick="@{()->viewModel.onClick()}" />
 
             <ImageView
                 android:id="@+id/symbol"
@@ -95,7 +91,6 @@
                 android:layout_marginStart="@dimen/default_8"
                 android:text="@{viewModel.title}"
                 tools:text="Item title" />
-
 
             <TextView
                 style="@style/textDefault.small"

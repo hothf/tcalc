@@ -54,5 +54,21 @@
                 app:setItemAnimator="@{viewModel.itemAnimator}" />
 
         </androidx.core.widget.NestedScrollView>
+
+        <de.ka.jamit.tcalc.utils.Snacker
+            android:id="@+id/dialogSnacker"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginStart="@dimen/default_76"
+            android:layout_marginEnd="@dimen/default_76"
+            android:layout_above="@+id/helperBottom" />
+
+        <View
+            android:id="@+id/helperBottom"
+            android:layout_width="@dimen/default_1"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="@dimen/default_32"
+            android:layout_height="@dimen/default_1" />
     </RelativeLayout>
 </layout>

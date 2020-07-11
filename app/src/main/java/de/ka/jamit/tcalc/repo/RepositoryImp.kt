@@ -23,6 +23,7 @@ class RepositoryImpl(val app: Application, val db: AppDatabase) : Repository {
     private val userDao: Box<UserDao> = db.get().boxFor()
     private var currentlySelectedUser: UserDao? = null
     private var lastRemovedRecordDao: RecordDao? = null
+    private var lastRemovedUserDao: UserDao? = null
 
     override var lastImportResult: Repository.ImportResult? = null
 
@@ -89,6 +90,7 @@ class RepositoryImpl(val app: Application, val db: AppDatabase) : Repository {
         if (currentlySelectedUser?.id == id) { // would be not so nice to have nothing selected
             selectUser(1) // user 1 is not deletable, so select it now!
         }
+        lastRemovedUserDao = userDao.get(id)
         val recordIds = recordDao.query()
                 .equal(RecordDao_.userId, id)
                 .build()
@@ -96,6 +98,14 @@ class RepositoryImpl(val app: Application, val db: AppDatabase) : Repository {
                 .toList()
         recordDao.removeByIds(recordIds)
         userDao.remove(id)
+    }
+
+    override fun undoDeleteLastUser() {
+        val lastUser = lastRemovedUserDao
+        if (lastUser != null) {
+            userDao.put(lastUser)
+            lastRemovedUserDao = null
+        }
     }
 
     override fun addRecord(key: String,

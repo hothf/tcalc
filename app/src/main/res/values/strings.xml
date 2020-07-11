@@ -13,11 +13,13 @@
     <string name="user_hint">Username</string>
     <string name="user_title">Manage users</string>
     <string name="user_add">Add a new user</string>
+    <string name="user_delete_undo_title">User deleted</string>
+    <string name="user_delete_undo_action">Undo</string>
 
     <string name="home_result_format">%.2f %s</string>
     <string name="home_result_monthly">Monthly:</string>
     <string name="home_result_yearly">Yearly:</string>
-    <string name="home_delete_undo_title">Item deleted</string>
+    <string name="home_delete_undo_title">Entry deleted</string>
     <string name="home_delete_undo_action">Undo</string>
 
     <string name="home_addedit_title_add">Add new entry</string>

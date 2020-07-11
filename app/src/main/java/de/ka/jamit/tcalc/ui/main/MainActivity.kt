@@ -34,6 +34,9 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>(R.layout.a
     }
 
     override fun onShowMessage(showSnack: ShowSnack) {
-        getBinding<ActivityMainBinding>()?.mainSnacker?.reveal(showSnack)
+        getBinding<ActivityMainBinding>()?.mainSnacker?.apply {
+            bringToFront()
+            reveal(showSnack)
+        }
     }
 }

@@ -94,6 +94,11 @@ interface Repository {
     fun deleteUser(id: Long)
 
     /**
+     * Undo the deletion of the last user, if possible.
+     */
+    fun undoDeleteLastUser()
+
+    /**
      * The calculation result.
      */
     data class CalculationResult(val monthlyOutput: Float,

@@ -4,9 +4,11 @@ import android.os.Bundle
 import androidx.recyclerview.widget.LinearLayoutManager
 import de.ka.jamit.tcalc.R
 import de.ka.jamit.tcalc.base.BaseViewModel
+import de.ka.jamit.tcalc.base.events.ShowSnack
 import de.ka.jamit.tcalc.repo.db.UserDao
 import de.ka.jamit.tcalc.ui.home.addedit.HomeAddEditDialog
 import de.ka.jamit.tcalc.ui.home.user.addedit.UserAddEditDialog
+import de.ka.jamit.tcalc.utils.Snacker
 import de.ka.jamit.tcalc.utils.resources.ResourcesProvider
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.addTo
@@ -43,7 +45,11 @@ class UserDialogViewModel : BaseViewModel() {
     }
 
     private val deletionListener: () -> Unit = {
-        // not needed right now
+        handle(ShowDialogSnack(ShowSnack(
+                message = resourcesProvider.getString(R.string.user_delete_undo_title),
+                type = Snacker.SnackType.DEFAULT,
+                actionText = resourcesProvider.getString(R.string.user_delete_undo_action),
+                actionListener = { repository.undoDeleteLastUser() })))
     }
 
     private val addListener: () -> Unit = {
@@ -73,4 +79,5 @@ class UserDialogViewModel : BaseViewModel() {
     }
 
     class Close
+    class ShowDialogSnack(val snack: ShowSnack)
 }

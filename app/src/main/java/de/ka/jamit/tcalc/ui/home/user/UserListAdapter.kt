@@ -9,6 +9,8 @@ import de.ka.jamit.tcalc.base.BaseAdapter
 import de.ka.jamit.tcalc.base.BaseViewHolder
 import de.ka.jamit.tcalc.databinding.ItemUserAddBinding
 import de.ka.jamit.tcalc.databinding.ItemUserDefaultBinding
+import kotlin.math.abs
+import kotlin.math.min
 
 /**
  * A adapter for user list items.
@@ -54,10 +56,39 @@ class UserListAdapter(list: ArrayList<UserListItemViewModel> = arrayListOf()) :
     }
 }
 
-class UserListViewHolder(binding: ItemUserDefaultBinding) : BaseViewHolder<ViewDataBinding>(binding) {
+class UserListViewHolder(val binding: ItemUserDefaultBinding) : BaseViewHolder<ViewDataBinding>
+(binding) {
     override var swipeableView: View? = binding.swipeableContainer
     override var isSwipeable = true
     override var isDraggable = false
+
+    override fun onHolderClear() {
+        binding.deleteLeftImage.alpha = 0.0f
+        binding.deleteLeftImage.scaleX = 0.0f
+        binding.deleteLeftImage.scaleY = 0.0f
+
+        binding.deleteRightImage.alpha = 0.0f
+        binding.deleteRightImage.scaleX = 0.0f
+        binding.deleteRightImage.scaleY = 0.0f
+        super.onHolderClear()
+    }
+
+    override fun onHolderSwipe(dX: Float, dY: Float, actionState: Int) {
+        swipeableView?.let {
+            val change = (abs(dX) / it.width) * 2
+            if (dX < 0) {
+                binding.deleteLeftImage.alpha = 0.0f + change
+                binding.deleteLeftImage.scaleX = min(0.0f + change, 1.0f)
+                binding.deleteLeftImage.scaleY = min(0.0f + change, 1.0f)
+            } else {
+                binding.deleteRightImage.alpha = 0.0f + change
+                binding.deleteRightImage.scaleX = min(0.0f + change, 1.0f)
+                binding.deleteRightImage.scaleY = min(0.0f + change, 1.0f)
+            }
+        }
+
+        super.onHolderSwipe(dX, dY, actionState)
+    }
 }
 
 class UserDefaultListViewHolder(binding: ItemUserDefaultBinding) : BaseViewHolder<ViewDataBinding>(binding) {
