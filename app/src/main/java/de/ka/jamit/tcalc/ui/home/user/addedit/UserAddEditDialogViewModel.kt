@@ -28,7 +28,7 @@ class UserAddEditDialogViewModel : BaseViewModel() {
     private val titleValidator = inputValidator.Validator(
             InputValidator.ValidatorConfig(
                     titleError,
-                    listOf(ValidationRules.NOT_EMPTY, ValidationRules.MIN_4)
+                    listOf(ValidationRules.NOT_EMPTY, ValidationRules.MIN_3)
             )
     )
 

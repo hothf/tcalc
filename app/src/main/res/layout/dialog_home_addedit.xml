@@ -14,106 +14,192 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-
-        <EditText
-            android:id="@+id/editText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginBottom="384dp"
-            android:maxLines="1"
-            android:singleLine="true"
-            android:hint="@string/record_key_hint"
-            android:text="@={viewModel.keyText}"
-            app:setError="@{viewModel.keyError}"
-            app:setSelection="@{viewModel.keySelection}"
-            app:layout_constraintBottom_toTopOf="@+id/button"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.448"
-            android:imeOptions="actionNext"
-            android:inputType="textCapSentences"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <EditText
-            android:id="@+id/editText2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginBottom="152dp"
-            android:maxLines="1"
-            android:singleLine="true"
-            android:hint="@string/record_value_hint"
-            android:text="@={viewModel.valueText}"
-            app:setError="@{viewModel.valueError}"
-            android:imeOptions="actionDone"
-            android:inputType="numberDecimal"
-            app:setSelection="@{viewModel.valueSelection}"
-            app:layout_constraintBottom_toTopOf="@+id/button"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.448"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/editText" />
-
-        <Spinner
-            android:id="@+id/timespanSpinner"
+        <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:setAdapter="@{viewModel.timeSpanAdapter}"
-            android:selectedItemPosition="@={viewModel.timeSpanPosition}"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/editText"
-            app:layout_constraintVertical_bias="0.094" />
+            app:layout_constraintEnd_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-        <Button
-            android:id="@+id/button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="48dp"
-            android:onClick="@{()->viewModel.choose()}"
-            android:text="save"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.498"
-            app:layout_constraintStart_toStartOf="parent" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
 
-        <ImageView
-            android:id="@+id/imageView"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:onClick="@{()->viewModel.onCategory()}"
-            app:layout_constraintBottom_toTopOf="@+id/editText2"
-            app:layout_constraintEnd_toEndOf="@+id/timespanSpinner"
-            app:layout_constraintStart_toStartOf="@+id/timespanSpinner"
-            app:layout_constraintTop_toBottomOf="@+id/editText"
-            app:setImageResource="@{viewModel.categoryImage}"
-            tools:srcCompat="@tools:sample/avatars" />
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
 
-        <Switch
-            android:id="@+id/switch1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:text="Income"
-            android:checked="@={viewModel.incomeCheck}"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/editText2" />
+                    <TextView
+                        style="@style/textDefault.title"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/default_20"
+                        android:gravity="center"
+                        android:text="@{viewModel.editOrNewText}"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:text="Edit or New" />
 
-        <Switch
-            android:id="@+id/switch2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:checked="@={viewModel.consideredCheck}"
-            android:text="Considered"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/switch1" />
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/closeButton"
+                        style="@style/ButtonStyle.Transculent"
+                        android:layout_width="@dimen/default_48"
+                        android:layout_height="@dimen/default_58"
+                        android:layout_alignParentEnd="true"
+                        android:layout_marginTop="@dimen/default_4"
+                        android:layout_marginEnd="@dimen/default_8"
+                        android:onClick="@{()->viewModel.onClose()}"
+                        android:tint="@color/fontDefault"
+                        app:icon="@drawable/ic_close"
+                        app:iconSize="@dimen/default_24"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
 
+                </RelativeLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/default_16"
+                    android:background="@drawable/bg_bordered_cornered"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/default_8"
+                        android:text="Reffering:" />
+
+                    <EditText
+                        android:id="@+id/editText"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/default_54"
+                        android:layout_marginStart="@dimen/default_8"
+                        android:layout_marginEnd="@dimen/default_8"
+                        android:hint="@string/record_key_hint"
+                        android:imeOptions="actionNext"
+                        android:inputType="textCapSentences"
+                        android:maxLines="1"
+                        android:singleLine="true"
+                        android:text="@={viewModel.keyText}"
+                        app:setError="@{viewModel.keyError}"
+                        app:setSelection="@{viewModel.keySelection}" />
+
+                </LinearLayout>
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center">
+
+                    <ImageView
+                        android:id="@+id/imageView"
+                        android:layout_width="@dimen/default_54"
+                        android:layout_height="@dimen/default_54"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_margin="@dimen/default_16"
+                        android:background="@drawable/bg_bordered_cornered"
+                        android:onClick="@{()->viewModel.onCategory()}"
+                        android:foreground="@drawable/rounded_button_transculent_selector"
+                        android:padding="@dimen/default_4"
+                        android:tint="@{viewModel.categoryShade}"
+                        app:setImageResource="@{viewModel.categoryImage}"
+                        tools:srcCompat="@tools:sample/avatars" />
+
+                    <View
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignStart="@+id/imageView"
+                        android:layout_alignTop="@+id/imageView"
+                        android:layout_alignEnd="@+id/imageView"
+                        android:layout_alignBottom="@+id/imageView"
+                        />
+
+                </RelativeLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/default_16"
+                    android:background="@drawable/bg_bordered_cornered"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/default_8"
+                        android:text="Amount:" />
+
+                    <EditText
+                        android:id="@+id/editText2"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/default_54"
+                        android:layout_marginStart="@dimen/default_8"
+                        android:layout_marginEnd="@dimen/default_8"
+                        android:hint="@string/record_value_hint"
+                        android:imeOptions="actionDone"
+                        android:inputType="numberDecimal"
+                        android:maxLines="1"
+                        android:singleLine="true"
+                        android:text="@={viewModel.valueText}"
+                        app:setError="@{viewModel.valueError}"
+                        app:setSelection="@{viewModel.valueSelection}" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/default_16"
+                    android:background="@drawable/bg_bordered_cornered"
+                    android:orientation="horizontal">
+
+                    <Spinner
+                        android:foreground="@drawable/rounded_button_transculent_selector"
+                        android:id="@+id/timespanSpinner"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/default_54"
+                        android:selectedItemPosition="@={viewModel.timeSpanPosition}"
+                        app:setAdapter="@{viewModel.timeSpanAdapter}" />
+
+                </LinearLayout>
+
+                <Switch
+                    android:foreground="@drawable/rounded_button_transculent_selector"
+                    android:id="@+id/incomeSwitch"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/default_54"
+                    android:layout_margin="@dimen/default_16"
+                    android:background="@drawable/bg_bordered_cornered"
+                    android:checked="@={viewModel.incomeCheck}"
+                    android:padding="@dimen/default_8"
+                    android:text="Income" />
+
+                <Switch
+                    android:foreground="@drawable/rounded_button_transculent_selector"
+                    android:id="@+id/consideredSwitch"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/default_54"
+                    android:layout_margin="@dimen/default_16"
+                    android:background="@drawable/bg_bordered_cornered"
+                    android:checked="@={viewModel.consideredCheck}"
+                    android:padding="@dimen/default_8"
+                    android:text="Considered" />
+
+
+                <Button
+                    android:id="@+id/saveButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginBottom="@dimen/default_8"
+                    android:onClick="@{()->viewModel.choose()}"
+                    android:text="save" />
+
+            </LinearLayout>
+
+        </androidx.core.widget.NestedScrollView>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

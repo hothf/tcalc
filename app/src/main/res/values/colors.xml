@@ -33,12 +33,12 @@
     <color name="fontColorNegative">#f11100</color>
 
 
-    <color name="shade_one">#55eb4034</color>
-    <color name="shade_two">#55dfe833</color>
-    <color name="shade_three">#5530e630</color>
-    <color name="shade_four">#552be0ce</color>
-    <color name="shade_five">#552b67e0</color>
-    <color name="shade_six">#55792be0</color>
-    <color name="shade_seven">#55db2ac4</color>
-    <color name="shade_eight">#55cf273e</color>
+    <color name="shade_one">#eeeb4034</color>
+    <color name="shade_two">#eedfe833</color>
+    <color name="shade_three">#ee30e630</color>
+    <color name="shade_four">#ee2be0ce</color>
+    <color name="shade_five">#ee2b67e0</color>
+    <color name="shade_six">#ee792be0</color>
+    <color name="shade_seven">#eedb2ac4</color>
+    <color name="shade_eight">#eecf273e</color>
 </resources>

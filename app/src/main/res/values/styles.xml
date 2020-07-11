@@ -49,6 +49,20 @@
         <item name="android:paddingStart">@dimen/default_16</item>
     </style>
 
+    <style name="buttonTransculent" parent="Widget.MaterialComponents.Button">
+        <item name="background">@drawable/rounded_button_transculent_selector</item>
+    </style>
+
+    <style name="ButtonStyle.Transculent" parent="@style/Widget.MaterialComponents.Button.UnelevatedButton.Icon">
+        <item name="android:textAllCaps">false</item>
+        <item name="backgroundTint">@android:color/transparent</item>
+        <item name="android:textColor">@color/fontDefault</item>
+        <item name="iconTint">@color/fontDefault</item>
+        <item name="cornerRadius">@dimen/default_100</item>
+        <item name="android:textAppearance">@style/textDefault.title</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
     <style name="ButtonStyle.Bordered" parent="@style/Widget.MaterialComponents.Button">
         <item name="shapeAppearance">@style/cardShape</item>
         <item name="android:textAllCaps">false</item>

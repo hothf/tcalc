@@ -16,6 +16,9 @@
     <string name="home_result_monthly">Monthly:</string>
     <string name="home_result_yearly">Yearly:</string>
 
+    <string name="home_addedit_title_add">Add new entry</string>
+    <string name="home_addedit_title_edit">Edit entry</string>
+
     <string name="export_fallback_name">Export</string>
     <string name="import_fallback_name">Imported User</string>
     <string name="import_success_text">Imported %s successfully with %d entries!</string>

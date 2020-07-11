@@ -52,7 +52,7 @@
             <View
                 android:layout_width="match_parent"
                 android:alpha="@{viewModel.alpha}"
-                android:background="@{viewModel.categoryShade}"
+                android:background="@color/defaultBackgroundSecondary"
                 android:layout_height="match_parent" />
 
             <ImageView
@@ -120,6 +120,7 @@
                 android:layout_height="match_parent"
                 android:layout_alignParentEnd="true"
                 android:layout_marginEnd="@dimen/default_8"
+                android:tint="@{viewModel.categoryShade}"
                 android:alpha="@{viewModel.alpha}"
                 app:setImageResource="@{viewModel.categoryImage}"
                 tools:src="@drawable/ic_home" />

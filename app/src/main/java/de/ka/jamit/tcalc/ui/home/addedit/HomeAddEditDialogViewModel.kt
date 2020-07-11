@@ -35,13 +35,15 @@ class HomeAddEditDialogViewModel : BaseViewModel() {
     val valueSelection = MutableLiveData<Int>(0)
     val keySelection = MutableLiveData<Int>(0)
     val categoryImage = MutableLiveData<Int>(RecordDao.Category.COMMON.resId)
+    val categoryShade = MutableLiveData<Int>(resourcesProvider.getColor(RecordDao.Category.COMMON.shadeRes))
     val consideredCheck = MutableLiveData<Boolean>(true)
     val incomeCheck = MutableLiveData<Boolean>(false)
+    val editOrNewText = MutableLiveData<String>(resourcesProvider.getString(R.string.home_addedit_title_add))
 
     private val keyValidator = inputValidator.Validator(
             InputValidator.ValidatorConfig(
                     keyError,
-                    listOf(ValidationRules.NOT_EMPTY, ValidationRules.MIN_4)
+                    listOf(ValidationRules.NOT_EMPTY, ValidationRules.MIN_3)
             )
     )
     private val valueValidator = inputValidator.Validator(
@@ -52,7 +54,9 @@ class HomeAddEditDialogViewModel : BaseViewModel() {
     )
 
     fun timeSpanAdapter(): SpinnerAdapter {
-        val names = RecordDao.TimeSpan.values().map { it.name }.toTypedArray()
+        val names = RecordDao.TimeSpan.values().map {
+            resourcesProvider.getString(it.translationRes)
+        }.toTypedArray()
         return ArrayAdapter<String>(
                 resourcesProvider.getApplicationContext(),
                 android.R.layout.simple_spinner_item,
@@ -63,9 +67,15 @@ class HomeAddEditDialogViewModel : BaseViewModel() {
 
     fun updateCategory(id: Int) {
         categoryPosition.postValue(id)
-        val categoryImageRes = RecordDao.Category.values().find { id == it.id }
+        val category = RecordDao.Category.values().find { id == it.id }
                 ?: RecordDao.Category.COMMON
-        categoryImage.postValue(categoryImageRes.resId)
+        categoryImage.postValue(category.resId)
+        categoryShade.postValue(resourcesProvider.getColor(category.shadeRes))
+
+    }
+
+    fun onClose() {
+        handle(Choose())
     }
 
     fun choose() {
@@ -126,6 +136,7 @@ class HomeAddEditDialogViewModel : BaseViewModel() {
         consideredCheck.postValue(bundle.getBoolean(HomeAddEditDialog.CONSIDERED_KEY))
         incomeCheck.postValue(bundle.getBoolean(HomeAddEditDialog.INCOME_KEY))
         id = bundle.getLong(HomeAddEditDialog.ID_KEY)
+        editOrNewText.postValue(if (isUpdating) resourcesProvider.getString(R.string.home_addedit_title_edit) else resourcesProvider.getString(R.string.home_addedit_title_add))
     }
 
 

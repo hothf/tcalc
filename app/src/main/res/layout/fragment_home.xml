@@ -32,6 +32,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/default_36"
                     android:layout_marginEnd="@dimen/default_36"
+                    android:onClick="@{()->viewModel.onUserClicked()}"
+                    android:foreground="@drawable/rounded_button_transculent_selector"
                     android:background="@drawable/bg_bordered_cornered">
 
                     <TextView
@@ -39,10 +41,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/default_54"
                         android:layout_centerHorizontal="true"
-                        android:background="?attr/selectableItemBackground"
                         android:ellipsize="end"
                         android:gravity="center"
-                        android:onClick="@{()->viewModel.onUserClicked()}"
                         android:paddingStart="@dimen/default_16"
                         android:paddingEnd="@dimen/default_16"
                         android:singleLine="true"
