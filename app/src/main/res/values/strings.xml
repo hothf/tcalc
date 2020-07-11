@@ -22,6 +22,10 @@
 
     <string name="home_empty_text">No entries!</string>
 
+    <string name="enum_timespan_monthly">Monthly</string>
+    <string name="enum_timespan_quarterly">Quarterly</string>
+    <string name="enum_timespan_yearly">Yearly</string>
+
     <string name="error_input_empty">Please enter something</string>
     <string name="error_input_not_float">Please enter a valid number</string>
     <string name="error_input_too_small">Please use at least %s characters</string>

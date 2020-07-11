@@ -12,48 +12,117 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:background="?android:attr/selectableItemBackground"
-        android:onClick="@{()->viewModel.onClick()}">
-
+        android:layout_height="@dimen/default_100">
 
         <View
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="#ff0000" />
+            android:background="@color/colorRemove" />
+
+        <ImageView
+            android:layout_width="@dimen/default_36"
+            android:tint="@color/defaultBackgroundPrimary"
+            android:src="@drawable/ic_delete"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="@dimen/default_24"
+            android:layout_height="@dimen/default_36" />
+
+        <ImageView
+            android:layout_width="@dimen/default_36"
+            android:tint="@color/defaultBackgroundPrimary"
+            android:src="@drawable/ic_delete"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="@dimen/default_24"
+            android:layout_height="@dimen/default_36" />
 
         <RelativeLayout
             android:id="@+id/swipeableContainer"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/cardview_light_background">
+            android:background="@color/defaultBackgroundPrimary">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="?android:attr/selectableItemBackground"
+                android:onClick="@{()->viewModel.onClick()}" />
+
+            <View
+                android:layout_width="match_parent"
+                android:alpha="@{viewModel.alpha}"
+                android:background="@{viewModel.categoryShade}"
+                android:layout_height="match_parent" />
+
+            <ImageView
+                android:id="@+id/symbol"
+                android:layout_width="@dimen/default_24"
+                android:layout_height="match_parent"
+                android:layout_alignParentStart="true"
+                android:layout_marginStart="@dimen/default_8"
+                android:alpha="@{viewModel.alpha}"
+                android:tint="@{viewModel.valueTextColor}"
+                app:setImageResource="@{viewModel.valueImage}"
+                tools:src="@drawable/ic_add" />
+
+            <TextView
+                android:id="@+id/value"
+                style="@style/textDefault.title.bold"
+                android:layout_width="@dimen/default_86"
+                android:layout_height="match_parent"
+                android:layout_toEndOf="@+id/symbol"
+                android:alpha="@{viewModel.alpha}"
+                android:autoSizeMaxTextSize="@dimen/font_max_size"
+                android:autoSizeTextType="uniform"
+                android:ellipsize="end"
+                android:gravity="center"
+                android:maxLines="1"
+                android:text="@{viewModel.value}"
+                tools:text="12.2" />
 
             <TextView
                 android:id="@+id/title"
                 style="@style/textDefault.bold"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="@dimen/default_8"
+                android:layout_above="@+id/helper"
+                android:layout_toStartOf="@+id/image"
+                android:layout_toEndOf="@+id/value"
                 android:alpha="@{viewModel.alpha}"
+                android:layout_marginStart="@dimen/default_8"
                 android:text="@{viewModel.title}"
                 tools:text="Item title" />
 
-            <TextView
-                android:id="@+id/value"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/title"
-                android:alpha="@{viewModel.alpha}"
-                android:textColor="@{viewModel.valueTextColor}"
-                android:text="@{viewModel.value}" />
 
             <TextView
-                android:layout_width="wrap_content"
+                style="@style/textDefault.small"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/title"
-                android:alpha="@{viewModel.alpha}"
+                android:layout_below="@+id/helper"
+                android:layout_marginStart="@dimen/default_8"
+                android:layout_toStartOf="@+id/image"
                 android:layout_toEndOf="@+id/value"
-                android:text="@{viewModel.timeSpan}" />
+                android:alpha="@{viewModel.alpha}"
+                android:text="@{viewModel.timeSpan}"
+                tools:text="YEARLY" />
+
+            <View
+                android:id="@+id/helper"
+                android:layout_width="@dimen/default_1"
+                android:layout_height="@dimen/default_1"
+                android:layout_centerVertical="true"
+                android:layout_toEndOf="@+id/value" />
+
+            <ImageView
+                android:id="@+id/image"
+                android:layout_width="@dimen/default_36"
+                android:layout_height="match_parent"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="@dimen/default_8"
+                android:alpha="@{viewModel.alpha}"
+                app:setImageResource="@{viewModel.categoryImage}"
+                tools:src="@drawable/ic_home" />
         </RelativeLayout>
 
     </RelativeLayout>

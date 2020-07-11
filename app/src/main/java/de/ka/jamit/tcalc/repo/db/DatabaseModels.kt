@@ -1,7 +1,9 @@
 package de.ka.jamit.tcalc.repo.db
 
+import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes
 import androidx.annotation.Keep
+import androidx.annotation.StringRes
 import de.ka.jamit.tcalc.R
 import io.objectbox.annotation.Convert
 import io.objectbox.annotation.Entity
@@ -22,8 +24,10 @@ data class RecordDao(
         val isIncome: Boolean = false,
         val userId: Long) {
 
-    enum class TimeSpan(val id: Int) {
-        MONTHLY(0), QUARTERLY(1), YEARLY(2);
+    enum class TimeSpan(val id: Int, @StringRes val translationRes: Int) {
+        MONTHLY(0, R.string.enum_timespan_monthly),
+        QUARTERLY(1, R.string.enum_timespan_quarterly),
+        YEARLY(2, R.string.enum_timespan_yearly)
     }
 
     class TimeSpanConverter : PropertyConverter<TimeSpan, Int> {
@@ -37,11 +41,11 @@ data class RecordDao(
         }
     }
 
-    enum class Category(val id: Int, @DrawableRes val resId: Int) {
-        COMMON(0, R.drawable.ic_home),
-        HOUSE(1, R.drawable.ic_profile),
-        SAVING(2, R.drawable.ic_settings),
-        CAR(3, R.drawable.ic_home)
+    enum class Category(val id: Int, @DrawableRes val resId: Int, @ColorRes val shadeRes: Int) {
+        COMMON(0, R.drawable.ic_home, R.color.shade_one),
+        HOUSE(1, R.drawable.ic_profile, R.color.shade_two),
+        SAVING(2, R.drawable.ic_settings, R.color.shade_three),
+        CAR(3, R.drawable.ic_home, R.color.shade_four)
     }
 
     class CategoryConverter : PropertyConverter<Category, Int> {

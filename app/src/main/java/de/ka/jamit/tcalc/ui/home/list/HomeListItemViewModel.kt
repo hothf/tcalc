@@ -21,8 +21,11 @@ class HomeListItemViewModel(val item: RecordDao,
     val title = AppDatabase.getTranslatedStringForKey(resourcesProvider, item.key)
     val alpha = if (item.isConsidered) 1.0f else 0.5f
     val value = item.value.toString()
-    val timeSpan = item.timeSpan.name
+    val timeSpan = resourcesProvider.getString(item.timeSpan.translationRes)
+    val categoryImage = item.category.resId
     val valueTextColor = if (item.isIncome) resourcesProvider.getColor(R.color.fontColorPositive) else resourcesProvider.getColor(R.color.fontColorNegative)
+    val valueImage = if (item.isIncome) R.drawable.ic_add else R.drawable.ic_remove
+    val categoryShade = resourcesProvider.getColor(item.category.shadeRes)
 
     /**
      * Called on a click of the item.

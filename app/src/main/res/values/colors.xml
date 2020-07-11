@@ -5,6 +5,8 @@
     <color name="colorAccent">#1f8f45</color>
     <color name="colorHighlight">@color/colorAccent</color>
 
+    <color name="colorRemove">#bf0821</color>
+
     <color name="defaultBackgroundPrimary">#ffffff</color>
     <color name="defaultBackgroundPrimaryInverted">#000000</color>
     <color name="defaultBackgroundSecondary">#efefef</color>
@@ -29,4 +31,14 @@
 
     <color name="fontColorPositive">#1f8f45</color>
     <color name="fontColorNegative">#f11100</color>
+
+
+    <color name="shade_one">#55eb4034</color>
+    <color name="shade_two">#55dfe833</color>
+    <color name="shade_three">#5530e630</color>
+    <color name="shade_four">#552be0ce</color>
+    <color name="shade_five">#552b67e0</color>
+    <color name="shade_six">#55792be0</color>
+    <color name="shade_seven">#55db2ac4</color>
+    <color name="shade_eight">#55cf273e</color>
 </resources>
