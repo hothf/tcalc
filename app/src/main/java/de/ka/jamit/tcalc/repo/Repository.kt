@@ -43,6 +43,11 @@ interface Repository {
     fun deleteRecord(id: Long)
 
     /**
+     * Undo the last record deletion, if possible.
+     */
+    fun undoDeleteLastRecord()
+
+    /**
      * Updates a record with the given value.
      */
     fun updateRecord(value: Float,

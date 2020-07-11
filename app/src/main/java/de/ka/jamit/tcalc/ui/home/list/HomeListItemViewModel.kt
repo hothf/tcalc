@@ -12,7 +12,8 @@ import org.koin.core.inject
  * Created by Thomas Hofmann on 03.07.20
  **/
 class HomeListItemViewModel(val item: RecordDao,
-                            private val listener: ((HomeListItemViewModel) -> Unit)? = null) :
+                            private val listener: ((HomeListItemViewModel) -> Unit)? = null,
+                            private val removeListener: (() -> Unit)? = null) :
         BaseItemViewModel() {
 
     private val resourcesProvider: ResourcesProvider by inject()
@@ -39,5 +40,6 @@ class HomeListItemViewModel(val item: RecordDao,
      */
     fun onDismissed() {
         repository.deleteRecord(item.id)
+        removeListener?.invoke()
     }
 }

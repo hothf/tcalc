@@ -12,7 +12,6 @@ import io.objectbox.query.Query
 import io.objectbox.rx.RxQuery
 import io.reactivex.Observable
 import io.reactivex.Single
-import kotlin.math.abs
 
 
 /**
@@ -23,6 +22,7 @@ class RepositoryImpl(val app: Application, val db: AppDatabase) : Repository {
     private val recordDao: Box<RecordDao> = db.get().boxFor()
     private val userDao: Box<UserDao> = db.get().boxFor()
     private var currentlySelectedUser: UserDao? = null
+    private var lastRemovedRecordDao: RecordDao? = null
 
     override var lastImportResult: Repository.ImportResult? = null
 
@@ -142,7 +142,16 @@ class RepositoryImpl(val app: Application, val db: AppDatabase) : Repository {
     }
 
     override fun deleteRecord(id: Long) {
+        lastRemovedRecordDao = recordDao.get(id)
         recordDao.remove(id)
+    }
+
+    override fun undoDeleteLastRecord() {
+        val lastRecord = lastRemovedRecordDao
+        if (lastRecord != null && currentlySelectedUser?.id == lastRecord.userId) {
+            recordDao.put(lastRecord)
+            lastRemovedRecordDao = null
+        }
     }
 
     override fun observeRecords(): Observable<List<RecordDao>> {
