@@ -4,12 +4,14 @@ import android.os.Bundle
 import androidx.recyclerview.widget.LinearLayoutManager
 import de.ka.jamit.tcalc.R
 import de.ka.jamit.tcalc.base.BaseViewModel
+import de.ka.jamit.tcalc.repo.db.UserDao
 import de.ka.jamit.tcalc.ui.home.addedit.HomeAddEditDialog
 import de.ka.jamit.tcalc.ui.home.user.addedit.UserAddEditDialog
 import de.ka.jamit.tcalc.utils.resources.ResourcesProvider
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.schedulers.Schedulers
+import jp.wasabeef.recyclerview.animators.SlideInDownAnimator
 import org.koin.core.inject
 import timber.log.Timber
 
@@ -23,6 +25,8 @@ class UserDialogViewModel : BaseViewModel() {
     private val resourcesProvider: ResourcesProvider by inject()
 
     val adapter = UserListAdapter()
+
+    fun itemAnimator() = SlideInDownAnimator()
 
     private val itemListener: (UserListItemViewModel) -> Unit = {
         repository.selectUser(it.item.id)
@@ -42,14 +46,20 @@ class UserDialogViewModel : BaseViewModel() {
         // not needed right now
     }
 
+    private val addListener: () -> Unit = {
+        navigateTo(R.id.dialogUserAddEdit)
+    }
+
     init {
         repository.observeUsers()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ users ->
                     val items = users.map { user ->
-                        UserListItemViewModel(user, itemListener, editListener, deletionListener)
-                    }
+                        UserListItemViewModel(user, null, itemListener, editListener, deletionListener)
+                    }.toMutableList()
+                    // add more item
+                    items.add(UserListItemViewModel(UserDao(-1), addListener, null, null, null))
                     adapter.setItems(items)
                 }, { error ->
                     Timber.e(error, "While observing user data.")
@@ -60,10 +70,6 @@ class UserDialogViewModel : BaseViewModel() {
 
     fun onClose() {
         handle(Close())
-    }
-
-    fun onChoose() {
-        navigateTo(R.id.dialogUserAddEdit)
     }
 
     class Close

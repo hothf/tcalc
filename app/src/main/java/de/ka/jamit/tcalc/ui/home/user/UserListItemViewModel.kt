@@ -11,6 +11,7 @@ import de.ka.jamit.tcalc.repo.db.UserDao
  * Created by Thomas Hofmann on 07.07.20
  **/
 class UserListItemViewModel(val item: UserDao,
+                            private val moreClickListener: (() -> Unit)? = null,
                             private val clickListener: ((UserListItemViewModel) -> Unit)? = null,
                             private val editListener: ((UserListItemViewModel) -> Unit)? = null,
                             private val deletionListener: (() -> Unit)? = null) :
@@ -20,12 +21,15 @@ class UserListItemViewModel(val item: UserDao,
 
     val isDefaultItem = item.id == 1L
 
-    val checkVisibility = if (item.selected) View.VISIBLE else View.GONE
+    val isMoreItem = moreClickListener != null
+
+    val checkVisibility = if (item.selected) View.VISIBLE else View.INVISIBLE
 
     val editVisibility = if (isDefaultItem) View.GONE else View.VISIBLE
 
     fun onClick() {
         clickListener?.invoke(this)
+        moreClickListener?.invoke()
     }
 
     fun onEdit() {

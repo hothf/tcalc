@@ -11,6 +11,8 @@
     <string name="record_value_hint">0.0</string>
 
     <string name="user_hint">Username</string>
+    <string name="user_title">Manage users</string>
+    <string name="user_add">Add a new user</string>
 
     <string name="home_result_format">%.2f %s</string>
     <string name="home_result_monthly">Monthly:</string>

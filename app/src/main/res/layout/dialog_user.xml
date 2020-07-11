@@ -14,19 +14,35 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <Button
-            android:id="@+id/closeButton"
-            android:layout_width="wrap_content"
+        <TextView
+            style="@style/textDefault.title"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
+            android:layout_marginTop="@dimen/default_20"
+            android:gravity="center"
+            android:text="@string/user_title"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/closeButton"
+            style="@style/ButtonStyle.Transculent"
+            android:layout_width="@dimen/default_48"
+            android:layout_height="@dimen/default_58"
             android:layout_alignParentEnd="true"
+            android:layout_marginTop="@dimen/default_4"
+            android:layout_marginEnd="@dimen/default_8"
             android:onClick="@{()->viewModel.onClose()}"
-            android:text="close" />
+            android:tint="@color/fontDefault"
+            app:icon="@drawable/ic_close"
+            app:iconSize="@dimen/default_24"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.core.widget.NestedScrollView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_above="@+id/addButton"
             android:layout_below="@+id/closeButton">
 
             <de.ka.jamit.tcalc.utils.AutoReleaseRecyclerView
@@ -34,19 +50,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 app:adapter="@{viewModel.adapter}"
-                app:layoutManager="@{viewModel.layoutManager()}" />
+                app:layoutManager="@{viewModel.layoutManager()}"
+                app:setItemAnimator="@{viewModel.itemAnimator}" />
 
         </androidx.core.widget.NestedScrollView>
-
-        <Button
-            android:id="@+id/addButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
-            android:layout_marginBottom="48dp"
-            android:onClick="@{()->viewModel.onChoose()}"
-            android:text="add" />
-
     </RelativeLayout>
 </layout>

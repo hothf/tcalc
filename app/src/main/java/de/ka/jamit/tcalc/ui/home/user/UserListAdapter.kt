@@ -7,6 +7,7 @@ import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.DiffUtil
 import de.ka.jamit.tcalc.base.BaseAdapter
 import de.ka.jamit.tcalc.base.BaseViewHolder
+import de.ka.jamit.tcalc.databinding.ItemUserAddBinding
 import de.ka.jamit.tcalc.databinding.ItemUserDefaultBinding
 
 /**
@@ -19,7 +20,7 @@ class UserListAdapter(list: ArrayList<UserListItemViewModel> = arrayListOf()) :
 
     override fun onItemDismiss(position: Int) {
         getItems()[position].let {
-            if (!it.isDefaultItem) {
+            if (!it.isDefaultItem || !it.isMoreItem) {
                 it.onDismissed()
             }
         }
@@ -27,12 +28,16 @@ class UserListAdapter(list: ArrayList<UserListItemViewModel> = arrayListOf()) :
     }
 
     override fun getItemViewType(position: Int): Int {
-        return if (getItems()[position].isDefaultItem) 1 else 0
+        val item = getItems()[position]
+        return if (item.isDefaultItem) 1 else if (item.isMoreItem) 2 else 0
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder<*> {
-        return if (viewType == 1) UserDefaultListViewHolder(ItemUserDefaultBinding.inflate(layoutInflater, parent, false))
-        else UserListViewHolder(ItemUserDefaultBinding.inflate(layoutInflater, parent, false))
+        return when (viewType) {
+            2 -> UserMoreListViewHolder(ItemUserAddBinding.inflate(layoutInflater, parent, false))
+            1 -> UserDefaultListViewHolder(ItemUserDefaultBinding.inflate(layoutInflater, parent, false))
+            else -> UserListViewHolder(ItemUserDefaultBinding.inflate(layoutInflater, parent, false))
+        }
     }
 
     class UserListAdapterDiffCallback : DiffUtil.ItemCallback<UserListItemViewModel>() {
@@ -55,8 +60,13 @@ class UserListViewHolder(binding: ItemUserDefaultBinding) : BaseViewHolder<ViewD
     override var isDraggable = false
 }
 
-class UserDefaultListViewHolder(binding: ItemUserDefaultBinding) : BaseViewHolder<ViewDataBinding>
-(binding) {
+class UserDefaultListViewHolder(binding: ItemUserDefaultBinding) : BaseViewHolder<ViewDataBinding>(binding) {
+    override var swipeableView: View? = null
+    override var isSwipeable = true
+    override var isDraggable = false
+}
+
+class UserMoreListViewHolder(binding: ItemUserAddBinding) : BaseViewHolder<ViewDataBinding>(binding) {
     override var swipeableView: View? = null
     override var isSwipeable = true
     override var isDraggable = false

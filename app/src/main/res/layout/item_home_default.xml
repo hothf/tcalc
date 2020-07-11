@@ -20,6 +20,7 @@
             android:background="@color/colorRemove" />
 
         <ImageView
+            android:id="@+id/deleteLeftImage"
             android:layout_width="@dimen/default_36"
             android:tint="@color/defaultBackgroundPrimary"
             android:src="@drawable/ic_delete"
@@ -29,6 +30,7 @@
             android:layout_height="@dimen/default_36" />
 
         <ImageView
+            android:id="@+id/deleteRightImage"
             android:layout_width="@dimen/default_36"
             android:tint="@color/defaultBackgroundPrimary"
             android:src="@drawable/ic_delete"
@@ -46,7 +48,7 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="?android:attr/selectableItemBackground"
+                android:foreground="@drawable/rounded_button_transculent_selector"
                 android:onClick="@{()->viewModel.onClick()}" />
 
             <View
