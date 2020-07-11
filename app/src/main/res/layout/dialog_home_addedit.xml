@@ -188,7 +188,6 @@
                     android:padding="@dimen/default_8"
                     android:text="Considered" />
 
-
                 <Button
                     android:id="@+id/saveButton"
                     android:layout_width="wrap_content"
@@ -196,7 +195,7 @@
                     android:layout_gravity="center"
                     android:layout_marginBottom="@dimen/default_8"
                     android:onClick="@{()->viewModel.choose()}"
-                    android:text="save" />
+                    android:text="@string/home_addedit_submit" />
 
             </LinearLayout>
 

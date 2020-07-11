@@ -2,6 +2,7 @@ package de.ka.jamit.tcalc.ui.home.user.addedit
 
 import android.os.Bundle
 import androidx.lifecycle.MutableLiveData
+import de.ka.jamit.tcalc.R
 import de.ka.jamit.tcalc.base.BaseViewModel
 import de.ka.jamit.tcalc.utils.InputValidator
 import de.ka.jamit.tcalc.utils.ValidationRules
@@ -24,6 +25,7 @@ class UserAddEditDialogViewModel : BaseViewModel() {
     val titleText = MutableLiveData<String>("")
     val titleError = MutableLiveData<String?>(null)
     val titleSelection = MutableLiveData<Int>(0)
+    val editOrNewText = MutableLiveData<String>(resourcesProvider.getString(R.string.user_addedit_title_add))
 
     private val titleValidator = inputValidator.Validator(
             InputValidator.ValidatorConfig(
@@ -47,6 +49,10 @@ class UserAddEditDialogViewModel : BaseViewModel() {
         handle(Choose())
     }
 
+    fun onClose() {
+        handle(Choose())
+    }
+
     override fun onArgumentsReceived(bundle: Bundle) {
         super.onArgumentsReceived(bundle)
         isUpdating = bundle.getBoolean(UserAddEditDialog.UPDATE_KEY, false)
@@ -55,6 +61,7 @@ class UserAddEditDialogViewModel : BaseViewModel() {
         titleText.postValue(title)
         titleSelection.postValue(title.length)
         id = bundle.getLong(UserAddEditDialog.ID_KEY)
+        editOrNewText.postValue(if (isUpdating) resourcesProvider.getString(R.string.user_addedit_title_edit) else resourcesProvider.getString(R.string.user_addedit_title_add))
     }
 
     class Choose

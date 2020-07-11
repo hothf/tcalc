@@ -10,41 +10,76 @@
             type="de.ka.jamit.tcalc.ui.home.user.addedit.UserAddEditDialogViewModel" />
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-
-        <EditText
-            android:id="@+id/editText"
-            android:layout_width="wrap_content"
+        <TextView
+            style="@style/textDefault.title"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginBottom="384dp"
-            android:maxLines="1"
-            android:singleLine="true"
-            android:hint="@string/user_hint"
-            android:text="@={viewModel.titleText}"
-            app:setError="@{viewModel.titleError}"
-            app:setSelection="@{viewModel.titleSelection}"
-            app:layout_constraintBottom_toTopOf="@+id/button"
+            android:layout_marginTop="@dimen/default_20"
+            android:gravity="center"
+            android:text="@{viewModel.editOrNewText}"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.448"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/closeButton"
+            style="@style/ButtonStyle.Transculent"
+            android:layout_width="@dimen/default_48"
+            android:layout_height="@dimen/default_58"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="@dimen/default_4"
+            android:layout_marginEnd="@dimen/default_8"
+            android:onClick="@{()->viewModel.onClose()}"
+            android:tint="@color/fontDefault"
+            app:icon="@drawable/ic_close"
+            app:iconSize="@dimen/default_24"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <LinearLayout
+            android:id="@+id/editContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/closeButton"
+            android:layout_margin="@dimen/default_16"
+            android:background="@drawable/bg_bordered_cornered"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/editText"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/default_54"
+                android:layout_marginStart="@dimen/default_8"
+                android:layout_marginEnd="@dimen/default_8"
+                android:hint="@string/user_hint"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:text="@={viewModel.titleText}"
+                app:setError="@{viewModel.titleError}"
+                app:setSelection="@{viewModel.titleSelection}" />
+
+        </LinearLayout>
+
         <Button
-            android:id="@+id/button"
+            android:id="@+id/saveButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="48dp"
+            android:layout_below="@+id/editContainer"
+            android:layout_centerHorizontal="true"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/default_16"
+            android:layout_marginBottom="@dimen/default_8"
             android:onClick="@{()->viewModel.choose()}"
-            android:text="save"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.498"
-            app:layout_constraintStart_toStartOf="parent" />
+            android:text="@string/user_addedit_submit" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        <View
+            android:id="@+id/bottomHelper"
+            android:layout_width="@dimen/default_1"
+            android:layout_height="@dimen/default_8"
+            android:layout_below="@+id/saveButton" />
+    </RelativeLayout>
 </layout>

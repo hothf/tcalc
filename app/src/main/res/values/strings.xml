@@ -16,6 +16,10 @@
     <string name="user_delete_undo_title">User deleted</string>
     <string name="user_delete_undo_action">Undo</string>
 
+    <string name="user_addedit_title_add">Add new user</string>
+    <string name="user_addedit_title_edit">Edit user</string>
+    <string name="user_addedit_submit">Save</string>
+
     <string name="home_result_format">%.2f %s</string>
     <string name="home_result_monthly">Monthly:</string>
     <string name="home_result_yearly">Yearly:</string>
@@ -24,6 +28,7 @@
 
     <string name="home_addedit_title_add">Add new entry</string>
     <string name="home_addedit_title_edit">Edit entry</string>
+    <string name="home_addedit_submit">Savex</string>
 
     <string name="export_fallback_name">Export</string>
     <string name="import_fallback_name">Imported User</string>
