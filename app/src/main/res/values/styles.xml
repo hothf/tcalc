@@ -37,6 +37,8 @@
         <item name="android:background">@color/defaultBackgroundPrimary</item>
         <item name="itemIconTint">@color/colorAccent</item>
         <item name="itemTextColor">@color/colorAccent</item>
+        <item name="itemTextAppearanceActive">@style/textDefault.small.bold</item>
+        <item name="itemTextAppearanceInactive">@style/textDefault.small</item>
     </style>
 
     <style name="buttonDefault" parent="Base.TextAppearance.AppCompat.Button">

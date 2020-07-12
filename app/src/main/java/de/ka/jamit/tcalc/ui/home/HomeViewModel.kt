@@ -33,7 +33,7 @@ class HomeViewModel : BaseViewModel() {
 
     val emptyViewText = MutableLiveData<String>(resourcesProvider.getString(R.string.home_empty_text))
     val deltaTextColor = MutableLiveData<Int>(resourcesProvider.getColor(R.color.fontDefault))
-    val emptyViewImageRes = MutableLiveData<Int>(R.drawable.ic_home)
+    val emptyViewImageRes = MutableLiveData<Int>(R.drawable.ic_file)
     val loadingVisibility = MutableLiveData<Int>(View.GONE)
     val resultVisibility = MutableLiveData<Int>(View.GONE)
     val showEmptyView = MutableLiveData<Boolean>(false)
@@ -102,10 +102,10 @@ class HomeViewModel : BaseViewModel() {
                                             listener = itemListener,
                                             removeListener = removeListener)
                                 }.toMutableList()
+                                showEmptyView.postValue(items.isEmpty())
                                 items.add(HomeListItemViewModel(
                                         RecordDao(id = -1, userId = -1),
                                         moreListener = addListener))
-                                showEmptyView.postValue(items.isEmpty())
                                 adapter.setItems(items)
                                 calc(records)
                             }, { error ->
