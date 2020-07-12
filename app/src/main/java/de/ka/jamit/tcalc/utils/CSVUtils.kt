@@ -24,13 +24,13 @@ class CSVUtils(private val repository: Repository, private val app: Application)
      */
     fun importCSV(uri: Uri): Completable {
         return Completable.create { emitter ->
-
-            //TODO please, if the import fails, do not already add something in the database!
+            var oldUserId: Long? = repository.getCurrentlySelectedUser().id
+            var newUserId: Long? = null
+            val records = mutableListOf<RecordDao>()
 
             try {
                 app.contentResolver.openInputStream(uri)?.let { inputStream ->
                     val reader = CSVReader(InputStreamReader(inputStream))
-                    val records = mutableListOf<RecordDao>()
                     var record: Array<String?>?
 
                     var name = app.resources.getString(R.string.import_fallback_name)
@@ -39,6 +39,7 @@ class CSVUtils(private val repository: Repository, private val app: Application)
                         name = uri.path?.substring(cut + 1)?.substringBefore(".") ?: name
                     }
                     repository.addUser(name) // auto selects this user
+                    newUserId = repository.getCurrentlySelectedUser().id
 
                     val timeSpanConverter = RecordDao.TimeSpanConverter()
                     val categoryConverter = RecordDao.CategoryConverter()
@@ -61,6 +62,11 @@ class CSVUtils(private val repository: Repository, private val app: Application)
                 }
                 emitter.onComplete()
             } catch (exception: Exception) {
+                newUserId?.let {
+                    if (it != oldUserId) { // has a new entry been  inserted? Delete it right away!
+                        repository.deleteUser(it)
+                    }
+                }
                 emitter.onError(exception)
             }
         }
