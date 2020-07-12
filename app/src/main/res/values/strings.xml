@@ -42,9 +42,15 @@
     <string name="settings_import">Import entries</string>
     <string name="settings_export">Export entries</string>
 
+    <string name="export_title">Exporting</string>
     <string name="export_fallback_name">Export</string>
+    <string name="export_error">Error while exporting.</string>
+    <string name="import_title">Importing</string>
+    <string name="import_cancel">Cancel</string>
+    <string name="import_retry">Retry</string>
     <string name="import_fallback_name">Imported User</string>
     <string name="import_success_text">Imported %s successfully with %d entries!</string>
+    <string name="import_error">Error while importing.</string>
 
     <string name="home_empty_text">No entries!</string>
 

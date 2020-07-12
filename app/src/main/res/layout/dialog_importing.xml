@@ -11,9 +11,20 @@
     </data>
 
     <RelativeLayout
-        android:theme="@style/AppTheme"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:theme="@style/AppTheme">
+
+        <TextView
+            style="@style/textDefault.title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/default_20"
+            android:gravity="center"
+            android:text="@string/import_title"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <ProgressBar
             android:layout_width="wrap_content"
@@ -21,44 +32,86 @@
             android:layout_centerInParent="true"
             android:visibility="@{viewModel.loadingVisibility}" />
 
-        <com.google.android.material.button.MaterialButton
-            style="@style/ButtonStyle.Bordered"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:onClick="@{()->viewModel.onCancel()}"
-            android:text="cancel"
-            android:visibility="@{viewModel.errorVisibility}" />
-
-        <com.google.android.material.button.MaterialButton
-            style="@style/ButtonStyle.Bordered"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:onClick="@{()->viewModel.onRetry()}"
-            android:text="retry"
-            android:visibility="@{viewModel.errorVisibility}" />
+        <ImageView
+            android:id="@+id/successImage"
+            android:layout_width="@dimen/default_54"
+            android:layout_height="@dimen/default_54"
+            android:layout_below="@+id/helper"
+            android:layout_centerHorizontal="true"
+            android:src="@drawable/ic_checked"
+            android:tint="@color/fontColorPositive"
+            android:visibility="@{viewModel.successVisibility}" />
 
         <ImageView
-            android:layout_width="match_parent"
-            android:src="@android:drawable/checkbox_on_background"
+            android:id="@+id/errorImage"
+            android:layout_width="@dimen/default_54"
+            android:layout_height="@dimen/default_54"
+            android:layout_below="@+id/helper"
             android:layout_centerHorizontal="true"
-            android:layout_above="@+id/helper"
-            android:visibility="@{viewModel.successVisibility}"
-            android:layout_height="wrap_content" />
+            android:src="@drawable/ic_error"
+            android:tint="@color/fontColorNegative"
+            android:visibility="@{viewModel.errorVisibility}" />
 
         <View
             android:id="@+id/helper"
             android:layout_width="1dp"
-            android:layout_centerInParent="true"
-            android:layout_height="1dp" />
+            android:layout_height="@dimen/default_72"
+            android:layout_centerInParent="true" />
 
         <TextView
-            android:layout_below="@+id/helper"
-            android:visibility="@{viewModel.successVisibility}"
+            style="@style/textDefault.bold"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/successImage"
+            android:layout_marginStart="@dimen/default_16"
+            android:layout_marginTop="@dimen/default_8"
+            android:layout_marginEnd="@dimen/default_16"
+            android:gravity="center"
+            android:layout_marginBottom="@dimen/default_24"
             android:text="@{viewModel.lastImportText}"
+            android:visibility="@{viewModel.successVisibility}"
+            tools:text="That was pretty successful" />
+
+        <TextView
+            android:id="@+id/errorText"
+            style="@style/textDefault.bold"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/errorImage"
+            android:layout_marginStart="@dimen/default_16"
+            android:layout_marginTop="@dimen/default_8"
+            android:layout_marginBottom="@dimen/default_24"
+            android:layout_marginEnd="@dimen/default_16"
+            android:gravity="center"
+            android:text="@string/import_error"
+            android:visibility="@{viewModel.errorVisibility}"
+            tools:text="That did not go as expected!" />
+
+        <com.google.android.material.button.MaterialButton
+            style="@style/ButtonStyle.Bordered"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/errorText"
+            android:layout_marginStart="@dimen/default_16"
+            android:layout_marginTop="@dimen/default_16"
+            android:layout_toEndOf="@+id/helper"
+            android:onClick="@{()->viewModel.onCancel()}"
+            android:text="@string/import_cancel"
+            android:layout_marginBottom="@dimen/default_16"
+            android:visibility="@{viewModel.errorVisibility}" />
+
+        <com.google.android.material.button.MaterialButton
+            style="@style/ButtonStyle.Bordered"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/errorText"
+            android:layout_marginTop="@dimen/default_16"
+            android:layout_marginEnd="@dimen/default_16"
+            android:layout_marginBottom="@dimen/default_16"
+            android:layout_toStartOf="@+id/helper"
+            android:onClick="@{()->viewModel.onRetry()}"
+            android:text="@string/import_retry"
+            android:visibility="@{viewModel.errorVisibility}" />
 
     </RelativeLayout>
 </layout>

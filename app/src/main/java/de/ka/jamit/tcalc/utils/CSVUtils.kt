@@ -24,6 +24,9 @@ class CSVUtils(private val repository: Repository, private val app: Application)
      */
     fun importCSV(uri: Uri): Completable {
         return Completable.create { emitter ->
+
+            //TODO please, if the import fails, do not already add something in the database!
+
             try {
                 app.contentResolver.openInputStream(uri)?.let { inputStream ->
                     val reader = CSVReader(InputStreamReader(inputStream))
