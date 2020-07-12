@@ -5,8 +5,10 @@ import android.view.View
 import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
+import de.ka.jamit.tcalc.R
 import de.ka.jamit.tcalc.base.BaseViewModel
 import de.ka.jamit.tcalc.repo.db.RecordDao
+import de.ka.jamit.tcalc.utils.DecorationUtil
 import de.ka.jamit.tcalc.utils.resources.ResourcesProvider
 import org.koin.core.inject
 
@@ -20,8 +22,13 @@ class CategoryDialogViewModel : BaseViewModel() {
     private val resourcesProvider: ResourcesProvider by inject()
     private var id: Int? = null
 
-    fun layoutManager() = GridLayoutManager(resourcesProvider.getApplicationContext(), 2)
+    fun layoutManager() = GridLayoutManager(resourcesProvider.getApplicationContext(), COLUMNS_COUNT)
     val adapter = CategoryListAdapter()
+    val itemDecoration = DecorationUtil(
+            resourcesProvider.getDimensionPixelSize(R.dimen.default_16),
+            resourcesProvider.getDimensionPixelSize(R.dimen.default_16),
+            COLUMNS_COUNT
+    )
 
     override fun onArgumentsReceived(bundle: Bundle) {
         super.onArgumentsReceived(bundle)
@@ -41,9 +48,13 @@ class CategoryDialogViewModel : BaseViewModel() {
         adapter.setItems(items)
     }
 
-    fun onCancel() {
+    fun onClose() {
         handle(Choose())
     }
 
     class Choose(val id: Int? = null)
+
+    companion object {
+        const val COLUMNS_COUNT = 2
+    }
 }

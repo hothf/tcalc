@@ -11,42 +11,42 @@
     </data>
 
     <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:background="?android:attr/selectableItemBackground"
-        android:onClick="@{()->viewModel.onClick()}">
-
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="#ff0000" />
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/defaultBackgroundPrimary"
+        android:gravity="center">
 
         <RelativeLayout
-            android:id="@+id/swipeableContainer"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/cardview_light_background">
-
+            android:id="@+id/item"
+            android:layout_centerInParent="true"
+            android:layout_width="@dimen/default_86"
+            android:layout_height="@dimen/default_86">
 
             <ImageView
                 android:id="@+id/title"
                 style="@style/textDefault.bold"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="@dimen/default_8"
+                android:layout_width="@dimen/default_54"
+                android:layout_height="@dimen/default_54"
+                android:layout_centerInParent="true"
+                android:onClick="@{()->viewModel.onClick()}"
+                android:background="@drawable/bg_bordered_cornered"
+                android:foreground="@drawable/rounded_button_transculent_selector"
+                android:padding="@dimen/default_4"
+                android:tint="@{viewModel.categoryShade}"
                 app:setImageResource="@{viewModel.categoryImage}"
                 tools:text="Item title" />
 
-            <View
-                android:visibility="@{viewModel.selectedVisibility}"
-                android:layout_width="50dp"
-                android:background="#55000000"
-                android:layout_height="50dp" />
-
-
+            <ImageView
+                android:layout_width="@dimen/default_24"
+                android:layout_height="@dimen/default_24"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginStart="@dimen/default_4"
+                android:layout_marginBottom="@dimen/default_4"
+                android:src="@android:drawable/checkbox_on_background"
+                android:tint="@color/colorAccent"
+                android:visibility="@{viewModel.selectedVisibility}" />
         </RelativeLayout>
-
     </RelativeLayout>
 
 </layout>

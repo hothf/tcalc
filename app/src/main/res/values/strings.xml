@@ -20,6 +20,8 @@
     <string name="user_addedit_title_edit">Edit user</string>
     <string name="user_addedit_submit">Save</string>
 
+    <string name="category_title">Choose a category</string>
+
     <string name="home_result_format">%.2f %s</string>
     <string name="home_result_monthly">Monthly:</string>
     <string name="home_result_yearly">Yearly:</string>
