@@ -37,6 +37,7 @@
                     android:onClick="@{()->viewModel.onUserClicked()}">
 
                     <TextView
+                        style="@style/textDefault"
                         android:id="@+id/userText"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/default_54"
@@ -109,10 +110,9 @@
                 android:layout_below="@+id/resultShadow"
                 android:layout_centerInParent="true"
                 android:background="@color/defaultBackgroundPrimary"
-                android:gravity="center_horizontal|bottom"
+                android:gravity="center"
                 android:paddingStart="@dimen/default_8"
                 android:paddingEnd="@dimen/default_8"
-                android:paddingBottom="@dimen/default_4"
                 android:stretchColumns="*">
 
                 <TableRow android:visibility="@{viewModel.resultVisibility}">
@@ -252,15 +252,5 @@
                 android:layout_centerHorizontal="true"
                 android:visibility="@{viewModel.loadingVisibility}" />
         </RelativeLayout>
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/addButton"
-            style="@style/ButtonStyle.Bordered"
-            android:layout_width="wrap_content"
-            android:layout_height="@dimen/default_54"
-            android:onClick="@{()->viewModel.onAddClicked()}"
-            android:text="@string/home_add"
-            app:layout_anchor="@+id/resultContainer"
-            app:layout_anchorGravity="center_horizontal" />
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

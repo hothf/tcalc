@@ -12,27 +12,19 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/default_100">
+        android:layout_height="@dimen/default_100"
+        android:background="@color/defaultBackgroundPrimary"
+        android:theme="@style/AppTheme">
 
-        <RelativeLayout
-            android:id="@+id/swipeableContainer"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/defaultBackgroundPrimary"
-            android:foreground="@drawable/rounded_button_transculent_selector"
-            android:onClick="@{()->viewModel.onClick()}">
-
-            <TextView
-                android:id="@+id/title"
-                style="@style/textDefault.bold"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:padding="@dimen/default_8"
-                android:text="@string/user_add"
-                android:textColor="@color/colorAccent"
-                tools:text="Item title" />
-        </RelativeLayout>
+        <com.google.android.material.button.MaterialButton
+            style="@style/ButtonStyle.Bordered"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:onClick="@{()->viewModel.onClick()}"
+            android:padding="@dimen/default_8"
+            android:text="@string/user_add"
+            tools:text="Item title" />
 
     </RelativeLayout>
 

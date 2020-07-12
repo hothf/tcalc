@@ -7,9 +7,8 @@ import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.DiffUtil
 import de.ka.jamit.tcalc.base.BaseAdapter
 import de.ka.jamit.tcalc.base.BaseViewHolder
+import de.ka.jamit.tcalc.databinding.ItemHomeAddBinding
 import de.ka.jamit.tcalc.databinding.ItemHomeDefaultBinding
-import de.ka.jamit.tcalc.databinding.ItemHomeHeaderBinding
-import timber.log.Timber
 import kotlin.math.abs
 import kotlin.math.min
 
@@ -22,17 +21,19 @@ class HomeListAdapter(list: ArrayList<HomeListItemViewModel> = arrayListOf()) :
         BaseAdapter<HomeListItemViewModel>(list, HomeListAdapterDiffCallback()) {
 
     override fun onItemDismiss(position: Int) {
-        getItems()[position].onDismissed()
+        val item = getItems()[position]
+        if (!item.isMore) {
+            item.onDismissed()
+        }
         super.onItemDismiss(position)
     }
 
     override fun getItemViewType(position: Int): Int {
-        return if (getItems()[position].isHeader) 1 else 0
+        return if (getItems()[position].isMore) 1 else 0
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder<*> {
-        return if (viewType == 1) HomeListHeaderViewHolder(ItemHomeHeaderBinding.inflate
-        (layoutInflater, parent, false))
+        return if (viewType == 1) HomeListAddViewHolder(ItemHomeAddBinding.inflate(layoutInflater, parent, false))
         else HomeListViewHolder(ItemHomeDefaultBinding.inflate(layoutInflater, parent, false))
     }
 
@@ -86,8 +87,7 @@ class HomeListViewHolder(val binding: ItemHomeDefaultBinding) : BaseViewHolder<V
     }
 }
 
-class HomeListHeaderViewHolder(binding: ViewDataBinding) : BaseViewHolder<ViewDataBinding>
-(binding) {
+class HomeListAddViewHolder(binding: ViewDataBinding) : BaseViewHolder<ViewDataBinding>(binding) {
     override var swipeableView: View? = null
     override var isSwipeable = false
     override var isDraggable = false

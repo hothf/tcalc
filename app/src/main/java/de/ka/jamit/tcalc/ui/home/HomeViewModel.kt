@@ -66,6 +66,10 @@ class HomeViewModel : BaseViewModel() {
         navigateTo(R.id.dialogHomeAdd, args = arguments)
     }
 
+    private val addListener = {
+        navigateTo(R.id.dialogHomeAdd)
+    }
+
     private val removeListener = {
         showMessage(ShowSnack(
                 message = resourcesProvider.getString(R.string.home_delete_undo_title),
@@ -94,8 +98,13 @@ class HomeViewModel : BaseViewModel() {
                             .subscribe({ records ->
                                 Timber.d("||| record: $records")
                                 val items = records.map { record ->
-                                    HomeListItemViewModel(record, itemListener, removeListener)
-                                }
+                                    HomeListItemViewModel(item = record,
+                                            listener = itemListener,
+                                            removeListener = removeListener)
+                                }.toMutableList()
+                                items.add(HomeListItemViewModel(
+                                        RecordDao(id = -1, userId = -1),
+                                        moreListener = addListener))
                                 showEmptyView.postValue(items.isEmpty())
                                 adapter.setItems(items)
                                 calc(records)
@@ -109,10 +118,6 @@ class HomeViewModel : BaseViewModel() {
     }
 
     fun layoutManager() = LinearLayoutManager(resourcesProvider.getApplicationContext())
-
-    fun onAddClicked() {
-        navigateTo(R.id.dialogHomeAdd)
-    }
 
     private fun calc(data: List<RecordDao>) {
         resultVisibility.postValue(View.GONE)

@@ -18,12 +18,12 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/colorRemove" />
+            android:background="@color/defaultBackgroundPrimary" />
 
         <ImageView
             android:id="@+id/deleteLeftImage"
             android:layout_width="@dimen/default_36"
-            android:tint="@color/defaultBackgroundPrimary"
+            android:tint="@color/colorRemove"
             android:src="@drawable/ic_delete"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
@@ -33,7 +33,7 @@
         <ImageView
             android:id="@+id/deleteRightImage"
             android:layout_width="@dimen/default_36"
-            android:tint="@color/defaultBackgroundPrimary"
+            android:tint="@color/colorRemove"
             android:src="@drawable/ic_delete"
             android:layout_alignParentStart="true"
             android:layout_centerVertical="true"
@@ -55,7 +55,7 @@
                 android:layout_alignParentStart="true"
                 android:layout_centerVertical="true"
                 android:layout_marginStart="@dimen/default_16"
-                android:src="@android:drawable/checkbox_on_background"
+                android:src="@drawable/ic_checked"
                 android:tint="@color/colorAccent"
                 android:visibility="@{viewModel.checkVisibility}" />
 

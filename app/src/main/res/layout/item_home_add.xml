@@ -11,16 +11,19 @@
     </data>
 
     <RelativeLayout
+        android:background="@color/defaultBackgroundPrimary"
+        android:theme="@style/AppTheme"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/navBarHeight">
+        android:layout_height="@dimen/default_100">
 
-        <TextView
-            style="@style/textDefault.title.bold"
+        <com.google.android.material.button.MaterialButton
+            style="@style/ButtonStyle.Bordered"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
+            android:layout_centerInParent="true"
+            android:onClick="@{()->viewModel.onClick()}"
             android:padding="@dimen/default_8"
-            android:text="@{viewModel.title}"
+            android:text="@string/home_add"
             tools:text="Item title" />
 
     </RelativeLayout>

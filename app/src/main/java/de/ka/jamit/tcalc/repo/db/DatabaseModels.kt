@@ -14,7 +14,7 @@ import io.objectbox.converter.PropertyConverter
 @Entity
 data class RecordDao(
         @Id var id: Long = 142547635L,
-        val key: String,
+        val key: String = "",
         val value: Float = 0.0f,
         @Convert(converter = TimeSpanConverter::class, dbType = Int::class)
         val timeSpan: TimeSpan = TimeSpan.MONTHLY,

@@ -13,14 +13,15 @@ import org.koin.core.inject
  **/
 class HomeListItemViewModel(val item: RecordDao,
                             private val listener: ((HomeListItemViewModel) -> Unit)? = null,
+                            private val moreListener: (() -> Unit)? = null,
                             private val removeListener: (() -> Unit)? = null) :
         BaseItemViewModel() {
 
     private val resourcesProvider: ResourcesProvider by inject()
 
-    val isHeader = listener == null
+    val isMore = moreListener != null
     val title = AppDatabase.getTranslatedStringForKey(resourcesProvider, item.key)
-    val alpha = if (item.isConsidered) 1.0f else 0.5f
+    val alpha = if (item.isConsidered) 1.0f else 0.25f
     val value = item.value.toString()
     val timeSpan = resourcesProvider.getString(item.timeSpan.translationRes)
     val categoryImage = item.category.resId
@@ -33,6 +34,7 @@ class HomeListItemViewModel(val item: RecordDao,
      */
     fun onClick() {
         listener?.invoke(this)
+        moreListener?.invoke()
     }
 
     /**

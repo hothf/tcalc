@@ -11,10 +11,10 @@
     </data>
 
     <RelativeLayout
-        android:id="@+id/main"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/colorPrimaryDark"
+        android:background="@color/defaultBackgroundPrimary"
+        android:theme="@style/AppTheme"
         tools:context=".ui.main.MainActivity">
 
         <TextView
@@ -26,20 +26,22 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/button"
+            style="@style/ButtonStyle.Bordered"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:onClick="@{()->viewModel.onImport()}"
-            android:text="import" />
+            android:text="@string/settings_import" />
 
-        <Button
+        <com.google.android.material.button.MaterialButton
+            style="@style/ButtonStyle.Bordered"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:onClick="@{()->viewModel.onExport()}"
             android:layout_below="@+id/button"
             android:layout_centerHorizontal="true"
-            android:text="export" />
+            android:onClick="@{()->viewModel.onExport()}"
+            android:text="@string/settings_export" />
     </RelativeLayout>
 </layout>
