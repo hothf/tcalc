@@ -12,6 +12,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
+        android:theme="@style/AppTheme"
         android:layout_height="match_parent">
 
         <androidx.core.widget.NestedScrollView
@@ -63,14 +64,14 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/default_16"
-                    android:background="@drawable/bg_bordered_cornered"
                     android:orientation="horizontal">
 
                     <TextView
+                        style="@style/textDefault.bold"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/default_8"
-                        android:text="Reffering:" />
+                        android:text="@string/home_addedit_referring" />
 
                     <EditText
                         android:id="@+id/editText"
@@ -114,8 +115,7 @@
                         android:layout_alignStart="@+id/imageView"
                         android:layout_alignTop="@+id/imageView"
                         android:layout_alignEnd="@+id/imageView"
-                        android:layout_alignBottom="@+id/imageView"
-                        />
+                        android:layout_alignBottom="@+id/imageView" />
 
                 </RelativeLayout>
 
@@ -123,14 +123,14 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/default_16"
-                    android:background="@drawable/bg_bordered_cornered"
                     android:orientation="horizontal">
 
                     <TextView
+                        style="@style/textDefault.bold"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/default_8"
-                        android:text="Amount:" />
+                        android:text="@string/home_addedit_amount" />
 
                     <EditText
                         android:id="@+id/editText2"
@@ -153,10 +153,18 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/default_16"
-                    android:background="@drawable/bg_bordered_cornered"
                     android:orientation="horizontal">
 
+                    <TextView
+                        style="@style/textDefault.bold"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/default_8"
+                        android:text="@string/home_addedit_timespan" />
+
                     <Spinner
+                        android:layout_marginStart="@dimen/default_8"
+                        style="@style/textDefault.bold"
                         android:foreground="@drawable/rounded_button_transculent_selector"
                         android:id="@+id/timespanSpinner"
                         android:layout_width="match_parent"
@@ -167,28 +175,29 @@
                 </LinearLayout>
 
                 <Switch
+                    style="@style/textDefault.bold"
                     android:foreground="@drawable/rounded_button_transculent_selector"
                     android:id="@+id/incomeSwitch"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/default_54"
                     android:layout_margin="@dimen/default_16"
-                    android:background="@drawable/bg_bordered_cornered"
                     android:checked="@={viewModel.incomeCheck}"
                     android:padding="@dimen/default_8"
-                    android:text="Income" />
+                    android:text="@string/home_addedit_income" />
 
                 <Switch
+                    style="@style/textDefault.bold"
                     android:foreground="@drawable/rounded_button_transculent_selector"
                     android:id="@+id/consideredSwitch"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/default_54"
                     android:layout_margin="@dimen/default_16"
-                    android:background="@drawable/bg_bordered_cornered"
                     android:checked="@={viewModel.consideredCheck}"
                     android:padding="@dimen/default_8"
-                    android:text="Considered" />
+                    android:text="@string/home_addedit_considered" />
 
-                <Button
+                <com.google.android.material.button.MaterialButton
+                    style="@style/ButtonStyle.Bordered"
                     android:id="@+id/saveButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

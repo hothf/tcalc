@@ -11,6 +11,7 @@
     </data>
 
     <RelativeLayout
+        android:theme="@style/AppTheme"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -46,8 +47,14 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/closeButton"
             android:layout_margin="@dimen/default_16"
-            android:background="@drawable/bg_bordered_cornered"
             android:orientation="horizontal">
+
+            <TextView
+                style="@style/textDefault.bold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/default_8"
+                android:text="@string/user_addedit_name" />
 
             <EditText
                 android:id="@+id/editText"
@@ -64,7 +71,8 @@
 
         </LinearLayout>
 
-        <Button
+        <com.google.android.material.button.MaterialButton
+            style="@style/ButtonStyle.Bordered"
             android:id="@+id/saveButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

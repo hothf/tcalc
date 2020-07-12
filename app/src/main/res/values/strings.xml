@@ -15,6 +15,7 @@
     <string name="user_add">Add a new user</string>
     <string name="user_delete_undo_title">User deleted</string>
     <string name="user_delete_undo_action">Undo</string>
+    <string name="user_addedit_name">Name:</string>
 
     <string name="user_addedit_title_add">Add new user</string>
     <string name="user_addedit_title_edit">Edit user</string>
@@ -25,12 +26,18 @@
     <string name="home_result_format">%.2f %s</string>
     <string name="home_result_monthly">Monthly:</string>
     <string name="home_result_yearly">Yearly:</string>
+    <string name="home_add">Add Entry</string>
     <string name="home_delete_undo_title">Entry deleted</string>
     <string name="home_delete_undo_action">Undo</string>
 
     <string name="home_addedit_title_add">Add new entry</string>
     <string name="home_addedit_title_edit">Edit entry</string>
-    <string name="home_addedit_submit">Savex</string>
+    <string name="home_addedit_submit">Save</string>
+    <string name="home_addedit_referring">Referring:</string>
+    <string name="home_addedit_amount">Amount:</string>
+    <string name="home_addedit_timespan">Timespan:</string>
+    <string name="home_addedit_income">Mark as income:</string>
+    <string name="home_addedit_considered">Include in calculation:</string>
 
     <string name="export_fallback_name">Export</string>
     <string name="import_fallback_name">Imported User</string>

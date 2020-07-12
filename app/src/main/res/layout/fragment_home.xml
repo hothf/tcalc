@@ -32,9 +32,9 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/default_36"
                     android:layout_marginEnd="@dimen/default_36"
-                    android:onClick="@{()->viewModel.onUserClicked()}"
+                    android:background="@drawable/bg_bordered_cornered"
                     android:foreground="@drawable/rounded_button_transculent_selector"
-                    android:background="@drawable/bg_bordered_cornered">
+                    android:onClick="@{()->viewModel.onUserClicked()}">
 
                     <TextView
                         android:id="@+id/userText"
@@ -69,10 +69,10 @@
             android:layout_below="@+id/userText"
             android:layout_gravity="bottom"
             android:paddingBottom="@dimen/default_156"
-            app:setItemAnimator="@{viewModel.itemAnimator}"
             app:adapter="@{viewModel.adapter}"
             app:layoutManager="@{viewModel.layoutManager()}"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            app:setItemAnimator="@{viewModel.itemAnimator}" />
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -253,13 +253,13 @@
                 android:visibility="@{viewModel.loadingVisibility}" />
         </RelativeLayout>
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/addButton"
-            style="@style/FabButtonStyle"
+            style="@style/ButtonStyle.Bordered"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/default_54"
             android:onClick="@{()->viewModel.onAddClicked()}"
-            android:src="@drawable/ic_add"
+            android:text="@string/home_add"
             app:layout_anchor="@+id/resultContainer"
             app:layout_anchorGravity="center_horizontal" />
     </androidx.coordinatorlayout.widget.CoordinatorLayout>

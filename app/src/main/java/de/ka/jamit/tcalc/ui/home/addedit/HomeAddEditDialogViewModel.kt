@@ -59,7 +59,7 @@ class HomeAddEditDialogViewModel : BaseViewModel() {
         }.toTypedArray()
         return ArrayAdapter<String>(
                 resourcesProvider.getApplicationContext(),
-                android.R.layout.simple_spinner_item,
+                R.layout.spinner_item,
                 names).apply {
             setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         }
