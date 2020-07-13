@@ -1,10 +1,7 @@
 package de.ka.jamit.tcalc.repo
 
 import android.app.Application
-import de.ka.jamit.tcalc.repo.db.AppDatabase
-import de.ka.jamit.tcalc.repo.db.RecordDao
-import de.ka.jamit.tcalc.repo.db.RecordDao_
-import de.ka.jamit.tcalc.repo.db.UserDao
+import de.ka.jamit.tcalc.repo.db.*
 import io.objectbox.Box
 import io.objectbox.kotlin.boxFor
 import io.objectbox.query.Query
@@ -28,11 +25,23 @@ class RepositoryImpl(val app: Application, val db: AppDatabase) : Repository {
     override var lastImportResult: Repository.ImportResult? = null
 
     init {
+        insertDefaultValues()
+    }
+
+    override fun wipeDatabase() {
+        lastRemovedRecordDao = null
+        lastRemovedUserDao = null
+        lastImportResult = null
+        currentlySelectedUser = null
+        userDao.removeAll()
+        recordDao.removeAll()
+        insertDefaultValues()
+    }
+
+    private fun insertDefaultValues() {
         if (userDao.isEmpty) {
-            userDao.put(db.defaultUser)
-        }
-        if (recordDao.isEmpty) {
-            recordDao.put(db.masterData)
+            val userId = userDao.put(db.getDefaultUser())
+            recordDao.put(db.getMasterData(userId))
         }
     }
 
@@ -50,6 +59,15 @@ class RepositoryImpl(val app: Application, val db: AppDatabase) : Repository {
                     .toList()
         }
         return emptyList()
+    }
+
+    private fun getDefaultUserId(): Long? {
+        val user = userDao
+                .query()
+                .equal(UserDao_.name, "default")
+                .build()
+                .findFirst()
+        return user?.id
     }
 
     override fun getCurrentlySelectedUser(): UserDao {
@@ -88,7 +106,7 @@ class RepositoryImpl(val app: Application, val db: AppDatabase) : Repository {
 
     override fun deleteUser(id: Long) {
         if (currentlySelectedUser?.id == id) { // would be not so nice to have nothing selected
-            selectUser(1) // user 1 is not deletable, so select it now!
+            getDefaultUserId()?.let(::selectUser) // this user is not deletable, so select it now!
         }
         lastRemovedUserDao = userDao.get(id)
         val recordIds = recordDao.query()

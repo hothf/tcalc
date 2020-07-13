@@ -18,24 +18,26 @@ class AppDatabase(private val application: Application) {
     fun get() = db
 
     /**
-     * Retrieves a default user.
+     * Retrieves a default user, usable for insertion only.
      */
-    val defaultUser = UserDao(id = 0, name = "default", selected = true)
+    fun getDefaultUser() = UserDao(id = 0, name = "default", selected = true)
 
     /**
      * All the master data which should only be inserted once into the database.
      * Please do this after putting the default user, as this data references the first
-     * inserted user.
+     * inserted user, usable for insertion only.
      */
-    val masterData = listOf(
-            RecordDao(id = 0, key = "firstVal", value = 0.0f, userId = 1L),
-            RecordDao(id = 0, key = "secondVal", value = 0.0f, userId = 1L),
-            RecordDao(id = 0, key = "thirdVal", value = 0.0f, userId = 1L),
-            RecordDao(id = 0, key = "fourthVal", value = 0.0f, userId = 1L),
-            RecordDao(id = 0, key = "fifthVal", value = 0.0f, userId = 1L),
-            RecordDao(id = 0, key = "sixthVal", value = 0.0f, userId = 1L),
-            RecordDao(id = 0, key = "seventhVal", value = 0.0f, userId = 1L)
-    )
+    fun getMasterData(userId: Long): List<RecordDao> {
+        return listOf(
+                RecordDao(id = 0, key = "firstVal", value = 0.0f, userId = userId),
+                RecordDao(id = 0, key = "secondVal", value = 0.0f, userId = userId),
+                RecordDao(id = 0, key = "thirdVal", value = 0.0f, userId = userId),
+                RecordDao(id = 0, key = "fourthVal", value = 0.0f, userId = userId),
+                RecordDao(id = 0, key = "fifthVal", value = 0.0f, userId = userId),
+                RecordDao(id = 0, key = "sixthVal", value = 0.0f, userId = userId),
+                RecordDao(id = 0, key = "seventhVal", value = 0.0f, userId = userId)
+        )
+    }
 
 
     companion object {

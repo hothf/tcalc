@@ -112,4 +112,9 @@ interface Repository {
      * Represents an import result
      */
     data class ImportResult(val name: String, val recordCount: Int)
+
+    /**
+     * Deletes all entries of the database.
+     */
+    fun wipeDatabase()
 }
