@@ -4,10 +4,10 @@ import de.ka.jamit.tcalc.repo.Repository
 import de.ka.jamit.tcalc.repo.db.RecordDao
 import de.ka.jamit.tcalc.repo.db.UserDao
 import io.mockk.every
+import io.mockk.impl.annotations.RelaxedMockK
 import io.reactivex.Observable
 import org.junit.*
 import org.koin.test.inject
-import org.koin.test.mock.declareMock
 
 /**
  * A database management unit test.
@@ -17,6 +17,15 @@ import org.koin.test.mock.declareMock
 class DatabaseManagementUnitTest : InjectedAppTest() {
 
     private val repository: Repository by inject()
+
+    @RelaxedMockK
+    lateinit var mockRepository: Repository
+
+    @Before
+    override fun setUp() {
+        super.setUp()
+
+    }
 
     @Test
     fun `database should have default values and records`() {
@@ -33,7 +42,6 @@ class DatabaseManagementUnitTest : InjectedAppTest() {
         // check if the observing of user count is as expected 1 (only the default user) and the
         // records match the expectation
         // given
-        val mockRepository = declareMock<Repository>()
         val defaultUserId = repository.getCurrentlySelectedUser().id
         val dummyUser = UserDao(defaultUserId, "default", true)
         every { mockRepository.observeUsers() } returns Observable.just(listOf(dummyUser))
@@ -70,5 +78,33 @@ class DatabaseManagementUnitTest : InjectedAppTest() {
             Assert.assertEquals(dummyValues[index].key, item.key)
         }
         testList.dispose()
+    }
+
+    @Test
+    fun `database should handle record manipulations`() {
+        //given
+        val defaultUserId = repository.getCurrentlySelectedUser().id
+        val dummyRecords = listOf(
+                RecordDao(id = 1L, key = "firstVal", userId = defaultUserId),
+                RecordDao(id = 1L, key = "secondVal", userId = defaultUserId),
+                RecordDao(id = 1L, key = "thirdVal", userId = defaultUserId),
+                RecordDao(id = 1L, key = "fourthVal", userId = defaultUserId),
+                RecordDao(id = 1L, key = "fifthVal", userId = defaultUserId),
+                RecordDao(id = 1L, key = "sixthVal", userId = defaultUserId),
+                RecordDao(id = 1L, key = "seventhVal", userId = defaultUserId),
+                RecordDao(id = 1L, key = "Hello", userId = defaultUserId))
+        every { mockRepository.observeRecords() } returns Observable.just(dummyRecords)
+        val dummyValues = mockRepository.observeRecords().blockingSingle()
+        val testList = repository.observeRecords().test().awaitCount(1)
+        testList.assertValueCount(1)
+
+        // when
+        repository.addRecord("Hello", isConsidered = true, isIncome = false)
+
+        // then
+        val result = testList.awaitCount(2).values()
+        result[1].forEachIndexed { index, item ->
+            Assert.assertEquals(dummyValues[index].key, item.key)
+        }
     }
 }

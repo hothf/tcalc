@@ -7,6 +7,7 @@ import de.ka.jamit.tcalc.repo.db.AppDatabase
 import de.ka.jamit.tcalc.repo.db.MyObjectBox
 import de.ka.jamit.tcalc.repo.db.RecordDao
 import de.ka.jamit.tcalc.repo.db.UserDao
+import io.mockk.MockKAnnotations
 import io.mockk.mockk
 import io.mockk.mockkClass
 import io.objectbox.BoxStore
@@ -46,6 +47,7 @@ open class InjectedAppTest: KoinTest {
     @Throws(Exception::class)
     open fun setUp() {
         // delete database files before each test to start with a clean database
+        MockKAnnotations.init(this)
         BoxStore.deleteAllFiles(testDirectory)
         db = MyObjectBox.builder() // add directory flag to change where ObjectBox puts its database files
                 .directory(testDirectory) // optional: add debug flags for more detailed ObjectBox log output
