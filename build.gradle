@@ -11,6 +11,7 @@ buildscript {
         gradle_version = '4.0.0'
         kotlin_version = '1.3.72'
 
+        mockk_version = '1.10.0'
         rv_animations_version = '3.0.0'
         csv_version = '5.2'
         koin_version = '2.1.5'
