@@ -14,7 +14,11 @@ import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
 import io.mockk.mockk
 import io.reactivex.Observable
+import io.reactivex.Scheduler
+import io.reactivex.internal.schedulers.TrampolineScheduler
 import io.reactivex.observers.TestObserver
+import io.reactivex.schedulers.Schedulers
+import io.reactivex.subscribers.TestSubscriber
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
@@ -68,13 +72,30 @@ class DatabaseManagementTest : KoinComponent {
                 .assertValues(dummyRepository.observeUsers().blockingSingle())
                 .dispose()
 
-//        val dummyRecords = listOf(
-//                RecordDao(),
-//                RecordDao(),
-//                RecordDao(),
-//        )
-//        every { dummyRepository.observeRecords() } returns Observable.just(listOf(records))
-//        repository.
+        val dummyRecords = listOf(
+                RecordDao(id = 1L, key = "firstVal", userId = defaultUserId),
+                RecordDao(id = 1L, key = "secondVal", userId = defaultUserId),
+                RecordDao(id = 1L, key = "thirdVal", userId = defaultUserId),
+                RecordDao(id = 1L, key = "fourthVal", userId = defaultUserId),
+                RecordDao(id = 1L, key = "fifthVal", userId = defaultUserId),
+                RecordDao(id = 1L, key = "sixthVal", userId = defaultUserId),
+                RecordDao(id = 1L, key = "seventhVal", userId = defaultUserId)
+        )
+        every { dummyRepository.observeRecords() } returns Observable.just(dummyRecords)
+
+        val testList = repository.observeRecords()
+                .test()
+                .awaitCount(1)
+                .assertValueCount(1)
+
+        val dummyValues = dummyRepository.observeRecords().blockingSingle()
+
+        val result = testList.values()
+        result[0].forEachIndexed { index, item ->
+            Assert.assertEquals(dummyValues[index].key, item.key)
+        }
+
+        testList.dispose()
 
     }
 
