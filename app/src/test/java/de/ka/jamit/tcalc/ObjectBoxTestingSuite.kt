@@ -8,15 +8,18 @@ import de.ka.jamit.tcalc.repo.db.MyObjectBox
 import de.ka.jamit.tcalc.repo.db.RecordDao
 import de.ka.jamit.tcalc.repo.db.UserDao
 import io.mockk.mockk
+import io.mockk.mockkClass
 import io.objectbox.BoxStore
 import io.objectbox.DebugFlags
 import org.junit.After
 import org.junit.Before
+import org.junit.Rule
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
 import org.koin.dsl.module
 import org.koin.test.KoinTest
+import org.koin.test.mock.MockProviderRule
 import java.io.File
 
 
@@ -33,6 +36,11 @@ open class InjectedAppTest: KoinTest {
 
     var db: BoxStore? = null
     private val testDirectory: File = File("objectbox-example/test-db")
+
+    @get:Rule
+    val mockProvider = MockProviderRule.create { clazz ->
+        mockkClass(clazz)
+    }
 
     @Before
     @Throws(Exception::class)
