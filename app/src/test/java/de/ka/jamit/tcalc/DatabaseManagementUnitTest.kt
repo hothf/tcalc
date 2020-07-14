@@ -94,7 +94,7 @@ class DatabaseManagementUnitTest : InjectedAppTest() {
                 RecordDao(id = 1L, key = "seventhVal", userId = defaultUserId),
                 RecordDao(id = 1L, key = "Hello", userId = defaultUserId))
         every { mockRepository.observeRecords() } returns Observable.just(dummyRecords)
-        val dummyValues = mockRepository.observeRecords().blockingSingle()
+        val dummyValues = mockRepository.observeRecords().blockingSingle().toMutableList()
         val testList = repository.observeRecords().test().awaitCount(1)
         testList.assertValueCount(1)
 
@@ -102,9 +102,22 @@ class DatabaseManagementUnitTest : InjectedAppTest() {
         repository.addRecord("Hello", isConsidered = true, isIncome = false)
 
         // then
-        val result = testList.awaitCount(2).values()
-        result[1].forEachIndexed { index, item ->
+        var lastId = 1L
+        val resultAfterAdd = testList.awaitCount(2).values()
+        resultAfterAdd[1].forEachIndexed { index, item ->
+            Assert.assertEquals(dummyValues[index].key, item.key)
+            lastId = item.id
+        }
+
+        // when
+        repository.deleteRecord(lastId)
+
+        // then
+        val resultAfterDelete = testList.awaitCount(3).values()
+        dummyValues.removeAt(dummyValues.size-1)
+        resultAfterDelete[2].forEachIndexed { index, item ->
             Assert.assertEquals(dummyValues[index].key, item.key)
         }
+        Assert.assertTrue(resultAfterAdd[2].size == 7)
     }
 }
