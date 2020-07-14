@@ -1,44 +1,20 @@
 package de.ka.jamit.tcalc.repo.db
 
-import android.app.Application
 import de.ka.jamit.tcalc.R
 import de.ka.jamit.tcalc.utils.resources.ResourcesProvider
 import io.objectbox.BoxStore
 
+
 /**
- * A object box database.
+ * A app database
  */
-class AppDatabase(private val application: Application) {
+interface AppDatabase {
 
-    private val db: BoxStore by lazy { MyObjectBox.builder().androidContext(application.applicationContext).build() }
+    fun get(): BoxStore
 
-    /**
-     * Retrieve the object box.
-     */
-    fun get() = db
+    fun getDefaultUser(): UserDao
 
-    /**
-     * Retrieves a default user, usable for insertion only.
-     */
-    fun getDefaultUser() = UserDao(id = 0, name = "default", selected = true)
-
-    /**
-     * All the master data which should only be inserted once into the database.
-     * Please do this after putting the default user, as this data references the first
-     * inserted user, usable for insertion only.
-     */
-    fun getMasterData(userId: Long): List<RecordDao> {
-        return listOf(
-                RecordDao(id = 0, key = "firstVal", value = 0.0f, userId = userId),
-                RecordDao(id = 0, key = "secondVal", value = 0.0f, userId = userId),
-                RecordDao(id = 0, key = "thirdVal", value = 0.0f, userId = userId),
-                RecordDao(id = 0, key = "fourthVal", value = 0.0f, userId = userId),
-                RecordDao(id = 0, key = "fifthVal", value = 0.0f, userId = userId),
-                RecordDao(id = 0, key = "sixthVal", value = 0.0f, userId = userId),
-                RecordDao(id = 0, key = "seventhVal", value = 0.0f, userId = userId)
-        )
-    }
-
+    fun getMasterData(userId: Long): List<RecordDao>
 
     companion object {
         private val translatedKeyMap = mapOf(
@@ -58,4 +34,5 @@ class AppDatabase(private val application: Application) {
             return translatedKeyMap[key]?.let(resourcesProvider::getString) ?: key
         }
     }
+
 }

@@ -1,6 +1,5 @@
 package de.ka.jamit.tcalc.repo
 
-import android.app.Application
 import de.ka.jamit.tcalc.repo.db.*
 import io.objectbox.Box
 import io.objectbox.kotlin.boxFor
@@ -14,7 +13,7 @@ import io.reactivex.Single
 /**
  * The implementation for the abstraction of data sources.
  */
-class RepositoryImpl(val app: Application, val db: AppDatabase) : Repository {
+class RepositoryImpl(val db: AppDatabase) : Repository {
 
     private val recordDao: Box<RecordDao> = db.get().boxFor()
     private val userDao: Box<UserDao> = db.get().boxFor()

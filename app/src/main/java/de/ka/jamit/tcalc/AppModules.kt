@@ -3,6 +3,7 @@ package de.ka.jamit.tcalc
 import de.ka.jamit.tcalc.repo.Repository
 import de.ka.jamit.tcalc.repo.RepositoryImpl
 import de.ka.jamit.tcalc.repo.db.AppDatabase
+import de.ka.jamit.tcalc.repo.db.AppDatabaseImpl
 import de.ka.jamit.tcalc.ui.home.HomeViewModel
 import de.ka.jamit.tcalc.ui.home.addedit.HomeAddEditDialogViewModel
 import de.ka.jamit.tcalc.ui.home.category.CategoryDialogViewModel
@@ -37,12 +38,11 @@ val appModule = module {
     viewModel { ExportingDialogViewModel() }
     viewModel { CategoryDialogViewModel() }
 
+    single { AppDatabaseImpl(get()) as AppDatabase }
     single { ResourcesProviderImpl(get()) as ResourcesProvider }
     single { GlobalMessageEventListener() }
     single { CloseEventListener() }
     single { CSVUtils(get(), get()) }
     single { InputValidator(get()) }
-
-    single { AppDatabase(get()) }
-    single { RepositoryImpl(get(), get()) as Repository }
+    single { RepositoryImpl(get()) as Repository }
 }

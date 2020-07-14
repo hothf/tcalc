@@ -94,9 +94,15 @@ class DatabaseManagementTest : KoinComponent {
         result[0].forEachIndexed { index, item ->
             Assert.assertEquals(dummyValues[index].key, item.key)
         }
-
         testList.dispose()
+    }
 
+    @Test
+    fun database_shouldUserManagementCorrect_whenAdding(){
+
+        val userList = repository.observeUsers().test()
+
+        repository.addUser("New Testuser")
     }
 
 }
