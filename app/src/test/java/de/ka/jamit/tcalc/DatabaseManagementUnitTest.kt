@@ -1,5 +1,6 @@
 package de.ka.jamit.tcalc
 
+import de.ka.jamit.tcalc.base.InjectedAppTest
 import de.ka.jamit.tcalc.repo.Repository
 import de.ka.jamit.tcalc.repo.db.RecordDao
 import de.ka.jamit.tcalc.repo.db.UserDao
@@ -92,14 +93,15 @@ class DatabaseManagementUnitTest : InjectedAppTest() {
                 RecordDao(id = 1L, key = "fifthVal", userId = defaultUserId),
                 RecordDao(id = 1L, key = "sixthVal", userId = defaultUserId),
                 RecordDao(id = 1L, key = "seventhVal", userId = defaultUserId),
-                RecordDao(id = 1L, key = "Hello", userId = defaultUserId))
+                RecordDao(id = 1L, key = "New", userId = defaultUserId))
         every { mockRepository.observeRecords() } returns Observable.just(dummyRecords)
         val dummyValues = mockRepository.observeRecords().blockingSingle().toMutableList()
         val testList = repository.observeRecords().test().awaitCount(1)
         testList.assertValueCount(1)
 
+        // adding a record
         // when
-        repository.addRecord("Hello", isConsidered = true, isIncome = false)
+        repository.addRecord("New", isConsidered = true, isIncome = false)
 
         // then
         var lastId = 1L
@@ -109,15 +111,43 @@ class DatabaseManagementUnitTest : InjectedAppTest() {
             lastId = item.id
         }
 
+        // deleting a record
         // when
         repository.deleteRecord(lastId)
 
         // then
         val resultAfterDelete = testList.awaitCount(3).values()
-        dummyValues.removeAt(dummyValues.size-1)
+        dummyValues.removeAt(dummyValues.size - 1)
         resultAfterDelete[2].forEachIndexed { index, item ->
             Assert.assertEquals(dummyValues[index].key, item.key)
+            lastId = item.id
         }
         Assert.assertTrue(resultAfterAdd[2].size == 7)
+
+        // updating a record
+        // when
+        repository.updateRecord(value = 2.0f,
+                id = lastId,
+                key = "Updated",
+                timeSpan = RecordDao.TimeSpan.QUARTERLY,
+                category = RecordDao.Category.HOUSE,
+                isIncome = true,
+                isConsidered = true)
+
+        //then
+        val resultAfterUpdate = testList.awaitCount(4).values()
+        val updatedItem = RecordDao(
+                id = lastId,
+                key = "Updated",
+                timeSpan = RecordDao.TimeSpan.QUARTERLY,
+                category = RecordDao.Category.HOUSE,
+                isIncome = true,
+                isConsidered = true,
+                userId = defaultUserId)
+        dummyValues.removeAt(dummyValues.size - 1)
+        dummyValues.add(dummyValues.size, updatedItem)
+        resultAfterUpdate[3].forEachIndexed { index, item ->
+            Assert.assertEquals(dummyValues[index].key, item.key)
+        }
     }
 }

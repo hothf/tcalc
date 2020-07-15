@@ -1,4 +1,4 @@
-package de.ka.jamit.tcalc
+package de.ka.jamit.tcalc.base
 
 import android.app.Application
 import de.ka.jamit.tcalc.repo.Repository
