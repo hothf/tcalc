@@ -92,7 +92,7 @@ class HomeViewModel : BaseViewModel() {
                     val selected = users.firstOrNull { it.selected } ?: return@subscribe
                     userText.postValue(selected.name)
                     userRecords?.let(compositeDisposable::remove)
-                    userRecords = repository.observeRecords()
+                    userRecords = repository.observeRecordsOfCurrentlySelected()
                             .subscribeOn(Schedulers.io())
                             .observeOn(AndroidSchedulers.mainThread())
                             .subscribe({ records ->

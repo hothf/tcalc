@@ -38,7 +38,6 @@ class UserDialogViewModel : BaseViewModel() {
         val arguments = Bundle().apply {
             putBoolean(UserAddEditDialog.UPDATE_KEY, true)
             putString(UserAddEditDialog.TITLE_KEY, it.item.name)
-            putBoolean(UserAddEditDialog.IS_SELECTED_KEY, it.item.selected)
             putLong(HomeAddEditDialog.ID_KEY, it.item.id)
         }
         navigateTo(R.id.dialogUserAddEdit, args = arguments)

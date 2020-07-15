@@ -20,6 +20,7 @@ class RepositoryImpl(val db: AppDatabase) : Repository {
     private var currentlySelectedUser: UserDao? = null
     private var lastRemovedRecordDao: RecordDao? = null
     private var lastRemovedUserDao: UserDao? = null
+    private var lastRemovedUserRecords: List<RecordDao>? = null
 
     override var lastImportResult: Repository.ImportResult? = null
 
@@ -79,16 +80,22 @@ class RepositoryImpl(val db: AppDatabase) : Repository {
 
     override fun selectUser(id: Long) {
         val existing = getCurrentlySelectedUser()
-        updateUser(existing.id, existing.name, false)
+        updateUserInternally(existing.id, existing.name, false)
 
         val selectedUser = userDao.get(id)
         if (selectedUser != null) {
-            updateUser(id, selectedUser.name, true)
+            updateUserInternally(id, selectedUser.name, true)
             currentlySelectedUser = selectedUser
         }
     }
 
-    override fun updateUser(id: Long, name: String, selected: Boolean) {
+    override fun updateUser(id: Long, name: String) {
+        userDao.get(id)?.let {
+            updateUserInternally(it.id, name, it.selected)
+        }
+    }
+
+    private fun updateUserInternally(id: Long, name: String, selected: Boolean) {
         userDao.get(id)?.let {
             val user = UserDao(id = id, name = name, selected = selected)
             userDao.put(user)
@@ -108,12 +115,12 @@ class RepositoryImpl(val db: AppDatabase) : Repository {
             getDefaultUserId()?.let(::selectUser) // this user is not deletable, so select it now!
         }
         lastRemovedUserDao = userDao.get(id)
-        val recordIds = recordDao.query()
+        val records = recordDao.query()
                 .equal(RecordDao_.userId, id)
                 .build()
-                .findIds()
-                .toList()
-        recordDao.removeByIds(recordIds)
+                .find()
+        lastRemovedUserRecords = records
+        recordDao.remove(records)
         userDao.remove(id)
     }
 
@@ -122,6 +129,9 @@ class RepositoryImpl(val db: AppDatabase) : Repository {
         if (lastUser != null) {
             userDao.put(lastUser)
             lastRemovedUserDao = null
+            val lastRecords = lastRemovedUserRecords
+            lastRecords?.let(recordDao::put)
+            lastRemovedUserRecords = null
         }
     }
 
@@ -181,7 +191,7 @@ class RepositoryImpl(val db: AppDatabase) : Repository {
         }
     }
 
-    override fun observeRecords(): Observable<List<RecordDao>> {
+    override fun observeRecordsOfCurrentlySelected(): Observable<List<RecordDao>> {
         val query: Query<RecordDao> = recordDao.query().equal(RecordDao_.userId, getCurrentlySelectedUser().id).build()
         return RxQuery.observable<RecordDao>(query)
     }

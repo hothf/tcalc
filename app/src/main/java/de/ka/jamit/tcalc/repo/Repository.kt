@@ -13,9 +13,9 @@ interface Repository {
     var lastImportResult: ImportResult?
 
     /**
-     * Retrieves all records
+     * Retrieves all records of the currently selected user.
      */
-    fun observeRecords(): Observable<List<RecordDao>>
+    fun observeRecordsOfCurrentlySelected(): Observable<List<RecordDao>>
 
     /**
      * Retrieves all records of the currently selected user.
@@ -79,9 +79,9 @@ interface Repository {
     fun selectUser(id: Long)
 
     /**
-     * Updates the given user
+     * Updates the given user.
      */
-    fun updateUser(id: Long, name: String, selected: Boolean)
+    fun updateUser(id: Long, name: String)
 
     /**
      * Adds a new user.

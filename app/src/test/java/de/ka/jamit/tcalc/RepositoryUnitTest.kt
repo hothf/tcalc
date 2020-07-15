@@ -58,14 +58,14 @@ class RepositoryUnitTest : InjectedAppTest() {
                 RecordDao(id = 6L, key = "sixthVal", userId = defaultUserId),
                 RecordDao(id = 7L, key = "seventhVal", userId = defaultUserId)
         )
-        every { mockRepository.observeRecords() } returns Observable.just(dummyRecords)
+        every { mockRepository.observeRecordsOfCurrentlySelected() } returns Observable.just(dummyRecords)
 
         // when
-        val testList = repository.observeRecords()
+        val testList = repository.observeRecordsOfCurrentlySelected()
                 .test()
                 .awaitCount(1)
                 .assertValueCount(1)
-        val dummyValues = mockRepository.observeRecords().blockingSingle()
+        val dummyValues = mockRepository.observeRecordsOfCurrentlySelected().blockingSingle()
 
         // then
         testList.values()[0].forEachIndexed { index, item ->
@@ -87,9 +87,9 @@ class RepositoryUnitTest : InjectedAppTest() {
                 RecordDao(id = 6L, key = "sixthVal", userId = defaultUserId),
                 RecordDao(id = 7L, key = "seventhVal", userId = defaultUserId),
                 RecordDao(id = 8L, key = "New", userId = defaultUserId))
-        every { mockRepository.observeRecords() } returns Observable.just(dummyRecords)
-        val dummyValues = mockRepository.observeRecords().blockingSingle().toMutableList()
-        val testList = repository.observeRecords().test().awaitCount(1)
+        every { mockRepository.observeRecordsOfCurrentlySelected() } returns Observable.just(dummyRecords)
+        val dummyValues = mockRepository.observeRecordsOfCurrentlySelected().blockingSingle().toMutableList()
+        val testList = repository.observeRecordsOfCurrentlySelected().test().awaitCount(1)
         testList.assertValueCount(1)
 
         // adding a record
@@ -110,7 +110,7 @@ class RepositoryUnitTest : InjectedAppTest() {
 
         // then
         val resultAfterDelete = testList.awaitCount(3).values()[2]
-        val lastDeletedItem = dummyValues[dummyValues.size -1]
+        val lastDeletedItem = dummyValues[dummyValues.size - 1]
         dummyValues.remove(lastDeletedItem)
         resultAfterDelete.forEachIndexed { index, item ->
             Assert.assertEquals(dummyValues[index].key, item.key)
@@ -182,4 +182,112 @@ class RepositoryUnitTest : InjectedAppTest() {
 
         testList.dispose()
     }
+
+    @Test
+    fun `database should handle user manipulations`() {
+        //given
+        val users = listOf(UserDao(id = 1L, name = "default", selected = true))
+        every { mockRepository.observeUsers() } returns Observable.just(users)
+
+        // observe users
+        // when, then
+        val dummyUsers = mockRepository.observeUsers().blockingSingle().toMutableList()
+        val testList = repository
+                .observeUsers()
+                .test()
+                .awaitCount(1)
+                .assertValueCount(1)
+                .assertValue(dummyUsers)
+
+        // adding a user
+        // when
+        repository.addUser("NewUser")
+
+        // then
+        var lastId = 1L
+        dummyUsers.add(UserDao(id = 2L, name = "NewUser", selected = false))
+        val resultAfterAdd = testList.awaitCount(4).values()[3]
+        resultAfterAdd.forEachIndexed { index, item -> // we check like this because ids may be different internally
+            Assert.assertEquals(dummyUsers[index].name, item.name)
+            lastId = item.id
+        }
+        // add records to this user, needed for later tests
+        val dummyRecords = listOf(RecordDao(id = 0, userId = lastId), RecordDao(id = 0, userId = lastId))
+        repository.addRecords(dummyRecords)
+        // should auto select the new user
+        Assert.assertFalse(resultAfterAdd[0].selected)
+        Assert.assertTrue(resultAfterAdd[1].selected)
+        Assert.assertEquals(2, repository.getAllRecordsOfCurrentlySelectedUser().size)
+
+        // deleting a user
+        // when
+        repository.deleteUser(lastId)
+
+        // then
+        val lastDeletedItem = dummyUsers[dummyUsers.size - 1]
+        dummyUsers.remove(lastDeletedItem)
+        val resultAfterDelete = testList.awaitCount(7).values()[6]
+        resultAfterDelete.forEachIndexed { index, item ->
+            Assert.assertEquals(dummyUsers[index].name, item.name)
+            lastId = item.id
+        }
+        Assert.assertTrue(resultAfterDelete.size == 1) // should auto select the default user
+        Assert.assertTrue(resultAfterDelete[0].selected)
+
+        // check if records of the user have been deleted (in this case only default records)
+        // when, then
+        val recordsObserver = repository.observeRecordsOfCurrentlySelected().test().awaitCount(1)
+        Assert.assertTrue(recordsObserver.values()[0].size == 7)
+        recordsObserver.dispose()
+
+        // undo deleting a user
+        // when
+        repository.undoDeleteLastUser()
+
+        // then
+        dummyUsers.add(dummyUsers.size, lastDeletedItem)
+        val resultAfterUndoDelete = testList.awaitCount(8).values()[7]
+        resultAfterUndoDelete.forEachIndexed { index, item ->
+            Assert.assertEquals(dummyUsers[index].name, item.name)
+            lastId = item.id
+        }
+        Assert.assertTrue(resultAfterUndoDelete.size == 2)
+
+        // update a user
+        // when
+        repository.updateUser(lastId, "Update")
+
+        // then
+        val resultAfterUpdate = testList.awaitCount(9).values()[8]
+        Assert.assertEquals("Update", resultAfterUpdate[1].name)
+
+        // select a user
+        // when
+        repository.selectUser(lastId)
+
+        val resultAfterSelect = testList.awaitCount(11).values()[10]
+        Assert.assertTrue(resultAfterSelect[1].selected)
+
+        // check if records of the deleted user have been restored
+        // this should be now possible as the selected user has changed
+        val recordObserver = repository.observeRecordsOfCurrentlySelected().test().awaitCount(1)
+        Assert.assertTrue(recordObserver.values()[0].size == 2)
+        recordObserver.dispose()
+
+        // delete the last user and check if the default user is checked again
+        // when
+        repository.deleteUser(lastId)
+
+        // then
+        val resultAfterSelectAndDelete = testList.awaitCount(14).values()[12]
+        Assert.assertTrue(resultAfterSelectAndDelete[0].selected)
+
+        testList.dispose()
+    }
+
+
+    // testing calc
+
+
+    // other file: testing import and export
 }
