@@ -110,12 +110,26 @@ class RepositoryUnitTest : InjectedAppTest() {
 
         // then
         val resultAfterDelete = testList.awaitCount(3).values()[2]
-        dummyValues.removeAt(dummyValues.size - 1)
+        val lastDeletedItem = dummyValues[dummyValues.size -1]
+        dummyValues.remove(lastDeletedItem)
         resultAfterDelete.forEachIndexed { index, item ->
             Assert.assertEquals(dummyValues[index].key, item.key)
             lastId = item.id
         }
         Assert.assertTrue(resultAfterDelete.size == 7)
+
+        // undo deletion of a record
+        // when
+        repository.undoDeleteLastRecord()
+
+        // then
+        val resultAfterUndoDelete = testList.awaitCount(4).values()[3]
+        dummyValues.add(dummyValues.size, lastDeletedItem)
+        resultAfterUndoDelete.forEachIndexed { index, item ->
+            Assert.assertEquals(dummyValues[index].key, item.key)
+            lastId = item.id
+        }
+        Assert.assertTrue(resultAfterUndoDelete.size == 8)
 
         // updating a record
         // when
@@ -128,7 +142,7 @@ class RepositoryUnitTest : InjectedAppTest() {
                 isConsidered = true)
 
         //then
-        val resultAfterUpdate = testList.awaitCount(4).values()[3]
+        val resultAfterUpdate = testList.awaitCount(5).values()[4]
         val updatedItem = RecordDao(
                 id = lastId,
                 key = "Updated",
@@ -161,7 +175,7 @@ class RepositoryUnitTest : InjectedAppTest() {
         repository.addRecords(newRecords)
 
         // then
-        val resultAfterBunkAdd = testList.awaitCount(5).values()[4]
+        val resultAfterBunkAdd = testList.awaitCount(6).values()[5]
         resultAfterBunkAdd.forEachIndexed { index, item ->
             Assert.assertEquals(dummyValues[index].key, item.key)
         }
