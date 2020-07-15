@@ -23,7 +23,7 @@ class RepositoryUnitTest : InjectedAppTest() {
     lateinit var mockRepository: Repository
 
     @Test
-    fun `database should have default values and records`() {
+    fun `repository should have default values and records`() {
         // is the default user set? And does it have the default records?
         Assert.assertEquals("There should only be the default user with name=default", "default", repository.getCurrentlySelectedUser().name)
         Assert.assertEquals("There should only be 7 records of the default user", 7, repository.getAllRecordsOfCurrentlySelectedUser().size)
@@ -75,7 +75,7 @@ class RepositoryUnitTest : InjectedAppTest() {
     }
 
     @Test
-    fun `database should handle record manipulations`() {
+    fun `repository should handle record manipulations`() {
         //given
         val defaultUserId = repository.getCurrentlySelectedUser().id
         val dummyRecords = listOf(
@@ -89,8 +89,8 @@ class RepositoryUnitTest : InjectedAppTest() {
                 RecordDao(id = 8L, key = "New", userId = defaultUserId))
         every { mockRepository.observeRecordsOfCurrentlySelected() } returns Observable.just(dummyRecords)
         val dummyValues = mockRepository.observeRecordsOfCurrentlySelected().blockingSingle().toMutableList()
-        val testList = repository.observeRecordsOfCurrentlySelected().test().awaitCount(1)
-        testList.assertValueCount(1)
+        val testObserver = repository.observeRecordsOfCurrentlySelected().test().awaitCount(1)
+        testObserver.assertValueCount(1)
 
         // adding a record
         // when
@@ -98,7 +98,7 @@ class RepositoryUnitTest : InjectedAppTest() {
 
         // then
         var lastId = 1L
-        val resultAfterAdd = testList.awaitCount(2).values()[1]
+        val resultAfterAdd = testObserver.awaitCount(2).values()[1]
         resultAfterAdd.forEachIndexed { index, item -> // we check like this because ids may be different internally
             Assert.assertEquals(dummyValues[index].key, item.key)
             lastId = item.id
@@ -109,7 +109,7 @@ class RepositoryUnitTest : InjectedAppTest() {
         repository.deleteRecord(lastId)
 
         // then
-        val resultAfterDelete = testList.awaitCount(3).values()[2]
+        val resultAfterDelete = testObserver.awaitCount(3).values()[2]
         val lastDeletedItem = dummyValues[dummyValues.size - 1]
         dummyValues.remove(lastDeletedItem)
         resultAfterDelete.forEachIndexed { index, item ->
@@ -123,7 +123,7 @@ class RepositoryUnitTest : InjectedAppTest() {
         repository.undoDeleteLastRecord()
 
         // then
-        val resultAfterUndoDelete = testList.awaitCount(4).values()[3]
+        val resultAfterUndoDelete = testObserver.awaitCount(4).values()[3]
         dummyValues.add(dummyValues.size, lastDeletedItem)
         resultAfterUndoDelete.forEachIndexed { index, item ->
             Assert.assertEquals(dummyValues[index].key, item.key)
@@ -142,7 +142,7 @@ class RepositoryUnitTest : InjectedAppTest() {
                 isConsidered = true)
 
         //then
-        val resultAfterUpdate = testList.awaitCount(5).values()[4]
+        val resultAfterUpdate = testObserver.awaitCount(5).values()[4]
         val updatedItem = RecordDao(
                 id = lastId,
                 key = "Updated",
@@ -175,16 +175,16 @@ class RepositoryUnitTest : InjectedAppTest() {
         repository.addRecords(newRecords)
 
         // then
-        val resultAfterBunkAdd = testList.awaitCount(6).values()[5]
+        val resultAfterBunkAdd = testObserver.awaitCount(6).values()[5]
         resultAfterBunkAdd.forEachIndexed { index, item ->
             Assert.assertEquals(dummyValues[index].key, item.key)
         }
 
-        testList.dispose()
+        testObserver.dispose()
     }
 
     @Test
-    fun `database should handle user manipulations`() {
+    fun `repository should handle user manipulations`() {
         //given
         val users = listOf(UserDao(id = 1L, name = "default", selected = true))
         every { mockRepository.observeUsers() } returns Observable.just(users)
@@ -192,7 +192,7 @@ class RepositoryUnitTest : InjectedAppTest() {
         // observe users
         // when, then
         val dummyUsers = mockRepository.observeUsers().blockingSingle().toMutableList()
-        val testList = repository
+        val testObserver = repository
                 .observeUsers()
                 .test()
                 .awaitCount(1)
@@ -206,7 +206,7 @@ class RepositoryUnitTest : InjectedAppTest() {
         // then
         var lastId = 1L
         dummyUsers.add(UserDao(id = 2L, name = "NewUser", selected = false))
-        val resultAfterAdd = testList.awaitCount(4).values()[3]
+        val resultAfterAdd = testObserver.awaitCount(4).values()[3]
         resultAfterAdd.forEachIndexed { index, item -> // we check like this because ids may be different internally
             Assert.assertEquals(dummyUsers[index].name, item.name)
             lastId = item.id
@@ -226,7 +226,7 @@ class RepositoryUnitTest : InjectedAppTest() {
         // then
         val lastDeletedItem = dummyUsers[dummyUsers.size - 1]
         dummyUsers.remove(lastDeletedItem)
-        val resultAfterDelete = testList.awaitCount(7).values()[6]
+        val resultAfterDelete = testObserver.awaitCount(7).values()[6]
         resultAfterDelete.forEachIndexed { index, item ->
             Assert.assertEquals(dummyUsers[index].name, item.name)
             lastId = item.id
@@ -246,7 +246,7 @@ class RepositoryUnitTest : InjectedAppTest() {
 
         // then
         dummyUsers.add(dummyUsers.size, lastDeletedItem)
-        val resultAfterUndoDelete = testList.awaitCount(8).values()[7]
+        val resultAfterUndoDelete = testObserver.awaitCount(8).values()[7]
         resultAfterUndoDelete.forEachIndexed { index, item ->
             Assert.assertEquals(dummyUsers[index].name, item.name)
             lastId = item.id
@@ -258,14 +258,14 @@ class RepositoryUnitTest : InjectedAppTest() {
         repository.updateUser(lastId, "Update")
 
         // then
-        val resultAfterUpdate = testList.awaitCount(9).values()[8]
+        val resultAfterUpdate = testObserver.awaitCount(9).values()[8]
         Assert.assertEquals("Update", resultAfterUpdate[1].name)
 
         // select a user
         // when
         repository.selectUser(lastId)
 
-        val resultAfterSelect = testList.awaitCount(11).values()[10]
+        val resultAfterSelect = testObserver.awaitCount(11).values()[10]
         Assert.assertTrue(resultAfterSelect[1].selected)
 
         // check if records of the deleted user have been restored
@@ -279,15 +279,75 @@ class RepositoryUnitTest : InjectedAppTest() {
         repository.deleteUser(lastId)
 
         // then
-        val resultAfterSelectAndDelete = testList.awaitCount(14).values()[12]
+        val resultAfterSelectAndDelete = testObserver.awaitCount(14).values()[12]
         Assert.assertTrue(resultAfterSelectAndDelete[0].selected)
 
-        testList.dispose()
+        testObserver.dispose()
     }
 
 
-    // testing calc
+    @Test
+    fun `repository should calculate correctly`() {
+        //given
+        val data = mutableListOf(
+                RecordDao(value = 1.0f, timeSpan = RecordDao.TimeSpan.MONTHLY, userId = 1L),
+                RecordDao(value = 1.0f, timeSpan = RecordDao.TimeSpan.MONTHLY, userId = 1L))
 
+        // when
+        var testObserver = repository.calc(data).test().awaitCount(1)
 
-    // other file: testing import and export
+        //then
+        Assert.assertEquals(2.0f, testObserver.values()[0].monthlyOutput)
+        Assert.assertEquals(0.0f, testObserver.values()[0].monthlyIncome)
+        Assert.assertEquals(-2.0f, testObserver.values()[0].monthlyDifference)
+        Assert.assertEquals(24.0f, testObserver.values()[0].yearlyOutput)
+        Assert.assertEquals(0.0f, testObserver.values()[0].yearlyIncome)
+        Assert.assertEquals(-24.0f, testObserver.values()[0].yearlyDifference)
+
+        // given
+        data.add(RecordDao(value = 1.0f, timeSpan = RecordDao.TimeSpan.MONTHLY, isIncome = true, userId = 1L))
+
+        // when
+        testObserver = repository.calc(data).test().awaitCount(1)
+
+        //then
+        Assert.assertEquals(2.0f, testObserver.values()[0].monthlyOutput)
+        Assert.assertEquals(1.0f, testObserver.values()[0].monthlyIncome)
+        Assert.assertEquals(-1.0f, testObserver.values()[0].monthlyDifference)
+        Assert.assertEquals(24.0f, testObserver.values()[0].yearlyOutput)
+        Assert.assertEquals(12.0f, testObserver.values()[0].yearlyIncome)
+        Assert.assertEquals(-12.0f, testObserver.values()[0].yearlyDifference)
+
+        // given
+        data.add(RecordDao(value = 3.0f, timeSpan = RecordDao.TimeSpan.QUARTERLY, userId = 1L))
+
+        // when
+        testObserver = repository.calc(data).test().awaitCount(1)
+
+        //then
+        Assert.assertEquals(3.0f, testObserver.values()[0].monthlyOutput)
+        Assert.assertEquals(1.0f, testObserver.values()[0].monthlyIncome)
+        Assert.assertEquals(-2.0f, testObserver.values()[0].monthlyDifference)
+        Assert.assertEquals(36.0f, testObserver.values()[0].yearlyOutput)
+        Assert.assertEquals(12.0f, testObserver.values()[0].yearlyIncome)
+        Assert.assertEquals(-24.0f, testObserver.values()[0].yearlyDifference)
+
+        // given
+        data.add(RecordDao(value = 12.0f, timeSpan = RecordDao.TimeSpan.YEARLY, userId = 1L))
+
+        // when
+        testObserver = repository.calc(data).test().awaitCount(1)
+
+        //then
+        Assert.assertEquals(4.0f, testObserver.values()[0].monthlyOutput)
+        Assert.assertEquals(1.0f, testObserver.values()[0].monthlyIncome)
+        Assert.assertEquals(-3.0f, testObserver.values()[0].monthlyDifference)
+        Assert.assertEquals(48.0f, testObserver.values()[0].yearlyOutput)
+        Assert.assertEquals(12.0f, testObserver.values()[0].yearlyIncome)
+        Assert.assertEquals(-36.0f, testObserver.values()[0].yearlyDifference)
+
+        testObserver.dispose()
+    }
+
+    // TODO: other file: testing import and export
 }
