@@ -11,22 +11,16 @@ import org.junit.*
 import org.koin.test.inject
 
 /**
- * A database management unit test.
+ * A repository and database management unit test.
  *
  * Created by Thomas Hofmann on 14.07.20
  **/
-class DatabaseManagementUnitTest : InjectedAppTest() {
+class RepositoryUnitTest : InjectedAppTest() {
 
     private val repository: Repository by inject()
 
     @RelaxedMockK
     lateinit var mockRepository: Repository
-
-    @Before
-    override fun setUp() {
-        super.setUp()
-
-    }
 
     @Test
     fun `database should have default values and records`() {
@@ -57,12 +51,12 @@ class DatabaseManagementUnitTest : InjectedAppTest() {
         // given
         val dummyRecords = listOf(
                 RecordDao(id = 1L, key = "firstVal", userId = defaultUserId),
-                RecordDao(id = 1L, key = "secondVal", userId = defaultUserId),
-                RecordDao(id = 1L, key = "thirdVal", userId = defaultUserId),
-                RecordDao(id = 1L, key = "fourthVal", userId = defaultUserId),
-                RecordDao(id = 1L, key = "fifthVal", userId = defaultUserId),
-                RecordDao(id = 1L, key = "sixthVal", userId = defaultUserId),
-                RecordDao(id = 1L, key = "seventhVal", userId = defaultUserId)
+                RecordDao(id = 2L, key = "secondVal", userId = defaultUserId),
+                RecordDao(id = 3L, key = "thirdVal", userId = defaultUserId),
+                RecordDao(id = 4L, key = "fourthVal", userId = defaultUserId),
+                RecordDao(id = 5L, key = "fifthVal", userId = defaultUserId),
+                RecordDao(id = 6L, key = "sixthVal", userId = defaultUserId),
+                RecordDao(id = 7L, key = "seventhVal", userId = defaultUserId)
         )
         every { mockRepository.observeRecords() } returns Observable.just(dummyRecords)
 
@@ -74,8 +68,7 @@ class DatabaseManagementUnitTest : InjectedAppTest() {
         val dummyValues = mockRepository.observeRecords().blockingSingle()
 
         // then
-        val result = testList.values()
-        result[0].forEachIndexed { index, item ->
+        testList.values()[0].forEachIndexed { index, item ->
             Assert.assertEquals(dummyValues[index].key, item.key)
         }
         testList.dispose()
@@ -87,13 +80,13 @@ class DatabaseManagementUnitTest : InjectedAppTest() {
         val defaultUserId = repository.getCurrentlySelectedUser().id
         val dummyRecords = listOf(
                 RecordDao(id = 1L, key = "firstVal", userId = defaultUserId),
-                RecordDao(id = 1L, key = "secondVal", userId = defaultUserId),
-                RecordDao(id = 1L, key = "thirdVal", userId = defaultUserId),
-                RecordDao(id = 1L, key = "fourthVal", userId = defaultUserId),
-                RecordDao(id = 1L, key = "fifthVal", userId = defaultUserId),
-                RecordDao(id = 1L, key = "sixthVal", userId = defaultUserId),
-                RecordDao(id = 1L, key = "seventhVal", userId = defaultUserId),
-                RecordDao(id = 1L, key = "New", userId = defaultUserId))
+                RecordDao(id = 2L, key = "secondVal", userId = defaultUserId),
+                RecordDao(id = 3L, key = "thirdVal", userId = defaultUserId),
+                RecordDao(id = 4L, key = "fourthVal", userId = defaultUserId),
+                RecordDao(id = 5L, key = "fifthVal", userId = defaultUserId),
+                RecordDao(id = 6L, key = "sixthVal", userId = defaultUserId),
+                RecordDao(id = 7L, key = "seventhVal", userId = defaultUserId),
+                RecordDao(id = 8L, key = "New", userId = defaultUserId))
         every { mockRepository.observeRecords() } returns Observable.just(dummyRecords)
         val dummyValues = mockRepository.observeRecords().blockingSingle().toMutableList()
         val testList = repository.observeRecords().test().awaitCount(1)
@@ -105,8 +98,8 @@ class DatabaseManagementUnitTest : InjectedAppTest() {
 
         // then
         var lastId = 1L
-        val resultAfterAdd = testList.awaitCount(2).values()
-        resultAfterAdd[1].forEachIndexed { index, item ->
+        val resultAfterAdd = testList.awaitCount(2).values()[1]
+        resultAfterAdd.forEachIndexed { index, item -> // we check like this because ids may be different internally
             Assert.assertEquals(dummyValues[index].key, item.key)
             lastId = item.id
         }
@@ -116,13 +109,13 @@ class DatabaseManagementUnitTest : InjectedAppTest() {
         repository.deleteRecord(lastId)
 
         // then
-        val resultAfterDelete = testList.awaitCount(3).values()
+        val resultAfterDelete = testList.awaitCount(3).values()[2]
         dummyValues.removeAt(dummyValues.size - 1)
-        resultAfterDelete[2].forEachIndexed { index, item ->
+        resultAfterDelete.forEachIndexed { index, item ->
             Assert.assertEquals(dummyValues[index].key, item.key)
             lastId = item.id
         }
-        Assert.assertTrue(resultAfterAdd[2].size == 7)
+        Assert.assertTrue(resultAfterDelete.size == 7)
 
         // updating a record
         // when
@@ -135,10 +128,11 @@ class DatabaseManagementUnitTest : InjectedAppTest() {
                 isConsidered = true)
 
         //then
-        val resultAfterUpdate = testList.awaitCount(4).values()
+        val resultAfterUpdate = testList.awaitCount(4).values()[3]
         val updatedItem = RecordDao(
                 id = lastId,
                 key = "Updated",
+                value = 2.0f,
                 timeSpan = RecordDao.TimeSpan.QUARTERLY,
                 category = RecordDao.Category.HOUSE,
                 isIncome = true,
@@ -146,8 +140,32 @@ class DatabaseManagementUnitTest : InjectedAppTest() {
                 userId = defaultUserId)
         dummyValues.removeAt(dummyValues.size - 1)
         dummyValues.add(dummyValues.size, updatedItem)
-        resultAfterUpdate[3].forEachIndexed { index, item ->
+        resultAfterUpdate.forEachIndexed { index, item ->
             Assert.assertEquals(dummyValues[index].key, item.key)
         }
+
+        // getting all records of the currently selected user
+        // when
+        val records = repository.getAllRecordsOfCurrentlySelectedUser()
+
+        // then
+        Assert.assertEquals(dummyValues, records)
+
+        // adding multiple records at once
+        // when
+        val newRecords = listOf(
+                RecordDao(id = 0, key = "NewVal", userId = defaultUserId),
+                RecordDao(id = 0, key = "EvenNewerVal", userId = defaultUserId)
+        )
+        dummyValues.addAll(newRecords)
+        repository.addRecords(newRecords)
+
+        // then
+        val resultAfterBunkAdd = testList.awaitCount(5).values()[4]
+        resultAfterBunkAdd.forEachIndexed { index, item ->
+            Assert.assertEquals(dummyValues[index].key, item.key)
+        }
+
+        testList.dispose()
     }
 }
