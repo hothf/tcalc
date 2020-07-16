@@ -1,6 +1,6 @@
-package de.ka.jamit.tcalc
+package de.ka.jamit.tcalc.mocked
 
-import de.ka.jamit.tcalc.base.InjectedAppTest
+import de.ka.jamit.tcalc.mocked.base.InjectedAppTest
 import de.ka.jamit.tcalc.repo.Repository
 import de.ka.jamit.tcalc.repo.db.RecordDao
 import de.ka.jamit.tcalc.repo.db.UserDao

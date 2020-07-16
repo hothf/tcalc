@@ -24,7 +24,7 @@ class CSVUtils(private val repository: Repository, private val app: Application)
      */
     fun importCSV(uri: Uri): Completable {
         return Completable.create { emitter ->
-            var oldUserId: Long? = repository.getCurrentlySelectedUser().id
+            val oldUserId: Long? = repository.getCurrentlySelectedUser().id
             var newUserId: Long? = null
             val records = mutableListOf<RecordDao>()
 

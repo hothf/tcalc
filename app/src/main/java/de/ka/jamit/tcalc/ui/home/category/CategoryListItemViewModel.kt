@@ -1,8 +1,6 @@
 package de.ka.jamit.tcalc.ui.home.category
 
 import android.view.View
-import androidx.lifecycle.MutableLiveData
-import de.ka.jamit.tcalc.R
 import de.ka.jamit.tcalc.base.BaseItemViewModel
 import de.ka.jamit.tcalc.repo.db.RecordDao
 import de.ka.jamit.tcalc.utils.resources.ResourcesProvider

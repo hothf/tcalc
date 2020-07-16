@@ -1,10 +1,7 @@
 package de.ka.jamit.tcalc.ui.home.category
 
 import android.os.Bundle
-import android.view.View
-import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
 import de.ka.jamit.tcalc.R
 import de.ka.jamit.tcalc.base.BaseViewModel
 import de.ka.jamit.tcalc.repo.db.RecordDao

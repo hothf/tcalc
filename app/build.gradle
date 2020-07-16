@@ -28,6 +28,12 @@ android {
     buildFeatures {
         dataBinding = true
     }
+    testOptions {
+        unitTests {
+            returnDefaultValues = true
+            includeAndroidResources = true
+        }
+    }
     buildTypes {
         debug {
             minifyEnabled false
@@ -64,6 +70,7 @@ dependencies {
     testImplementation "org.koin:koin-test:$koin_version"
     testImplementation "androidx.arch.core:core-testing:$core_testing_version"
     testImplementation "junit:junit:$junit_version"
+    testImplementation "org.robolectric:robolectric:$roboelectric_version"
     androidTestImplementation "androidx.test.espresso:espresso-core:$espresso_version"
     testImplementation "io.mockk:mockk:$mockk_version"
     androidTestImplementation "io.mockk:mockk-android:$mockk_version"

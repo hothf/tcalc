@@ -1,4 +1,4 @@
-package de.ka.jamit.tcalc.base
+package de.ka.jamit.tcalc.mocked.base
 
 import android.app.Application
 import de.ka.jamit.tcalc.repo.Repository
@@ -33,9 +33,9 @@ import java.io.File
  *
  * By Thomas Hofmann on 14.07.20
  **/
-open class InjectedAppTest: KoinTest {
+open class InjectedAppTest : KoinTest {
 
-    var db: BoxStore? = null
+    private var db: BoxStore? = null
     private val testDirectory: File = File("objectbox-example/test-db")
 
     @get:Rule
@@ -56,11 +56,11 @@ open class InjectedAppTest: KoinTest {
 
         db?.let {
             val testDatabase = TestDatabase(it)
-            val mockkApp = mockk<Application>(relaxed = true)
+            val testApplication = mockk<Application>(relaxed = true)
             startKoin {
                 modules(
                         module {
-                            androidContext(mockkApp)
+                            androidContext(testApplication)
                             single { RepositoryImpl(testDatabase) as Repository }
                         })
             }
