@@ -1,21 +1,26 @@
 package de.ka.jamit.tcalc.roboelectric
 
 import android.os.Build
+import android.os.Handler
 import androidx.core.net.toUri
 import androidx.test.core.app.ApplicationProvider
-import com.opencsv.CSVWriter
+import com.opencsv.CSVReader
 import de.ka.jamit.tcalc.repo.Repository
 import de.ka.jamit.tcalc.repo.db.RecordDao
 import de.ka.jamit.tcalc.roboelectric.base.RoboelectricKoinApplication
 import de.ka.jamit.tcalc.roboelectric.base.outputStream
 import de.ka.jamit.tcalc.utils.CSVUtils
-
+import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.koin.test.KoinTest
 import org.koin.test.inject
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
+import java.io.BufferedReader
+import java.io.ByteArrayInputStream
+import java.io.InputStreamReader
+import java.util.concurrent.CountDownLatch
 
 
 /**
@@ -25,31 +30,14 @@ import org.robolectric.annotation.Config
  **/
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [Build.VERSION_CODES.P], application = RoboelectricKoinApplication::class)
-class ExportImportUnitTest : KoinTest {
+class ImportUnitTest : KoinTest {
 
     private val app = ApplicationProvider.getApplicationContext<RoboelectricKoinApplication>()
 
     private val csvUtils: CSVUtils by inject()
     private val repository: Repository by inject()
 
-    @Test
-    fun `should export correctly`() {
-        // given
-        val userId = repository.getCurrentlySelectedUser().id
-        val newRecords = listOf(RecordDao(id = 0, key = "wat", userId = userId),
-                RecordDao(id = 0, key = "wat", userId = userId))
-        repository.addRecords(newRecords)
-
-        // first register
-        val uri = "content://test/file1.csv".toUri() // uri is not important, it is written to the output stream
-        app.appContentResolver?.registerOutputStream(uri, outputStream {
-            // then
-            println("received something")
-        })
-
-        // when, then
-        csvUtils.exportCSV(uri).test().assertComplete()
-    }
+    private val countDownLatch = CountDownLatch(1)
 
     @Test
     fun `should import correctly`() {
@@ -59,6 +47,8 @@ class ExportImportUnitTest : KoinTest {
         app.appContentResolver?.registerInputStream(uri, this.javaClass.classLoader?.getResourceAsStream("test_import_file.csv"))
 
         // when, then
-        csvUtils.importCSV(uri).test().assertComplete()
+        csvUtils.importCSV(uri).test().awaitCount(1).assertComplete()
     }
+
+    // due to a parallelism bug we can not have more than one roboelectric test at once running when testing this
 }

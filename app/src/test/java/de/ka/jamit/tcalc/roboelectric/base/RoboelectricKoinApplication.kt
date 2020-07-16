@@ -52,15 +52,23 @@ class RoboelectricKoinApplication : Application() {
 /**
  * Handy method for assigning an output stream.
  */
-fun outputStream(write: (Int) -> Unit): OutputStream {
-    return ApplicationOutputStream(write)
+fun outputStream(output: (ByteArray) -> Unit): OutputStream {
+    return ApplicationOutputStream(output)
 }
 
 /**
  * Abstraction for output stream usage.
  */
-class ApplicationOutputStream(private val output: (Int) -> Unit) : OutputStream() {
+class ApplicationOutputStream(private val output: (ByteArray) -> Unit) : OutputStream() {
+
+    private val outputBytes = mutableListOf<Byte>()
+
     override fun write(b: Int) {
-        output(b)
+        outputBytes.add(b.toByte())
+    }
+
+    override fun close() {
+        output(outputBytes.toByteArray())
+        super.close()
     }
 }

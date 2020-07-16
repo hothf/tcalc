@@ -63,7 +63,7 @@ class CSVUtils(private val repository: Repository, private val app: Application)
                 emitter.onComplete()
             } catch (exception: Exception) {
                 newUserId?.let {
-                    if (it != oldUserId) { // has a new entry been  inserted? Delete it right away!
+                    if (it != oldUserId) { // has a new entry been inserted? Delete it right away!
                         repository.deleteUser(it)
                     }
                 }
