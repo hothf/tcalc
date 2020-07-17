@@ -2,6 +2,7 @@ package de.ka.jamit.tcalc.roboelectric
 
 import android.os.Build
 import android.os.Looper
+import android.os.Looper.getMainLooper
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
 import androidx.test.core.app.ApplicationProvider
@@ -51,35 +52,26 @@ class HomeViewModelUnitTest : KoinTest {
         // given
         val user = repository.getCurrentlySelectedUser() // force initializing of the database
         Assert.assertNotNull(user)
-//        val viewModel = HomeViewModel()
-//        viewModel.itemAnimator()
 
-        val viewModel = spyk(HomeViewModel())
-//        viewModel.startObserving()
+        val viewModel = HomeViewModel()
 
         val obsi = Observer<String> {
             println("change" + it)
-//            Assert.assertEquals("0.0", it)
         }
-//        every { AndroidSchedulerProvider() } returns TestsSchedulerProvider()
 
-        val records = listOf(RecordDao(id = 0, value = 2.0f,userId = user.id),RecordDao(id = 0, value = 2.0f,userId = user.id),RecordDao(id = 0, value = 2.0f,userId = user.id))
+        val records = listOf(RecordDao(id = 0, value = 2.0f, userId = user.id), RecordDao(id = 0, value = 2.0f, userId = user.id), RecordDao(id = 0, value = 2.0f, userId = user.id))
 
-        repository.addRecords(records)
-        viewModel.resultYearlyOutputText.observeForever(obsi)
+        val adapter = viewModel.adapter
         runBlocking {
-            // when
-
-            // then
-
-//
-//            verify {viewModel.startObserving()}
-
-
-
             delay(1000)
-
-            Assert.assertEquals(8, viewModel.adapter.itemCount)
+            repository.addRecords(records)
+            viewModel.resultYearlyOutputText.observeForever(obsi)
+            delay(1000)
+            shadowOf(getMainLooper()).idle()
+            // seems to be a threading problem sometimes it does not fail
+            Assert.assertEquals(11, adapter.getItems().size)
         }
+
+
     }
 }
