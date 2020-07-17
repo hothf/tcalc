@@ -4,9 +4,7 @@ import android.os.Build
 import android.os.Handler
 import androidx.core.net.toUri
 import androidx.test.core.app.ApplicationProvider
-import com.opencsv.CSVReader
 import de.ka.jamit.tcalc.repo.Repository
-import de.ka.jamit.tcalc.repo.db.RecordDao
 import de.ka.jamit.tcalc.roboelectric.base.RoboelectricKoinApplication
 import de.ka.jamit.tcalc.roboelectric.base.outputStream
 import de.ka.jamit.tcalc.utils.CSVUtils
@@ -18,7 +16,6 @@ import org.koin.test.inject
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 import java.io.ByteArrayInputStream
-import java.io.InputStreamReader
 import java.util.concurrent.CountDownLatch
 
 

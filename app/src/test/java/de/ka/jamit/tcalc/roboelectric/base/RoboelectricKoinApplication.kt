@@ -1,8 +1,6 @@
 package de.ka.jamit.tcalc.roboelectric.base
 
 import android.app.Application
-import android.net.Uri
-import androidx.core.net.toUri
 import de.ka.jamit.tcalc.repo.Repository
 import de.ka.jamit.tcalc.repo.RepositoryImpl
 import de.ka.jamit.tcalc.repo.db.AppDatabase
@@ -45,7 +43,9 @@ class RoboelectricKoinApplication : Application() {
         }
 
         // content resolver initialisation
-        appContentResolver = shadowOf(this.contentResolver)
+        if (appContentResolver == null) {
+            appContentResolver = shadowOf(this.contentResolver)
+        }
     }
 }
 

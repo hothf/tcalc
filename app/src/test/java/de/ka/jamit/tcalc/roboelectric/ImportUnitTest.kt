@@ -1,14 +1,10 @@
 package de.ka.jamit.tcalc.roboelectric
 
 import android.os.Build
-import android.os.Handler
 import androidx.core.net.toUri
 import androidx.test.core.app.ApplicationProvider
-import com.opencsv.CSVReader
 import de.ka.jamit.tcalc.repo.Repository
-import de.ka.jamit.tcalc.repo.db.RecordDao
 import de.ka.jamit.tcalc.roboelectric.base.RoboelectricKoinApplication
-import de.ka.jamit.tcalc.roboelectric.base.outputStream
 import de.ka.jamit.tcalc.utils.CSVUtils
 import org.junit.Assert
 import org.junit.Test
@@ -17,11 +13,6 @@ import org.koin.test.KoinTest
 import org.koin.test.inject
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
-import java.io.BufferedReader
-import java.io.ByteArrayInputStream
-import java.io.InputStreamReader
-import java.util.concurrent.CountDownLatch
-
 
 /**
  * Test for exporting and importing functionality.
@@ -37,7 +28,6 @@ class ImportUnitTest : KoinTest {
     private val csvUtils: CSVUtils by inject()
     private val repository: Repository by inject()
 
-    private val countDownLatch = CountDownLatch(1)
 
     @Test
     fun `should import correctly`() {
@@ -59,7 +49,6 @@ class ImportUnitTest : KoinTest {
         // first register
         val uri = "content://test/file2.csv".toUri() // uri is not important, it is read from the resource
         app.appContentResolver?.registerInputStream(uri, this.javaClass.classLoader?.getResourceAsStream("test_import_corrupt_file.csv"))
-
 
         // when, then
         val errors = csvUtils.importCSV(uri).test().awaitCount(1).errors()
