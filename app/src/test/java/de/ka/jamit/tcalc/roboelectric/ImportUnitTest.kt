@@ -48,7 +48,25 @@ class ImportUnitTest : KoinTest {
 
         // when, then
         csvUtils.importCSV(uri).test().awaitCount(1).assertComplete()
+
+        Assert.assertEquals("file1", repository.getCurrentlySelectedUser().name)
+        Assert.assertEquals(4, repository.getAllRecordsOfCurrentlySelectedUser().size) // records from file
     }
 
-    // due to a parallelism bug we can not have more than one roboelectric test at once running when testing this
+    @Test
+    fun `should fail import`() {
+        // given
+        // first register
+        val uri = "content://test/file2.csv".toUri() // uri is not important, it is read from the resource
+        app.appContentResolver?.registerInputStream(uri, this.javaClass.classLoader?.getResourceAsStream("test_import_corrupt_file.csv"))
+
+
+        // when, then
+        val errors = csvUtils.importCSV(uri).test().awaitCount(1).errors()
+
+        Assert.assertEquals("default", repository.getCurrentlySelectedUser().name) // import should fail so use default
+        Assert.assertEquals(7, repository.getAllRecordsOfCurrentlySelectedUser().size) // records from default
+        Assert.assertEquals(1, errors.size)
+    }
+
 }

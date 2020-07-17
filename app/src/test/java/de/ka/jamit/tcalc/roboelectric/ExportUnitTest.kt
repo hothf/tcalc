@@ -36,11 +36,11 @@ class ExportUnitTest : KoinTest {
     private val csvUtils: CSVUtils by inject()
     private val repository: Repository by inject()
 
-    private val countDownLatch = CountDownLatch(1)
 
     @Test
     fun `should export correctly`() {
         // given
+        val countDownLatch = CountDownLatch(1)
         repository.getCurrentlySelectedUser().id // force database to be initialized
         // the default user has 7 values, these are to be exported
 
@@ -51,36 +51,17 @@ class ExportUnitTest : KoinTest {
             Handler().post {
                 // then
                 val inputStream = ByteArrayInputStream(stream)
-                val reader = CSVReader(InputStreamReader(inputStream))
-                var record: Array<String?>?
-                val records = mutableListOf<RecordDao>()
-                val timeSpanConverter = RecordDao.TimeSpanConverter()
-                val categoryConverter = RecordDao.CategoryConverter()
-                while (reader.readNext().also { record = it } != null) {
-                    val dao = RecordDao(id = 0,
-                            key = record?.get(0) ?: "",
-                            timeSpan = timeSpanConverter.convertToEntityProperty(record?.get(1)?.toInt()),
-                            category = categoryConverter.convertToEntityProperty(record?.get(2)?.toInt()),
-                            isConsidered = record?.get(3)?.toBoolean() ?: true,
-                            isIncome = record?.get(4)?.toBoolean() ?: false,
-                            value = record?.get(5)?.toFloat() ?: 0.0f,
-                            userId = repository.getCurrentlySelectedUser().id)
-                    records.add(dao)
-                }
-                reader.close()
-                Assert.assertEquals(7, records.size)
+                val records = csvUtils.streamRecords(inputStream)
+                Assert.assertEquals(7, records.size) // the default entries
                 countDownLatch.countDown()
             }
         })
 
-        // when, then
+        // when
         Handler().post {
             csvUtils.exportCSV(uri).test()
         }
 
         countDownLatch.await()
     }
-
-    // due to a parallelism bug we can not have more than one roboelectric test at once running when testing this
-
 }
