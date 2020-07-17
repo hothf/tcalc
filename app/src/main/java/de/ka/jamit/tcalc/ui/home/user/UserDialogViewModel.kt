@@ -10,6 +10,8 @@ import de.ka.jamit.tcalc.ui.home.addedit.HomeAddEditDialog
 import de.ka.jamit.tcalc.ui.home.user.addedit.UserAddEditDialog
 import de.ka.jamit.tcalc.utils.Snacker
 import de.ka.jamit.tcalc.utils.resources.ResourcesProvider
+import de.ka.jamit.tcalc.utils.schedulers.SchedulerProvider
+import de.ka.jamit.tcalc.utils.with
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.schedulers.Schedulers
@@ -25,6 +27,7 @@ import timber.log.Timber
 class UserDialogViewModel : BaseViewModel() {
 
     private val resourcesProvider: ResourcesProvider by inject()
+    private val schedulerProvider: SchedulerProvider by inject()
 
     val adapter = UserListAdapter()
 
@@ -57,8 +60,7 @@ class UserDialogViewModel : BaseViewModel() {
 
     init {
         repository.observeUsers()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
+                .with(schedulerProvider)
                 .subscribe({ users ->
                     val items = users.map { user ->
                         UserListItemViewModel(user, null, itemListener, editListener, deletionListener)

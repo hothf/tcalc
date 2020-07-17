@@ -87,7 +87,7 @@ class HomeListViewHolder(val binding: ItemHomeDefaultBinding) : BaseViewHolder<V
     }
 }
 
-class HomeListAddViewHolder(binding: ViewDataBinding) : BaseViewHolder<ViewDataBinding>(binding) {
+class HomeListAddViewHolder(binding: ItemHomeAddBinding) : BaseViewHolder<ViewDataBinding>(binding) {
     override var swipeableView: View? = null
     override var isSwipeable = false
     override var isDraggable = false

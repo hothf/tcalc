@@ -7,6 +7,8 @@ import androidx.core.net.toUri
 import androidx.lifecycle.MutableLiveData
 import de.ka.jamit.tcalc.base.BaseViewModel
 import de.ka.jamit.tcalc.utils.CSVUtils
+import de.ka.jamit.tcalc.utils.schedulers.SchedulerProvider
+import de.ka.jamit.tcalc.utils.with
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.schedulers.Schedulers
@@ -21,6 +23,7 @@ import timber.log.Timber
 class ExportingDialogViewModel : BaseViewModel() {
 
     private val csvUtils: CSVUtils by inject()
+    private val schedulerProvider: SchedulerProvider by inject()
 
     val errorVisibility = MutableLiveData<Int>(View.GONE)
     val loadingVisibility = MutableLiveData<Int>(View.GONE)
@@ -39,8 +42,7 @@ class ExportingDialogViewModel : BaseViewModel() {
         loadingVisibility.postValue(View.VISIBLE)
         uri?.let {
             csvUtils.exportCSV(it)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
+                    .with(schedulerProvider)
                     .subscribe({
                         handle(Completed(it))
                     }, { error ->

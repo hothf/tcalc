@@ -19,6 +19,8 @@ import de.ka.jamit.tcalc.utils.GlobalMessageEventListener
 import de.ka.jamit.tcalc.utils.InputValidator
 import de.ka.jamit.tcalc.utils.resources.ResourcesProvider
 import de.ka.jamit.tcalc.utils.resources.ResourcesProviderImpl
+import de.ka.jamit.tcalc.utils.schedulers.AndroidSchedulerProvider
+import de.ka.jamit.tcalc.utils.schedulers.SchedulerProvider
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
@@ -45,4 +47,6 @@ val appModule = module {
     single { CSVUtils(get(), get()) }
     single { InputValidator(get()) }
     single { RepositoryImpl(get()) as Repository }
+    single { AndroidSchedulerProvider() as SchedulerProvider }
+
 }

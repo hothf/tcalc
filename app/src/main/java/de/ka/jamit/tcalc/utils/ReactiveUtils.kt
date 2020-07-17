@@ -1,5 +1,6 @@
 package de.ka.jamit.tcalc.utils
 
+import de.ka.jamit.tcalc.utils.schedulers.SchedulerProvider
 import io.reactivex.*
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -30,20 +31,4 @@ fun Disposable.start(compositeDisposable: CompositeDisposable, start: () -> Unit
         compositeDisposable.add(this)
         start()
     }
-}
-
-//
-// Scheduler abstractions
-//
-
-interface SchedulerProvider {
-    fun io(): Scheduler
-    fun ui(): Scheduler
-    fun computation(): Scheduler
-}
-
-class AndroidSchedulerProvider : SchedulerProvider {
-    override fun io() = Schedulers.io()
-    override fun ui() = AndroidSchedulers.mainThread()
-    override fun computation() = Schedulers.computation()
 }

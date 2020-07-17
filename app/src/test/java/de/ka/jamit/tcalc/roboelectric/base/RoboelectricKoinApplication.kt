@@ -5,9 +5,27 @@ import de.ka.jamit.tcalc.repo.Repository
 import de.ka.jamit.tcalc.repo.RepositoryImpl
 import de.ka.jamit.tcalc.repo.db.AppDatabase
 import de.ka.jamit.tcalc.repo.db.AppDatabaseImpl
+import de.ka.jamit.tcalc.ui.home.HomeViewModel
+import de.ka.jamit.tcalc.ui.home.addedit.HomeAddEditDialogViewModel
+import de.ka.jamit.tcalc.ui.home.category.CategoryDialogViewModel
+import de.ka.jamit.tcalc.ui.home.user.UserDialogViewModel
+import de.ka.jamit.tcalc.ui.home.user.addedit.UserAddEditDialogViewModel
+import de.ka.jamit.tcalc.ui.main.MainViewModel
+import de.ka.jamit.tcalc.ui.settings.SettingsViewModel
+import de.ka.jamit.tcalc.ui.settings.exporting.ExportingDialogViewModel
+import de.ka.jamit.tcalc.ui.settings.importing.ImportingDialogViewModel
 import de.ka.jamit.tcalc.utils.CSVUtils
+import de.ka.jamit.tcalc.utils.CloseEventListener
+import de.ka.jamit.tcalc.utils.GlobalMessageEventListener
+import de.ka.jamit.tcalc.utils.InputValidator
+import de.ka.jamit.tcalc.utils.resources.ResourcesProvider
+import de.ka.jamit.tcalc.utils.resources.ResourcesProviderImpl
+import de.ka.jamit.tcalc.utils.schedulers.AndroidSchedulerProvider
+import de.ka.jamit.tcalc.utils.schedulers.SchedulerProvider
+import de.ka.jamit.tcalc.utils.schedulers.TestsSchedulerProvider
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
+import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.core.context.KoinContextHandler.getOrNull
 import org.koin.core.context.startKoin
 import org.koin.dsl.module
@@ -30,9 +48,14 @@ class RoboelectricKoinApplication : Application() {
         // koin initialisation
         if (getOrNull() == null) {
             val testAppModule = module {
+                single { GlobalMessageEventListener() }
+                single { ResourcesProviderImpl(get()) as ResourcesProvider }
                 single { AppDatabaseImpl(get()) as AppDatabase }
                 single { RepositoryImpl(get()) as Repository }
                 single { CSVUtils(get(), get()) }
+                single { CloseEventListener() }
+                single { InputValidator(get()) }
+                single { TestsSchedulerProvider() as SchedulerProvider }
             }
 
             startKoin {
