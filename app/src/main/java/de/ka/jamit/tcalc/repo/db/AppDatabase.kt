@@ -18,13 +18,13 @@ interface AppDatabase {
 
     companion object {
         private val translatedKeyMap = mapOf(
-                "firstVal" to R.string.app_name,
-                "secondVal" to R.string.app_name,
-                "thirdVal" to R.string.app_name,
-                "fourthVal" to R.string.app_name,
-                "fifthVal" to R.string.app_name,
-                "sixthVal" to R.string.app_name,
-                "seventhVal" to R.string.app_name
+                "firstVal" to R.string.dummy_val_one,
+                "secondVal" to R.string.dummy_val_two,
+                "thirdVal" to R.string.dummy_val_three,
+                "fourthVal" to R.string.dummy_val_four,
+                "fifthVal" to R.string.dummy_val_five,
+                "sixthVal" to R.string.dummy_val_six,
+                "seventhVal" to R.string.dummy_val_seven
         )
 
         /**

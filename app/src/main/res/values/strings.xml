@@ -1,6 +1,14 @@
 <resources>
     <string name="app_name">TCalc</string>
 
+    <string name="dummy_val_one">Example 1</string>
+    <string name="dummy_val_two">Example 2</string>
+    <string name="dummy_val_three">Example 3</string>
+    <string name="dummy_val_four">Example 4</string>
+    <string name="dummy_val_five">Example 5</string>
+    <string name="dummy_val_six">Example 6</string>
+    <string name="dummy_val_seven">Example 7</string>
+
     <string name="nav_home">Home</string>
     <string name="nav_settings">Settings</string>
 
