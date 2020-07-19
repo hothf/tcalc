@@ -52,6 +52,6 @@ class CategoryDialogViewModel : BaseViewModel() {
     class Choose(val id: Int? = null)
 
     companion object {
-        const val COLUMNS_COUNT = 2
+        const val COLUMNS_COUNT = 3
     }
 }

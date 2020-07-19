@@ -42,10 +42,14 @@ data class RecordDao(
     }
 
     enum class Category(val id: Int, @DrawableRes val resId: Int, @ColorRes val shadeRes: Int) {
-        COMMON(0, R.drawable.ic_home, R.color.shade_one),
-        HOUSE(1, R.drawable.ic_profile, R.color.shade_two),
-        SAVING(2, R.drawable.ic_settings, R.color.shade_three),
-        CAR(3, R.drawable.ic_home, R.color.shade_four)
+        COMMON(0, R.drawable.ic_saving_common, R.color.shade_one),
+        HOUSE(1, R.drawable.ic_saving_home, R.color.shade_two),
+        SAVING(2, R.drawable.ic_saving_bank, R.color.shade_three),
+        CAR(3, R.drawable.ic_saving_car, R.color.shade_four),
+        INCOME(4, R.drawable.ic_saving_income, R.color.shade_five),
+        INSURANCE(5, R.drawable.ic_saving_insurance, R.color.shade_six),
+        FUN(6, R.drawable.ic_saving_fun, R.color.shade_seven),
+        EAT(7, R.drawable.ic_saving_eat, R.color.shade_eight)
     }
 
     class CategoryConverter : PropertyConverter<Category, Int> {
