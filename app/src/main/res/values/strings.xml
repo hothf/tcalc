@@ -19,20 +19,20 @@
 
     <string name="user_addedit_title_add">Add new user</string>
     <string name="user_addedit_title_edit">Edit user</string>
-    <string name="user_addedit_submit">Save</string>
+    <string name="user_addedit_submit">Save user</string>
 
     <string name="category_title">Choose a category</string>
 
     <string name="home_result_format">%.2f %s</string>
     <string name="home_result_monthly">Monthly:</string>
     <string name="home_result_yearly">Yearly:</string>
-    <string name="home_add">Add Entry</string>
+    <string name="home_add">Add a new entry</string>
     <string name="home_delete_undo_title">Entry deleted</string>
     <string name="home_delete_undo_action">Undo</string>
 
     <string name="home_addedit_title_add">Add new entry</string>
     <string name="home_addedit_title_edit">Edit entry</string>
-    <string name="home_addedit_submit">Save</string>
+    <string name="home_addedit_submit">Save entry</string>
     <string name="home_addedit_referring">Referring:</string>
     <string name="home_addedit_amount">Amount:</string>
     <string name="home_addedit_timespan">Timespan:</string>

@@ -12,10 +12,10 @@
     </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
-        android:theme="@style/AppTheme"
         android:id="@+id/main"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:theme="@style/AppTheme">
 
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/appbar"
@@ -25,40 +25,45 @@
 
             <androidx.appcompat.widget.Toolbar
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/default_76"
+                android:layout_height="@dimen/default_58"
                 app:layout_scrollFlags="scroll|enterAlways">
 
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/default_36"
-                    android:layout_marginEnd="@dimen/default_36"
-                    android:background="@drawable/bg_bordered_cornered"
-                    android:foreground="@drawable/rounded_button_transculent_selector"
-                    android:onClick="@{()->viewModel.onUserClicked()}">
+                    android:paddingStart="@dimen/default_8"
+                    android:paddingEnd="@dimen/default_8">
 
-                    <TextView
-                        style="@style/textDefault"
-                        android:id="@+id/userText"
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/default_54"
-                        android:layout_centerHorizontal="true"
-                        android:ellipsize="end"
-                        android:gravity="center"
-                        android:paddingStart="@dimen/default_16"
-                        android:paddingEnd="@dimen/default_16"
-                        android:singleLine="true"
-                        android:text="@{viewModel.userText}"
-                        tools:text="Username" />
-
-                    <ImageView
-                        android:id="@+id/userDrop"
+                    <LinearLayout
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentEnd="true"
-                        android:layout_centerVertical="true"
-                        android:src="@drawable/ic_dropdown"
-                        android:tint="@color/fontDefault" />
+                        android:layout_height="@dimen/default_42"
+                        android:layout_centerInParent="true"
+                        android:background="@drawable/bg_bordered_cornered"
+                        android:foreground="@drawable/rounded_button_transculent_selector"
+                        android:onClick="@{()->viewModel.onUserClicked()}"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/userText"
+                            style="@style/textDefault"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:ellipsize="end"
+                            android:gravity="center"
+                            android:paddingStart="@dimen/default_16"
+                            android:paddingEnd="@dimen/default_8"
+                            android:singleLine="true"
+                            android:text="@{viewModel.userText}"
+                            tools:text="Username" />
+
+                        <ImageView
+                            android:id="@+id/userDrop"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:src="@drawable/ic_dropdown"
+                            android:tint="@color/fontDefault" />
+                    </LinearLayout>
 
                 </RelativeLayout>
             </androidx.appcompat.widget.Toolbar>
