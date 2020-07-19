@@ -1,7 +1,6 @@
 package de.ka.jamit.tcalc.ui.home.user
 
 import android.view.View
-import androidx.lifecycle.MutableLiveData
 import de.ka.jamit.tcalc.base.BaseItemViewModel
 import de.ka.jamit.tcalc.repo.db.UserDao
 

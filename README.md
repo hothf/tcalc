@@ -24,6 +24,12 @@ This means that at least `Android Studio 3.3` should be used for successful buil
 
 `Kotlin` is used as the main language of this project.
 
+## Testing
+This project uses **unit tests** with injected mocks, residing under the `test...mocked` package for pure business logic tests, roboelectric unit tests under `test..roboelectric` to android mocked capabilities of the app such as importing and exporting files and instrumented tests under `androidTest` for pure ui testsing.
+
+Please note that the tests can *not be run all at once*. 
+Especially roboelectric seems to have initializing and parallelism bugs when running multiple tests at once, making it only feasible to run tests per file. Otherwise perfectly fine working tests just fail. 
+
 ## Architecture
 To accelerate development and testability, a `Model-View-ViewModel (MVVM)` approach with android [architecture components](https://developer.android.com/jetpack/arch/) and [Databinding](https://developer.android.com/topic/libraries/data-binding/) is used. Base classes for viewModels and fragments give a structure to build upon. `LiveData<>` is used in conjuction with Databinding for updating activities and fragments with their corresponding `lifecycle`.
 

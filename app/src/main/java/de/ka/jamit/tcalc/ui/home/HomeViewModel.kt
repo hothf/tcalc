@@ -14,12 +14,12 @@ import de.ka.jamit.tcalc.ui.home.list.HomeListAdapter
 import de.ka.jamit.tcalc.ui.home.list.HomeListItemViewModel
 import de.ka.jamit.tcalc.utils.Snacker
 import de.ka.jamit.tcalc.utils.resources.ResourcesProvider
-import io.reactivex.android.schedulers.AndroidSchedulers
+import de.ka.jamit.tcalc.utils.schedulers.SchedulerProvider
+import de.ka.jamit.tcalc.utils.with
 import io.reactivex.disposables.Disposable
 
 
 import io.reactivex.rxkotlin.addTo
-import io.reactivex.schedulers.Schedulers
 import jp.wasabeef.recyclerview.animators.SlideInDownAnimator
 import org.koin.core.inject
 import timber.log.Timber
@@ -28,6 +28,7 @@ import timber.log.Timber
 class HomeViewModel : BaseViewModel() {
 
     private val resourcesProvider: ResourcesProvider by inject()
+    private val schedulerProvider: SchedulerProvider by inject()
     private var users: Disposable? = null
     private var userRecords: Disposable? = null
 
@@ -85,16 +86,14 @@ class HomeViewModel : BaseViewModel() {
     private fun startObserving() {
         users?.let(compositeDisposable::remove)
         users = repository.observeUsers()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
+                .with(schedulerProvider)
                 .subscribe({ users ->
                     Timber.e(users.toString())
                     val selected = users.firstOrNull { it.selected } ?: return@subscribe
                     userText.postValue(selected.name)
                     userRecords?.let(compositeDisposable::remove)
-                    userRecords = repository.observeRecords()
-                            .subscribeOn(Schedulers.io())
-                            .observeOn(AndroidSchedulers.mainThread())
+                    userRecords = repository.observeRecordsOfCurrentlySelected()
+                            .with(schedulerProvider)
                             .subscribe({ records ->
                                 Timber.d("||| record: $records")
                                 val items = records.map { record ->
@@ -123,8 +122,7 @@ class HomeViewModel : BaseViewModel() {
         resultVisibility.postValue(View.GONE)
         loadingVisibility.postValue(View.VISIBLE)
         repository.calc(data)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
+                .with(schedulerProvider)
                 .subscribe({ result: Repository.CalculationResult ->
                     // TODO get unit from repository or elsewhere!
                     Timber.e("wat::: ${result.monthlyIncome}")

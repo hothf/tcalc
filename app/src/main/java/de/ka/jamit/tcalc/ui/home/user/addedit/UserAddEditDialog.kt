@@ -26,7 +26,6 @@ class UserAddEditDialog : BaseDialogFragment<DialogHomeAddeditBinding, UserAddEd
         const val TITLE_KEY = "_k_title_"
         const val ID_KEY = "_k_id_"
         const val UPDATE_KEY = "_k_isupdate_"
-        const val IS_SELECTED_KEY = "_k_is_selected_"
     }
 }
 

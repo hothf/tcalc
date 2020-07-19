@@ -3,6 +3,7 @@ package de.ka.jamit.tcalc
 import de.ka.jamit.tcalc.repo.Repository
 import de.ka.jamit.tcalc.repo.RepositoryImpl
 import de.ka.jamit.tcalc.repo.db.AppDatabase
+import de.ka.jamit.tcalc.repo.db.AppDatabaseImpl
 import de.ka.jamit.tcalc.ui.home.HomeViewModel
 import de.ka.jamit.tcalc.ui.home.addedit.HomeAddEditDialogViewModel
 import de.ka.jamit.tcalc.ui.home.category.CategoryDialogViewModel
@@ -18,6 +19,8 @@ import de.ka.jamit.tcalc.utils.GlobalMessageEventListener
 import de.ka.jamit.tcalc.utils.InputValidator
 import de.ka.jamit.tcalc.utils.resources.ResourcesProvider
 import de.ka.jamit.tcalc.utils.resources.ResourcesProviderImpl
+import de.ka.jamit.tcalc.utils.schedulers.AndroidSchedulerProvider
+import de.ka.jamit.tcalc.utils.schedulers.SchedulerProvider
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
@@ -37,12 +40,13 @@ val appModule = module {
     viewModel { ExportingDialogViewModel() }
     viewModel { CategoryDialogViewModel() }
 
+    single { AppDatabaseImpl(get()) as AppDatabase }
     single { ResourcesProviderImpl(get()) as ResourcesProvider }
     single { GlobalMessageEventListener() }
     single { CloseEventListener() }
     single { CSVUtils(get(), get()) }
     single { InputValidator(get()) }
+    single { RepositoryImpl(get()) as Repository }
+    single { AndroidSchedulerProvider() as SchedulerProvider }
 
-    single { AppDatabase(get()) }
-    single { RepositoryImpl(get(), get()) as Repository }
 }

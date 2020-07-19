@@ -19,7 +19,6 @@ class UserAddEditDialogViewModel : BaseViewModel() {
     private val resourcesProvider: ResourcesProvider by inject()
     private val inputValidator: InputValidator by inject()
     private var isUpdating = false
-    private var isSelected = false
     private var id: Long = 0L
 
     val titleText = MutableLiveData<String>("")
@@ -41,7 +40,6 @@ class UserAddEditDialogViewModel : BaseViewModel() {
         if (isUpdating) {
             repository.updateUser(
                     name = title,
-                    selected = isSelected,
                     id = id)
         } else { // is creating a new entry!
             repository.addUser(name = title)
@@ -56,7 +54,6 @@ class UserAddEditDialogViewModel : BaseViewModel() {
     override fun onArgumentsReceived(bundle: Bundle) {
         super.onArgumentsReceived(bundle)
         isUpdating = bundle.getBoolean(UserAddEditDialog.UPDATE_KEY, false)
-        isSelected = bundle.getBoolean(UserAddEditDialog.IS_SELECTED_KEY, false)
         val title = bundle.getString(UserAddEditDialog.TITLE_KEY, "")
         titleText.postValue(title)
         titleSelection.postValue(title.length)

@@ -1,52 +1,30 @@
 package de.ka.jamit.tcalc.repo.db
 
-import android.app.Application
 import de.ka.jamit.tcalc.R
 import de.ka.jamit.tcalc.utils.resources.ResourcesProvider
 import io.objectbox.BoxStore
 
+
 /**
- * A object box database.
+ * A app database
  */
-class AppDatabase(private val application: Application) {
+interface AppDatabase {
 
-    private val db: BoxStore by lazy { MyObjectBox.builder().androidContext(application.applicationContext).build() }
+    fun get(): BoxStore
 
-    /**
-     * Retrieve the object box.
-     */
-    fun get() = db
+    fun getDefaultUser(): UserDao
 
-    /**
-     * Retrieves a default user.
-     */
-    val defaultUser = UserDao(id = 0, name = "default", selected = true)
-
-    /**
-     * All the master data which should only be inserted once into the database.
-     * Please do this after putting the default user, as this data references the first
-     * inserted user.
-     */
-    val masterData = listOf(
-            RecordDao(id = 0, key = "firstVal", value = 0.0f, userId = 1L),
-            RecordDao(id = 0, key = "secondVal", value = 0.0f, userId = 1L),
-            RecordDao(id = 0, key = "thirdVal", value = 0.0f, userId = 1L),
-            RecordDao(id = 0, key = "fourthVal", value = 0.0f, userId = 1L),
-            RecordDao(id = 0, key = "fifthVal", value = 0.0f, userId = 1L),
-            RecordDao(id = 0, key = "sixthVal", value = 0.0f, userId = 1L),
-            RecordDao(id = 0, key = "seventhVal", value = 0.0f, userId = 1L)
-    )
-
+    fun getMasterData(userId: Long): List<RecordDao>
 
     companion object {
         private val translatedKeyMap = mapOf(
-                "firstVal" to R.string.app_name,
-                "secondVal" to R.string.app_name,
-                "thirdVal" to R.string.app_name,
-                "fourthVal" to R.string.app_name,
-                "fifthVal" to R.string.app_name,
-                "sixthVal" to R.string.app_name,
-                "seventhVal" to R.string.app_name
+                "firstVal" to R.string.dummy_val_one,
+                "secondVal" to R.string.dummy_val_two,
+                "thirdVal" to R.string.dummy_val_three,
+                "fourthVal" to R.string.dummy_val_four,
+                "fifthVal" to R.string.dummy_val_five,
+                "sixthVal" to R.string.dummy_val_six,
+                "seventhVal" to R.string.dummy_val_seven
         )
 
         /**
@@ -56,4 +34,5 @@ class AppDatabase(private val application: Application) {
             return translatedKeyMap[key]?.let(resourcesProvider::getString) ?: key
         }
     }
+
 }
