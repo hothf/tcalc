@@ -1,24 +1,17 @@
 package de.ka.jamit.tcalc.roboelectric
 
 import android.os.Build
-import android.os.Looper
 import android.os.Looper.getMainLooper
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
-import androidx.test.core.app.ApplicationProvider
 import de.ka.jamit.tcalc.repo.Repository
 import de.ka.jamit.tcalc.repo.db.RecordDao
 import de.ka.jamit.tcalc.roboelectric.base.RoboelectricKoinApplication
 import de.ka.jamit.tcalc.ui.home.HomeViewModel
-import io.mockk.MockK
-import io.mockk.every
-import io.mockk.spyk
-import io.mockk.verify
-import io.reactivex.Scheduler
-import io.reactivex.internal.schedulers.TrampolineScheduler
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert
+import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -42,10 +35,12 @@ class HomeViewModelUnitTest : KoinTest {
     @JvmField
     val instantTaskExecutorRole = InstantTaskExecutorRule()
 
-    private val app = ApplicationProvider.getApplicationContext<RoboelectricKoinApplication>()
-
     private val repository: Repository by inject()
 
+    @Before
+    fun setUp(){
+        repository.wipeDatabase()
+    }
 
     @Test
     fun `home should load correctly`() {
@@ -55,23 +50,64 @@ class HomeViewModelUnitTest : KoinTest {
 
         val viewModel = HomeViewModel()
 
-        val obsi = Observer<String> {
-            println("change" + it)
-        }
 
-        val records = listOf(RecordDao(id = 0, value = 2.0f, userId = user.id), RecordDao(id = 0, value = 2.0f, userId = user.id), RecordDao(id = 0, value = 2.0f, userId = user.id))
-
-        val adapter = viewModel.adapter
         runBlocking {
-            delay(1000)
-            repository.addRecords(records)
-            viewModel.resultYearlyOutputText.observeForever(obsi)
-            delay(1000)
+            delay(50)
             shadowOf(getMainLooper()).idle()
-            // seems to be a threading problem sometimes it does not fail
-            Assert.assertEquals(11, adapter.getItems().size)
+
+            // then
+            // we have 7 default items, add 1 for a more button, this should make 8:
+            Assert.assertEquals(8, viewModel.adapter.getItems().size)
+        }
+    }
+
+    @Test
+    fun `home should calc correctly`() {
+        // given
+        val user = repository.getCurrentlySelectedUser() // force initializing of the database
+        Assert.assertNotNull(user)
+
+        val viewModel = HomeViewModel()
+
+        val yearlyOutputObserver = Observer<String> {
+            Assert.assertEquals("48.00 €", it)
+        }
+        val monthlyOutputObserver = Observer<String> {
+            Assert.assertEquals("4.00 €", it)
+        }
+        val yearlyDeltaObserver = Observer<String> {
+            Assert.assertEquals("-24.00 €", it)
+        }
+        val monthlyDeltaObserver = Observer<String> {
+            Assert.assertEquals("-2.00 €", it)
+        }
+        val yearlyIncomeObserver = Observer<String> {
+            Assert.assertEquals("24.00 €", it)
+        }
+        val monthlyIncomeObserver = Observer<String> {
+            Assert.assertEquals("2.00 €", it)
         }
 
+        val records = listOf(RecordDao(id = 0, value = 2.0f, userId = user.id),
+                RecordDao(id = 0, value = 2.0f, userId = user.id),
+                RecordDao(id = 0, value = 2.0f, isIncome = true, userId = user.id))
 
+        runBlocking {
+            repository.addRecords(records)
+            delay(50)
+            shadowOf(getMainLooper()).idle()
+
+            // then
+            // we have 7 default items, add 1 for a more button and add 3 in this test, this should make 11:
+            Assert.assertEquals(11, viewModel.adapter.getItems().size)
+
+            // see the observers if calculated correctly
+            viewModel.resultYearlyOutputText.observeForever(yearlyOutputObserver)
+            viewModel.resultMonthlyOutputText.observeForever(monthlyOutputObserver)
+            viewModel.resultYearlyDeltaText.observeForever(yearlyDeltaObserver)
+            viewModel.resultMonthlyDeltaText.observeForever(monthlyDeltaObserver)
+            viewModel.resultYearlyIncomeText.observeForever(yearlyIncomeObserver)
+            viewModel.resultMonthlyIncomeText.observeForever(monthlyIncomeObserver)
+        }
     }
 }

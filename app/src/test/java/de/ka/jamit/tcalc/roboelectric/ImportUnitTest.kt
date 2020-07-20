@@ -7,6 +7,7 @@ import de.ka.jamit.tcalc.repo.Repository
 import de.ka.jamit.tcalc.roboelectric.base.RoboelectricKoinApplication
 import de.ka.jamit.tcalc.utils.CSVUtils
 import org.junit.Assert
+import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.koin.test.KoinTest
@@ -28,6 +29,10 @@ class ImportUnitTest : KoinTest {
     private val csvUtils: CSVUtils by inject()
     private val repository: Repository by inject()
 
+    @Before
+    fun setUp(){
+        repository.wipeDatabase()
+    }
 
     @Test
     fun `should import correctly`() {
