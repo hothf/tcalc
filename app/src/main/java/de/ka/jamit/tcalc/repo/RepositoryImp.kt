@@ -101,7 +101,6 @@ class RepositoryImpl(val db: AppDatabaseDao) : Repository {
 
         val records = db.getRecordsOfUser(id)
         lastRemovedUserRecords = records
-        //recordDao.remove(records) // TODO test this out, it may be that room is intelligent and deletes itself
         db.deleteUserById(id)
 
     }
