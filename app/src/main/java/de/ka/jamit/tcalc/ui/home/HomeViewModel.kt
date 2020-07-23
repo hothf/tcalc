@@ -95,14 +95,12 @@ class HomeViewModel
         users = repository.observeUsers()
                 .with(schedulerProvider)
                 .subscribe({ users: List<User> ->
-                    Timber.e(users.toString())
                     val selected = users.firstOrNull { it.selected } ?: return@subscribe
                     userText.postValue(selected.name)
                     userRecords?.let(compositeDisposable::remove)
                     userRecords = repository.observeRecordsOfCurrentlySelected()
                             .with(schedulerProvider)
                             .subscribe({ records ->
-                                Timber.d("||| record: $records")
                                 val items = records.map { record ->
                                     HomeListItemViewModel(
                                             resourcesProvider = resourcesProvider,
@@ -137,7 +135,6 @@ class HomeViewModel
                 .with(schedulerProvider)
                 .subscribe({ result: Repository.CalculationResult ->
                     // TODO get unit from repository or elsewhere!
-                    Timber.i("Calculated ::: ${result.monthlyIncome}")
                     resultMonthlyIncomeText.postValue(
                             String.format(resourcesProvider.getString(R.string.home_result_format),
                                     result.monthlyIncome, "€"))

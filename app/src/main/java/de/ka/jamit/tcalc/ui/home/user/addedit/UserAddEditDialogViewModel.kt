@@ -11,8 +11,6 @@ import de.ka.jamit.tcalc.repo.Repository
 import de.ka.jamit.tcalc.utils.InputValidator
 import de.ka.jamit.tcalc.utils.ValidationRules
 import de.ka.jamit.tcalc.utils.resources.ResourcesProvider
-import de.ka.jamit.tcalc.utils.schedulers.SchedulerProvider
-import org.koin.core.inject
 
 /**
  * A ViewModel for updating or creating a new user entry.

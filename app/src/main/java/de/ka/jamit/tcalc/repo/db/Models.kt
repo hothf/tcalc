@@ -32,7 +32,7 @@ data class Record(@PrimaryKey(autoGenerate = true) var id: Int = 0,
                   var category: Category = Category.COMMON,
                   var isConsidered: Boolean = true,
                   var isIncome: Boolean = false,
-                  @ColumnInfo(name = "user_id") var userId: Int)
+                  @ColumnInfo(name = "user_id", index = true) var userId: Int)
 
 class Converters {
     @TypeConverter

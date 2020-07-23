@@ -4,7 +4,6 @@ import android.content.Context
 import androidx.annotation.StringRes
 import androidx.lifecycle.MutableLiveData
 import de.ka.jamit.tcalc.R
-import org.koin.ext.isFloat
 
 /**
  *  Lists different validation rules.
@@ -15,7 +14,7 @@ enum class ValidationRules(
         val variable: Int? = null, val predicate: String.() -> Boolean, @StringRes val errorTextResId: Int
 ) {
     NOT_EMPTY(predicate = { isBlank() }, errorTextResId = R.string.error_input_empty),
-    IS_FLOAT(predicate = { !isFloat() }, errorTextResId = R.string.error_input_not_float),
+    IS_FLOAT(predicate = { toFloatOrNull() == null }, errorTextResId = R.string.error_input_not_float),
     MIN_3(variable = 3, predicate = { length < 3 }, errorTextResId = R.string.error_input_too_small),
     MIN_8(variable = 8, predicate = { length < 8 }, errorTextResId = R.string.error_input_too_small),
     MAX_8(variable = 8, predicate = { length > 8 }, errorTextResId = R.string.error_input_too_long),

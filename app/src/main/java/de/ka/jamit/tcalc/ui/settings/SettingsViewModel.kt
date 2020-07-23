@@ -6,9 +6,7 @@ import androidx.lifecycle.SavedStateHandle
 import de.ka.jamit.tcalc.R
 import de.ka.jamit.tcalc.base.BaseViewModel
 import de.ka.jamit.tcalc.repo.Repository
-import de.ka.jamit.tcalc.utils.InputValidator
 import de.ka.jamit.tcalc.utils.resources.ResourcesProvider
-import org.koin.core.inject
 
 class SettingsViewModel
 @ViewModelInject constructor(

@@ -7,7 +7,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.recyclerview.widget.GridLayoutManager
 import de.ka.jamit.tcalc.R
 import de.ka.jamit.tcalc.base.BaseViewModel
-import de.ka.jamit.tcalc.repo.db.RecordDao
+import de.ka.jamit.tcalc.repo.db.Category
 import de.ka.jamit.tcalc.utils.DecorationUtil
 import de.ka.jamit.tcalc.utils.resources.ResourcesProvider
 
@@ -42,7 +42,7 @@ class CategoryDialogViewModel
     }
 
     private fun populateList() {
-        val items = RecordDao.Category.values().map {
+        val items = Category.values().map {
             CategoryListItemViewModel(
                     resourcesProvider = resourcesProvider,
                     item = it,

@@ -64,7 +64,6 @@ class UserDialogViewModel
         repository.observeUsers()
                 .with(schedulerProvider)
                 .subscribe({ users ->
-                    Timber.e("obsi in users: ${users.map { it.name }.joinToString { ", " }}")
                     val items = users.map { user ->
                         UserListItemViewModel(
                                 repository = repository,
