@@ -6,7 +6,8 @@ import com.opencsv.CSVReader
 import com.opencsv.CSVWriter
 import de.ka.jamit.tcalc.R
 import de.ka.jamit.tcalc.repo.Repository
-import de.ka.jamit.tcalc.repo.db.RecordDao
+import de.ka.jamit.tcalc.repo.db.Converters
+import de.ka.jamit.tcalc.repo.db.Record
 import io.reactivex.Completable
 import java.io.InputStream
 import java.io.InputStreamReader
@@ -25,8 +26,8 @@ class CSVUtils(private val repository: Repository, private val app: Application)
      */
     fun importCSV(uri: Uri): Completable {
         return Completable.create { emitter ->
-            val oldUserId: Long? = repository.getCurrentlySelectedUser().id
-            var newUserId: Long? = null
+            val oldUserId: Int? = repository.getCurrentlySelectedUser().id
+            var newUserId: Int? = null
 
             try {
                 app.contentResolver.openInputStream(uri)?.let { inputStream ->
@@ -58,17 +59,16 @@ class CSVUtils(private val repository: Repository, private val app: Application)
     /**
      * Streams records from an input stream.
      */
-    fun streamRecords(inputStream: InputStream): List<RecordDao> {
+    fun streamRecords(inputStream: InputStream): List<Record> {
+        val converters = Converters()
         val reader = CSVReader(InputStreamReader(inputStream))
         var record: Array<String?>?
-        val records = mutableListOf<RecordDao>()
-        val timeSpanConverter = RecordDao.TimeSpanConverter()
-        val categoryConverter = RecordDao.CategoryConverter()
+        val records = mutableListOf<Record>()
         while (reader.readNext().also { record = it } != null) {
-            val dao = RecordDao(id = 0,
+            val dao = Record(
                     key = record?.get(0) ?: "",
-                    timeSpan = timeSpanConverter.convertToEntityProperty(record?.get(1)?.toInt()),
-                    category = categoryConverter.convertToEntityProperty(record?.get(2)?.toInt()),
+                    timeSpan = converters.timeSpanFromDatabase(record?.get(1)?.toInt()),
+                    category = converters.categoryFromDatabase(record?.get(2)?.toInt()),
                     isConsidered = record?.get(3)?.toBoolean() ?: true,
                     isIncome = record?.get(4)?.toBoolean() ?: false,
                     value = record?.get(5)?.toFloat() ?: 0.0f,
@@ -88,18 +88,17 @@ class CSVUtils(private val repository: Repository, private val app: Application)
                 val records = repository.getAllRecordsOfCurrentlySelectedUser()
 
                 app.contentResolver.openOutputStream(uri)?.let {
+                    val converters = Converters()
                     val writer = CSVWriter(OutputStreamWriter(it))
-                    val timeSpanConverter = RecordDao.TimeSpanConverter()
-                    val categoryConverter = RecordDao.CategoryConverter()
                     records.forEach { record ->
                         val data = arrayOf(
                                 record.key,
-                                timeSpanConverter.convertToDatabaseValue(record.timeSpan).toString(),
-                                categoryConverter.convertToDatabaseValue(record.category).toString(),
+                                converters.timeSpanToDatabase(record.timeSpan).toString(),
+                                converters.categoryToDatabase(record.category).toString(),
                                 record.isConsidered.toString(),
                                 record.isIncome.toString(),
                                 record.value.toString())
-                        writer.writeNext(data);
+                        writer.writeNext(data)
                     }
                     writer.close()
                 }

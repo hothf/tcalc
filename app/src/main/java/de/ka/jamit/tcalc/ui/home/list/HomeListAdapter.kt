@@ -9,6 +9,7 @@ import de.ka.jamit.tcalc.base.BaseAdapter
 import de.ka.jamit.tcalc.base.BaseViewHolder
 import de.ka.jamit.tcalc.databinding.ItemHomeAddBinding
 import de.ka.jamit.tcalc.databinding.ItemHomeDefaultBinding
+import de.ka.jamit.tcalc.utils.resources.ResourcesProvider
 import kotlin.math.abs
 import kotlin.math.min
 
@@ -17,8 +18,8 @@ import kotlin.math.min
  *
  * Created by Thomas Hofmann on 03.07.20
  **/
-class HomeListAdapter(list: ArrayList<HomeListItemViewModel> = arrayListOf()) :
-        BaseAdapter<HomeListItemViewModel>(list, HomeListAdapterDiffCallback()) {
+class HomeListAdapter(list: ArrayList<HomeListItemViewModel> = arrayListOf(), resourcesProvider: ResourcesProvider) :
+        BaseAdapter<HomeListItemViewModel>(resourcesProvider, list, HomeListAdapterDiffCallback()) {
 
     override fun onItemDismiss(position: Int) {
         val item = getItems()[position]

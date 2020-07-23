@@ -6,11 +6,9 @@ import androidx.lifecycle.ViewModel
 import androidx.navigation.NavOptions
 import androidx.navigation.Navigator
 import de.ka.jamit.tcalc.base.events.*
-import de.ka.jamit.tcalc.repo.Repository
 import de.ka.jamit.tcalc.utils.*
 import io.reactivex.disposables.CompositeDisposable
 import org.koin.core.KoinComponent
-import org.koin.core.inject
 import timber.log.Timber
 import kotlin.reflect.KClass
 
@@ -34,10 +32,6 @@ import kotlin.reflect.KClass
 abstract class BaseViewModel : ViewModel(), KoinComponent {
 
     val events = QueueLiveEvent<Event>()
-
-    val repository: Repository by inject()
-    val messageListener: GlobalMessageEventListener by inject()
-    val closeListener: CloseEventListener by inject()
 
     val compositeDisposable = CompositeDisposable()
 

@@ -1,26 +1,63 @@
-package de.ka.jamit.tcalc.mocked
+package de.ka.jamit.tcalc.roboelectric
 
-import de.ka.jamit.tcalc.mocked.base.InjectedAppTest
+import android.os.Build
+import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import dagger.hilt.android.testing.*
+import de.ka.jamit.tcalc.di.SchedulerModule
 import de.ka.jamit.tcalc.repo.Repository
-import de.ka.jamit.tcalc.repo.db.RecordDao
-import de.ka.jamit.tcalc.repo.db.UserDao
+import de.ka.jamit.tcalc.repo.db.Category
+import de.ka.jamit.tcalc.repo.db.Record
+import de.ka.jamit.tcalc.repo.db.TimeSpan
+import de.ka.jamit.tcalc.repo.db.User
+import de.ka.jamit.tcalc.utils.schedulers.SchedulerProvider
+import de.ka.jamit.tcalc.utils.schedulers.TestsSchedulerProvider
+import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.RelaxedMockK
-import io.reactivex.Observable
-import org.junit.*
-import org.koin.test.inject
+import io.reactivex.Flowable
+import org.junit.Assert
+import org.junit.Before
+import org.junit.Rule
+import org.junit.Test
+import org.junit.runner.RunWith
+import org.robolectric.RobolectricTestRunner
+import org.robolectric.annotation.Config
+import javax.inject.Inject
 
 /**
- * A repository and database management unit test.
+ * A repository unit test.
  *
- * Created by Thomas Hofmann on 14.07.20
+ * Created by Thomas Hofmann on 23.07.20
  **/
-class RepositoryUnitTest : InjectedAppTest() {
+@UninstallModules(SchedulerModule::class)
+@HiltAndroidTest
+@RunWith(RobolectricTestRunner::class)
+@Config(sdk = [Build.VERSION_CODES.P], application = HiltTestApplication::class)
+class RepositoryUnitTest {
 
-    private val repository: Repository by inject()
+    @Rule
+    @JvmField
+    var hiltRule = HiltAndroidRule(this)
+
+    @Rule
+    @JvmField
+    val instantTaskExecutorRole = InstantTaskExecutorRule() // important for RX tests to return immediately
+
+    @BindValue
+    @JvmField
+    val schedulerProvider: SchedulerProvider = TestsSchedulerProvider() // swap the scheduler provider for RX
+
+    @Inject
+    lateinit var repository: Repository
 
     @RelaxedMockK
     lateinit var mockRepository: Repository
+
+    @Before
+    fun setUp() {
+        hiltRule.inject()
+        MockKAnnotations.init(this)
+    }
 
     @Test
     fun `repository should have default values and records`() {
@@ -38,8 +75,8 @@ class RepositoryUnitTest : InjectedAppTest() {
         // records match the expectation
         // given
         val defaultUserId = repository.getCurrentlySelectedUser().id
-        val dummyUser = UserDao(defaultUserId, "default", true)
-        every { mockRepository.observeUsers() } returns Observable.just(listOf(dummyUser))
+        val dummyUser = User(defaultUserId, "default", true)
+        every { mockRepository.observeUsers() } returns Flowable.just(listOf(dummyUser))
 
         // when
         repository.observeUsers() // short for: TestObserver<List<UserDao>> =
@@ -50,15 +87,15 @@ class RepositoryUnitTest : InjectedAppTest() {
         // now we check if the records of that user are also correct
         // given
         val dummyRecords = listOf(
-                RecordDao(id = 1L, key = "firstVal", userId = defaultUserId),
-                RecordDao(id = 2L, key = "secondVal", userId = defaultUserId),
-                RecordDao(id = 3L, key = "thirdVal", userId = defaultUserId),
-                RecordDao(id = 4L, key = "fourthVal", userId = defaultUserId),
-                RecordDao(id = 5L, key = "fifthVal", userId = defaultUserId),
-                RecordDao(id = 6L, key = "sixthVal", userId = defaultUserId),
-                RecordDao(id = 7L, key = "seventhVal", userId = defaultUserId)
+                Record(id = 1, key = "firstVal", userId = defaultUserId),
+                Record(id = 2, key = "secondVal", userId = defaultUserId),
+                Record(id = 3, key = "thirdVal", userId = defaultUserId),
+                Record(id = 4, key = "fourthVal", userId = defaultUserId),
+                Record(id = 5, key = "fifthVal", userId = defaultUserId),
+                Record(id = 6, key = "sixthVal", userId = defaultUserId),
+                Record(id = 7, key = "seventhVal", userId = defaultUserId)
         )
-        every { mockRepository.observeRecordsOfCurrentlySelected() } returns Observable.just(dummyRecords)
+        every { mockRepository.observeRecordsOfCurrentlySelected() } returns Flowable.just(dummyRecords)
 
         // when
         val testList = repository.observeRecordsOfCurrentlySelected()
@@ -79,15 +116,15 @@ class RepositoryUnitTest : InjectedAppTest() {
         //given
         val defaultUserId = repository.getCurrentlySelectedUser().id
         val dummyRecords = listOf(
-                RecordDao(id = 1L, key = "firstVal", userId = defaultUserId),
-                RecordDao(id = 2L, key = "secondVal", userId = defaultUserId),
-                RecordDao(id = 3L, key = "thirdVal", userId = defaultUserId),
-                RecordDao(id = 4L, key = "fourthVal", userId = defaultUserId),
-                RecordDao(id = 5L, key = "fifthVal", userId = defaultUserId),
-                RecordDao(id = 6L, key = "sixthVal", userId = defaultUserId),
-                RecordDao(id = 7L, key = "seventhVal", userId = defaultUserId),
-                RecordDao(id = 8L, key = "New", userId = defaultUserId))
-        every { mockRepository.observeRecordsOfCurrentlySelected() } returns Observable.just(dummyRecords)
+                Record(id = 1, key = "firstVal", userId = defaultUserId),
+                Record(id = 2, key = "secondVal", userId = defaultUserId),
+                Record(id = 3, key = "thirdVal", userId = defaultUserId),
+                Record(id = 4, key = "fourthVal", userId = defaultUserId),
+                Record(id = 5, key = "fifthVal", userId = defaultUserId),
+                Record(id = 6, key = "sixthVal", userId = defaultUserId),
+                Record(id = 7, key = "seventhVal", userId = defaultUserId),
+                Record(id = 8, key = "New", userId = defaultUserId))
+        every { mockRepository.observeRecordsOfCurrentlySelected() } returns Flowable.just(dummyRecords)
         val dummyValues = mockRepository.observeRecordsOfCurrentlySelected().blockingSingle().toMutableList()
         val testObserver = repository.observeRecordsOfCurrentlySelected().test().awaitCount(1)
         testObserver.assertValueCount(1)
@@ -97,7 +134,7 @@ class RepositoryUnitTest : InjectedAppTest() {
         repository.addRecord("New", isConsidered = true, isIncome = false)
 
         // then
-        var lastId = 1L
+        var lastId = 1
         val resultAfterAdd = testObserver.awaitCount(2).values()[1]
         resultAfterAdd.forEachIndexed { index, item -> // we check like this because ids may be different internally
             Assert.assertEquals(dummyValues[index].key, item.key)
@@ -136,19 +173,19 @@ class RepositoryUnitTest : InjectedAppTest() {
         repository.updateRecord(value = 2.0f,
                 id = lastId,
                 key = "Updated",
-                timeSpan = RecordDao.TimeSpan.QUARTERLY,
-                category = RecordDao.Category.HOUSE,
+                timeSpan = TimeSpan.QUARTERLY,
+                category = Category.HOUSE,
                 isIncome = true,
                 isConsidered = true)
 
         //then
         val resultAfterUpdate = testObserver.awaitCount(5).values()[4]
-        val updatedItem = RecordDao(
+        val updatedItem = Record(
                 id = lastId,
                 key = "Updated",
                 value = 2.0f,
-                timeSpan = RecordDao.TimeSpan.QUARTERLY,
-                category = RecordDao.Category.HOUSE,
+                timeSpan = TimeSpan.QUARTERLY,
+                category = Category.HOUSE,
                 isIncome = true,
                 isConsidered = true,
                 userId = defaultUserId)
@@ -168,8 +205,8 @@ class RepositoryUnitTest : InjectedAppTest() {
         // adding multiple records at once
         // when
         val newRecords = listOf(
-                RecordDao(id = 0, key = "NewVal", userId = defaultUserId),
-                RecordDao(id = 0, key = "EvenNewerVal", userId = defaultUserId)
+                Record(id = 0, key = "NewVal", userId = defaultUserId),
+                Record(id = 0, key = "EvenNewerVal", userId = defaultUserId)
         )
         dummyValues.addAll(newRecords)
         repository.addRecords(newRecords)
@@ -186,8 +223,8 @@ class RepositoryUnitTest : InjectedAppTest() {
     @Test
     fun `repository should handle user manipulations`() {
         //given
-        val users = listOf(UserDao(id = 1L, name = "default", selected = true))
-        every { mockRepository.observeUsers() } returns Observable.just(users)
+        val users = listOf(User(id = 1, name = "default", selected = true))
+        every { mockRepository.observeUsers() } returns Flowable.just(users)
 
         // observe users
         // when, then
@@ -204,15 +241,15 @@ class RepositoryUnitTest : InjectedAppTest() {
         repository.addUser("NewUser")
 
         // then
-        var lastId = 1L
-        dummyUsers.add(UserDao(id = 2L, name = "NewUser", selected = false))
+        var lastId = 1
+        dummyUsers.add(User(id = 2, name = "NewUser", selected = false))
         val resultAfterAdd = testObserver.awaitCount(4).values()[3]
         resultAfterAdd.forEachIndexed { index, item -> // we check like this because ids may be different internally
             Assert.assertEquals(dummyUsers[index].name, item.name)
             lastId = item.id
         }
         // add records to this user, needed for later tests
-        val dummyRecords = listOf(RecordDao(id = 0, userId = lastId), RecordDao(id = 0, userId = lastId))
+        val dummyRecords = listOf(Record(id = 0, userId = lastId), Record(id = 0, userId = lastId))
         repository.addRecords(dummyRecords)
         // should auto select the new user
         Assert.assertFalse(resultAfterAdd[0].selected)
@@ -255,11 +292,11 @@ class RepositoryUnitTest : InjectedAppTest() {
 
         // update a user
         // when
-        repository.updateUser(lastId, "Update")
+        repository.updateUser(lastId, "Update1")
 
         // then
         val resultAfterUpdate = testObserver.awaitCount(9).values()[8]
-        Assert.assertEquals("Update", resultAfterUpdate[1].name)
+        Assert.assertEquals("Update1", resultAfterUpdate[1].name)
 
         // select a user
         // when
@@ -267,6 +304,7 @@ class RepositoryUnitTest : InjectedAppTest() {
 
         val resultAfterSelect = testObserver.awaitCount(11).values()[10]
         Assert.assertTrue(resultAfterSelect[1].selected)
+        Assert.assertEquals("Update1", resultAfterSelect[1].name)
 
         // check if records of the deleted user have been restored
         // this should be now possible as the selected user has changed
@@ -290,8 +328,8 @@ class RepositoryUnitTest : InjectedAppTest() {
     fun `repository should calculate correctly`() {
         //given
         val data = mutableListOf(
-                RecordDao(value = 1.0f, timeSpan = RecordDao.TimeSpan.MONTHLY, userId = 1L),
-                RecordDao(value = 1.0f, timeSpan = RecordDao.TimeSpan.MONTHLY, userId = 1L))
+                Record(value = 1.0f, timeSpan = TimeSpan.MONTHLY, userId = 1),
+                Record(value = 1.0f, timeSpan = TimeSpan.MONTHLY, userId = 1))
 
         // when
         var testObserver = repository.calc(data).test().awaitCount(1)
@@ -305,7 +343,7 @@ class RepositoryUnitTest : InjectedAppTest() {
         Assert.assertEquals(-24.0f, testObserver.values()[0].yearlyDifference)
 
         // given
-        data.add(RecordDao(value = 1.0f, timeSpan = RecordDao.TimeSpan.MONTHLY, isIncome = true, userId = 1L))
+        data.add(Record(value = 1.0f, timeSpan = TimeSpan.MONTHLY, isIncome = true, userId = 1))
 
         // when
         testObserver = repository.calc(data).test().awaitCount(1)
@@ -319,7 +357,7 @@ class RepositoryUnitTest : InjectedAppTest() {
         Assert.assertEquals(-12.0f, testObserver.values()[0].yearlyDifference)
 
         // given
-        data.add(RecordDao(value = 3.0f, timeSpan = RecordDao.TimeSpan.QUARTERLY, userId = 1L))
+        data.add(Record(value = 3.0f, timeSpan = TimeSpan.QUARTERLY, userId = 1))
 
         // when
         testObserver = repository.calc(data).test().awaitCount(1)
@@ -333,7 +371,7 @@ class RepositoryUnitTest : InjectedAppTest() {
         Assert.assertEquals(-24.0f, testObserver.values()[0].yearlyDifference)
 
         // given
-        data.add(RecordDao(value = 12.0f, timeSpan = RecordDao.TimeSpan.YEARLY, userId = 1L))
+        data.add(Record(value = 12.0f, timeSpan = TimeSpan.YEARLY, userId = 1))
 
         // when
         testObserver = repository.calc(data).test().awaitCount(1)
@@ -348,6 +386,4 @@ class RepositoryUnitTest : InjectedAppTest() {
 
         testObserver.dispose()
     }
-
-    // TODO: other file: testing import and export
 }

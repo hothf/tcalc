@@ -1,13 +1,21 @@
 package de.ka.jamit.tcalc.ui.settings
 
+import androidx.hilt.Assisted
+import androidx.hilt.lifecycle.ViewModelInject
+import androidx.lifecycle.SavedStateHandle
 import de.ka.jamit.tcalc.R
 import de.ka.jamit.tcalc.base.BaseViewModel
+import de.ka.jamit.tcalc.repo.Repository
+import de.ka.jamit.tcalc.utils.InputValidator
 import de.ka.jamit.tcalc.utils.resources.ResourcesProvider
 import org.koin.core.inject
 
-class SettingsViewModel : BaseViewModel() {
-
-    private val resourcesProvider: ResourcesProvider by inject()
+class SettingsViewModel
+@ViewModelInject constructor(
+        @Assisted private val stateHandle: SavedStateHandle,
+        val repository: Repository,
+        val resourcesProvider: ResourcesProvider
+): BaseViewModel() {
 
     fun onImport() {
         handle(Import())

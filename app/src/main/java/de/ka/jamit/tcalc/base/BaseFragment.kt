@@ -16,9 +16,8 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import de.ka.jamit.tcalc.base.events.*
-import org.koin.androidx.viewmodel.ext.android.getSharedViewModel
-import org.koin.androidx.viewmodel.ext.android.getViewModel
 import timber.log.Timber
 import kotlin.reflect.KClass
 
@@ -47,16 +46,15 @@ import kotlin.reflect.KClass
  */
 abstract class BaseFragment<out T : ViewDataBinding, E : BaseViewModel>(
     @LayoutRes private val bindingLayoutId: Int,
-    clazz: KClass<E>,
+    private val clazz: KClass<E>,
     private val useActivityPool: Boolean = false
 ) : Fragment(), BaseComposable {
 
     private var binding: ViewDataBinding? = null
 
-    val viewModel: E by lazy {
-        if (useActivityPool) getSharedViewModel(clazz)
-        else getViewModel(clazz)
-    }
+    val viewModel: E
+        get() = if (useActivityPool) ViewModelProvider(requireActivity()).get(clazz.java)
+        else ViewModelProvider(this).get(clazz.java)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

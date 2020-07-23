@@ -2,8 +2,7 @@ package de.ka.jamit.tcalc
 
 import de.ka.jamit.tcalc.repo.Repository
 import de.ka.jamit.tcalc.repo.RepositoryImpl
-import de.ka.jamit.tcalc.repo.db.AppDatabase
-import de.ka.jamit.tcalc.repo.db.AppDatabaseImpl
+import de.ka.jamit.tcalc.repo.db.AppDatabaseDao
 import de.ka.jamit.tcalc.ui.home.HomeViewModel
 import de.ka.jamit.tcalc.ui.home.addedit.HomeAddEditDialogViewModel
 import de.ka.jamit.tcalc.ui.home.category.CategoryDialogViewModel
@@ -30,23 +29,23 @@ import org.koin.dsl.module
 
 val appModule = module {
 
-    viewModel { MainViewModel() }
-    viewModel { HomeViewModel() }
-    viewModel { SettingsViewModel() }
-    viewModel { HomeAddEditDialogViewModel() }
-    viewModel { UserDialogViewModel() }
-    viewModel { UserAddEditDialogViewModel() }
-    viewModel { ImportingDialogViewModel() }
-    viewModel { ExportingDialogViewModel() }
-    viewModel { CategoryDialogViewModel() }
+//    viewModel { MainViewModel() }
+//    viewModel { HomeViewModel() }
+//    viewModel { SettingsViewModel() }
+//    viewModel { HomeAddEditDialogViewModel() }
+//    viewModel { UserDialogViewModel() }
+//    viewModel { UserAddEditDialogViewModel() }
+//    viewModel { ImportingDialogViewModel() }
+//    viewModel { ExportingDialogViewModel() }
+//    viewModel { CategoryDialogViewModel() }
 
-    single { AppDatabaseImpl(get()) as AppDatabase }
-    single { ResourcesProviderImpl(get()) as ResourcesProvider }
-    single { GlobalMessageEventListener() }
-    single { CloseEventListener() }
-    single { CSVUtils(get(), get()) }
-    single { InputValidator(get()) }
-    single { RepositoryImpl(get()) as Repository }
-    single { AndroidSchedulerProvider() as SchedulerProvider }
+//    single { AppDatabaseImpl(get()) as AppDatabaseDao }
+//    single { ResourcesProviderImpl(get()) as ResourcesProvider }
+//    single { GlobalMessageEventListener() }
+//    single { CloseEventListener() }
+//    single { CSVUtils(get(), get()) }
+//    single { InputValidator(get()) }
+//    single { RepositoryImpl(get()) as Repository }
+//    single { AndroidSchedulerProvider() as SchedulerProvider }
 
 }

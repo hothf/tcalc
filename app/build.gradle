@@ -8,6 +8,8 @@ apply plugin: 'kotlin-kapt'
 
 apply plugin: 'io.objectbox'
 
+apply plugin: 'dagger.hilt.android.plugin'
+
 android {
     compileSdkVersion "$target_version".toInteger()
     defaultConfig {
@@ -28,6 +30,9 @@ android {
     buildFeatures {
         dataBinding = true
     }
+    hilt {
+        enableTransformForLocalTests = true
+    }
     testOptions {
         unitTests {
             returnDefaultValues = true
@@ -37,17 +42,22 @@ android {
     buildTypes {
         debug {
             minifyEnabled false
-            buildConfigField "String", "API_URL", "\"https://swapi.co/api/\""
         }
         prerelease {
             minifyEnabled false
-            buildConfigField "String", "API_URL", "\"https://swapi.co/api/\""
         }
         release {
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            buildConfigField "String", "API_URL", "\"https://swapi.co/api/\""
         }
+    }
+}
+
+tasks.withType(Test) {
+    testLogging {
+        exceptionFormat "full"
+        events "started", "skipped", "passed", "failed"
+        showStandardStreams true
     }
 }
 
@@ -83,6 +93,14 @@ dependencies {
     androidTestImplementation "androidx.test.ext:junit:$ext_junit_version"
     androidTestImplementation "androidx.test.espresso:espresso-contrib:$espresso_contrib_version"
 
+    // hilt dependency injection
+    implementation "com.google.dagger:hilt-android:$hilt_version"
+    kapt "com.google.dagger:hilt-android-compiler:$hilt_version"
+    testImplementation "com.google.dagger:hilt-android-testing:$hilt_version"
+    kaptTest "com.google.dagger:hilt-android-compiler:$hilt_version"
+    implementation "androidx.hilt:hilt-lifecycle-viewmodel:$hilt_viewmodel_version"
+    kapt "androidx.hilt:hilt-compiler:$hilt_viewmodel_version"
+
     // logging
     implementation "com.jakewharton.timber:timber:$timber_version"
 
@@ -105,6 +123,11 @@ dependencies {
     // database
     implementation "io.objectbox:objectbox-kotlin:$objectbox_version"
     implementation "io.objectbox:objectbox-rxjava:$objectbox_version"
+
+    // room database
+    implementation "androidx.room:room-runtime:$room_version"
+    kapt "androidx.room:room-compiler:$room_version"
+    implementation "androidx.room:room-rxjava2:$room_version"
 
     // time
     implementation "com.jakewharton.threetenabp:threetenabp:$java_time_abp_version"

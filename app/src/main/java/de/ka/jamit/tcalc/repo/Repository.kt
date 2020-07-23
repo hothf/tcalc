@@ -1,8 +1,10 @@
 package de.ka.jamit.tcalc.repo
 
-import de.ka.jamit.tcalc.repo.db.RecordDao
-import de.ka.jamit.tcalc.repo.db.UserDao
-import io.reactivex.Observable
+import de.ka.jamit.tcalc.repo.db.Category
+import de.ka.jamit.tcalc.repo.db.Record
+import de.ka.jamit.tcalc.repo.db.TimeSpan
+import de.ka.jamit.tcalc.repo.db.User
+import io.reactivex.Flowable
 import io.reactivex.Single
 
 /**
@@ -15,32 +17,32 @@ interface Repository {
     /**
      * Retrieves all records of the currently selected user.
      */
-    fun observeRecordsOfCurrentlySelected(): Observable<List<RecordDao>>
+    fun observeRecordsOfCurrentlySelected(): Flowable<List<Record>>
 
     /**
      * Retrieves all records of the currently selected user.
      */
-    fun getAllRecordsOfCurrentlySelectedUser(): List<RecordDao>
+    fun getAllRecordsOfCurrentlySelectedUser(): List<Record>
 
     /**
      * Saves a new record.
      */
     fun addRecord(key: String,
                   value: Float = 0.0f,
-                  timeSpan: RecordDao.TimeSpan = RecordDao.TimeSpan.MONTHLY,
-                  category: RecordDao.Category = RecordDao.Category.COMMON,
+                  timeSpan: TimeSpan = TimeSpan.MONTHLY,
+                  category: Category =Category.COMMON,
                   isConsidered: Boolean,
                   isIncome: Boolean)
 
     /**
      * Adds multiple records at once.
      */
-    fun addRecords(list: List<RecordDao>)
+    fun addRecords(list: List<Record>)
 
     /**
      * Deletes a given record.
      */
-    fun deleteRecord(id: Long)
+    fun deleteRecord(id: Int)
 
     /**
      * Undo the last record deletion, if possible.
@@ -52,36 +54,36 @@ interface Repository {
      */
     fun updateRecord(value: Float,
                      key: String,
-                     timeSpan: RecordDao.TimeSpan,
-                     category: RecordDao.Category,
+                     timeSpan: TimeSpan,
+                     category: Category,
                      isConsidered: Boolean,
                      isIncome: Boolean,
-                     id: Long)
+                     id: Int)
 
     /**
      * Calculates the sum of the data.
      */
-    fun calc(data: List<RecordDao>): Single<CalculationResult>
+    fun calc(data: List<Record>): Single<CalculationResult>
 
     /**
      * Retrieves all users
      */
-    fun observeUsers(): Observable<List<UserDao>>
+    fun observeUsers(): Flowable<List<User>>
 
     /**
      * Retrieves the currently selected user.
      */
-    fun getCurrentlySelectedUser(): UserDao
+    fun getCurrentlySelectedUser(): User
 
     /**
      * Selects the given user.
      */
-    fun selectUser(id: Long)
+    fun selectUser(id: Int)
 
     /**
      * Updates the given user.
      */
-    fun updateUser(id: Long, name: String)
+    fun updateUser(id: Int, name: String)
 
     /**
      * Adds a new user.
@@ -91,12 +93,17 @@ interface Repository {
     /**
      * Deletes the given user.
      */
-    fun deleteUser(id: Long)
+    fun deleteUser(id: Int)
 
     /**
      * Undo the deletion of the last user, if possible.
      */
     fun undoDeleteLastUser()
+
+    /**
+     * Retrieves the default user, if available
+     */
+    fun getDefaultUser(): User?
 
     /**
      * The calculation result.

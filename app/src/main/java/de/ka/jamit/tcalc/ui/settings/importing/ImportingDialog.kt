@@ -1,6 +1,7 @@
 package de.ka.jamit.tcalc.ui.settings.importing
 
 import android.os.Handler
+import dagger.hilt.android.AndroidEntryPoint
 import de.ka.jamit.tcalc.R
 import de.ka.jamit.tcalc.base.BaseDialogFragment
 import de.ka.jamit.tcalc.databinding.DialogImportingBinding
@@ -10,12 +11,16 @@ import de.ka.jamit.tcalc.databinding.DialogImportingBinding
  *
  * Created by Thomas Hofmann on 09.07.20
  **/
-class ImportingDialog : BaseDialogFragment<DialogImportingBinding, ImportingDialogViewModel>(
+// Workaround for https://github.com/google/dagger/issues/1904
+abstract class BaseImportDialogFragment : BaseDialogFragment<DialogImportingBinding, ImportingDialogViewModel>(
         R.layout.dialog_importing,
         ImportingDialogViewModel::class,
         DialogMode.DIALOG,
         cancellable = false
-) {
+)
+
+@AndroidEntryPoint
+class ImportingDialog : BaseImportDialogFragment() {
 
     override fun onHandle(element: Any?) {
         if (element is ImportingDialogViewModel.Completed) {

@@ -3,28 +3,34 @@ package de.ka.jamit.tcalc.ui.home.addedit
 import android.os.Bundle
 import android.widget.ArrayAdapter
 import android.widget.SpinnerAdapter
+import androidx.hilt.Assisted
+import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.SavedStateHandle
 import de.ka.jamit.tcalc.R
 import de.ka.jamit.tcalc.base.BaseViewModel
-import de.ka.jamit.tcalc.repo.db.AppDatabase
-import de.ka.jamit.tcalc.repo.db.RecordDao
+import de.ka.jamit.tcalc.repo.Repository
+import de.ka.jamit.tcalc.repo.db.*
 import de.ka.jamit.tcalc.ui.home.category.CategoryDialog
 import de.ka.jamit.tcalc.utils.InputValidator
 import de.ka.jamit.tcalc.utils.ValidationRules
 import de.ka.jamit.tcalc.utils.resources.ResourcesProvider
-import org.koin.core.inject
 
 /**
  * A ViewModel for updating or creating a new home entry.
  *
  * Created by Thomas Hofmann on 03.07.20
  **/
-class HomeAddEditDialogViewModel : BaseViewModel() {
+class HomeAddEditDialogViewModel
+@ViewModelInject constructor(
+        @Assisted private val stateHandle: SavedStateHandle,
+        val repository: Repository,
+        val inputValidator: InputValidator,
+        val resourcesProvider: ResourcesProvider
+): BaseViewModel() {
 
-    private val resourcesProvider: ResourcesProvider by inject()
-    private val inputValidator: InputValidator by inject()
     private var isUpdating = false
-    private var id: Long = 0L
+    private var id: Int = 0
 
     val keyText = MutableLiveData<String>("")
     val valueText = MutableLiveData<String>("")
@@ -34,8 +40,8 @@ class HomeAddEditDialogViewModel : BaseViewModel() {
     val valueError = MutableLiveData<String?>(null)
     val valueSelection = MutableLiveData<Int>(0)
     val keySelection = MutableLiveData<Int>(0)
-    val categoryImage = MutableLiveData<Int>(RecordDao.Category.COMMON.resId)
-    val categoryShade = MutableLiveData<Int>(resourcesProvider.getColor(RecordDao.Category.COMMON.shadeRes))
+    val categoryImage = MutableLiveData<Int>(Category.COMMON.resId)
+    val categoryShade = MutableLiveData<Int>(resourcesProvider.getColor(Category.COMMON.shadeRes))
     val consideredCheck = MutableLiveData<Boolean>(true)
     val incomeCheck = MutableLiveData<Boolean>(false)
     val editOrNewText = MutableLiveData<String>(resourcesProvider.getString(R.string.home_addedit_title_add))
@@ -54,7 +60,7 @@ class HomeAddEditDialogViewModel : BaseViewModel() {
     )
 
     fun timeSpanAdapter(): SpinnerAdapter {
-        val names = RecordDao.TimeSpan.values().map {
+        val names = TimeSpan.values().map {
             resourcesProvider.getString(it.translationRes)
         }.toTypedArray()
         return ArrayAdapter<String>(
@@ -67,8 +73,8 @@ class HomeAddEditDialogViewModel : BaseViewModel() {
 
     fun updateCategory(id: Int) {
         categoryPosition.postValue(id)
-        val category = RecordDao.Category.values().find { id == it.id }
-                ?: RecordDao.Category.COMMON
+        val category = Category.values().find { id == it.id }
+                ?: Category.COMMON
         categoryImage.postValue(category.resId)
         categoryShade.postValue(resourcesProvider.getColor(category.shadeRes))
 
@@ -85,11 +91,11 @@ class HomeAddEditDialogViewModel : BaseViewModel() {
         val value = valueText.value?.toFloat() ?: 0.0f
         val key = keyText.value ?: ""
         val timeSpan = timeSpanPosition.value?.let { v ->
-            RecordDao.TimeSpan.values().find { v == it.id }
-        } ?: RecordDao.TimeSpan.MONTHLY
+            TimeSpan.values().find { v == it.id }
+        } ?: TimeSpan.MONTHLY
         val category = categoryPosition.value?.let { v ->
-            RecordDao.Category.values().find { v == it.id }
-        } ?: RecordDao.Category.COMMON
+            Category.values().find { v == it.id }
+        } ?: Category.COMMON
         val isConsidered = consideredCheck.value ?: true
         val isIncome = incomeCheck.value ?: false
 
@@ -135,7 +141,7 @@ class HomeAddEditDialogViewModel : BaseViewModel() {
         updateCategory(category)
         consideredCheck.postValue(bundle.getBoolean(HomeAddEditDialog.CONSIDERED_KEY))
         incomeCheck.postValue(bundle.getBoolean(HomeAddEditDialog.INCOME_KEY))
-        id = bundle.getLong(HomeAddEditDialog.ID_KEY)
+        id = bundle.getInt(HomeAddEditDialog.ID_KEY)
         editOrNewText.postValue(if (isUpdating) resourcesProvider.getString(R.string.home_addedit_title_edit) else resourcesProvider.getString(R.string.home_addedit_title_add))
     }
 

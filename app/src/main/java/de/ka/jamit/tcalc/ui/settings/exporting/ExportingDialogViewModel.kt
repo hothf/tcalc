@@ -4,15 +4,16 @@ import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import androidx.core.net.toUri
+import androidx.hilt.Assisted
+import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.SavedStateHandle
 import de.ka.jamit.tcalc.base.BaseViewModel
 import de.ka.jamit.tcalc.utils.CSVUtils
+import de.ka.jamit.tcalc.utils.resources.ResourcesProvider
 import de.ka.jamit.tcalc.utils.schedulers.SchedulerProvider
 import de.ka.jamit.tcalc.utils.with
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.addTo
-import io.reactivex.schedulers.Schedulers
-import org.koin.core.inject
 import timber.log.Timber
 
 /**
@@ -20,10 +21,13 @@ import timber.log.Timber
  *
  * Created by Thomas Hofmann on 09.07.20
  **/
-class ExportingDialogViewModel : BaseViewModel() {
-
-    private val csvUtils: CSVUtils by inject()
-    private val schedulerProvider: SchedulerProvider by inject()
+class ExportingDialogViewModel
+@ViewModelInject constructor(
+        @Assisted private val stateHandle: SavedStateHandle,
+        val csvUtils: CSVUtils,
+        val schedulerProvider: SchedulerProvider,
+        val resourcesProvider: ResourcesProvider
+): BaseViewModel() {
 
     val errorVisibility = MutableLiveData<Int>(View.GONE)
     val loadingVisibility = MutableLiveData<Int>(View.GONE)

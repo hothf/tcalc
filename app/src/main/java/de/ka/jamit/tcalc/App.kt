@@ -1,8 +1,7 @@
 package de.ka.jamit.tcalc
 
 import android.app.Application
-import org.koin.android.ext.koin.androidContext
-import org.koin.core.context.startKoin
+import dagger.hilt.android.HiltAndroidApp
 import timber.log.Timber
 
 /**
@@ -12,23 +11,16 @@ import timber.log.Timber
  * The application context is available through injection, use the [de.ka.jamit.tcalc.utils.resources.ResourcesProvider]
  * for these and further resources related methods.
  **/
+@HiltAndroidApp
 class App : Application() {
 
     override fun onCreate() {
         super.onCreate()
 
-        // start injecting with koin
-        startKoin{
-            androidContext(this@App)
-            modules(appModule)
-        }
-
         // debug logging
         if (BuildConfig.DEBUG) {
             Timber.plant(Timber.DebugTree())
         }
-
-
     }
 
 }

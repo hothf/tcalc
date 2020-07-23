@@ -1,26 +1,29 @@
 package de.ka.jamit.tcalc.ui.home.category
 
 import android.os.Bundle
+import androidx.hilt.Assisted
+import androidx.hilt.lifecycle.ViewModelInject
+import androidx.lifecycle.SavedStateHandle
 import androidx.recyclerview.widget.GridLayoutManager
 import de.ka.jamit.tcalc.R
 import de.ka.jamit.tcalc.base.BaseViewModel
 import de.ka.jamit.tcalc.repo.db.RecordDao
 import de.ka.jamit.tcalc.utils.DecorationUtil
 import de.ka.jamit.tcalc.utils.resources.ResourcesProvider
-import org.koin.core.inject
 
 /**
  * A ViewModel for importing records.
  *
  * Created by Thomas Hofmann on 09.07.20
  **/
-class CategoryDialogViewModel : BaseViewModel() {
+class CategoryDialogViewModel
+@ViewModelInject constructor(@Assisted private val stateHandle: SavedStateHandle,
+                             val resourcesProvider: ResourcesProvider) : BaseViewModel() {
 
-    private val resourcesProvider: ResourcesProvider by inject()
     private var id: Int? = null
 
     fun layoutManager() = GridLayoutManager(resourcesProvider.getApplicationContext(), COLUMNS_COUNT)
-    val adapter = CategoryListAdapter()
+    val adapter = CategoryListAdapter(resourcesProvider = resourcesProvider)
     val itemDecoration = DecorationUtil(
             resourcesProvider.getDimensionPixelSize(R.dimen.default_16),
             resourcesProvider.getDimensionPixelSize(R.dimen.default_16),
@@ -40,7 +43,11 @@ class CategoryDialogViewModel : BaseViewModel() {
 
     private fun populateList() {
         val items = RecordDao.Category.values().map {
-            CategoryListItemViewModel(it, it.id == id, listener)
+            CategoryListItemViewModel(
+                    resourcesProvider = resourcesProvider,
+                    item = it,
+                    isSelected = it.id == id,
+                    listener = listener)
         }
         adapter.setItems(items)
     }

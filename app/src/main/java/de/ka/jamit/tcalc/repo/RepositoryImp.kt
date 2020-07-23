@@ -1,26 +1,19 @@
 package de.ka.jamit.tcalc.repo
 
 import de.ka.jamit.tcalc.repo.db.*
-import io.objectbox.Box
-import io.objectbox.kotlin.boxFor
-import io.objectbox.query.Query
-
-import io.objectbox.rx.RxQuery
-import io.reactivex.Observable
+import io.reactivex.Flowable
 import io.reactivex.Single
 
 
 /**
  * The implementation for the abstraction of data sources.
  */
-class RepositoryImpl(val db: AppDatabase) : Repository {
+class RepositoryImpl(val db: AppDatabaseDao) : Repository {
 
-    private val recordDao: Box<RecordDao> = db.get().boxFor()
-    private val userDao: Box<UserDao> = db.get().boxFor()
-    private var currentlySelectedUser: UserDao? = null
-    private var lastRemovedRecordDao: RecordDao? = null
-    private var lastRemovedUserDao: UserDao? = null
-    private var lastRemovedUserRecords: List<RecordDao>? = null
+    private var currentlySelectedUser: User? = null
+    private var lastRemovedRecordDao: Record? = null
+    private var lastRemovedUserDao: User? = null
+    private var lastRemovedUserRecords: List<Record>? = null
 
     override var lastImportResult: Repository.ImportResult? = null
 
@@ -33,118 +26,105 @@ class RepositoryImpl(val db: AppDatabase) : Repository {
         lastRemovedUserDao = null
         lastImportResult = null
         currentlySelectedUser = null
-        userDao.removeAll()
-        recordDao.removeAll()
+
+        db.deleteAllRecords()
+        db.deleteAllUsers()
         insertDefaultValues()
     }
 
     private fun insertDefaultValues() {
-        if (userDao.isEmpty) {
-            val userId = userDao.put(db.getDefaultUser())
-            recordDao.put(db.getMasterData(userId))
+        if (db.getFirstUser() == null) {
+            val id = db.addUser(AppDatabase.getDefaultUser())
+            db.addRecords(AppDatabase.getMasterData(id.toInt()))
         }
     }
 
-    override fun observeUsers(): Observable<List<UserDao>> {
-        val query: Query<UserDao> = userDao.query().build()
-        return RxQuery.observable<UserDao>(query)
+    override fun observeUsers(): Flowable<List<User>> {
+        return db.observeUsers()
     }
 
-    override fun getAllRecordsOfCurrentlySelectedUser(): List<RecordDao> {
+    override fun getAllRecordsOfCurrentlySelectedUser(): List<Record> {
         currentlySelectedUser?.id?.let {
-            return recordDao.query()
-                    .equal(RecordDao_.userId, it)
-                    .build()
-                    .find()
-                    .toList()
+            return db.getRecordsOfUser(it)
         }
         return emptyList()
     }
 
-    private fun getDefaultUserId(): Long? {
-        val user = userDao
-                .query()
-                .equal(UserDao_.name, "default")
-                .build()
-                .findFirst()
+    private fun getDefaultUserId(): Int? {
+        val user = db.getFirstUserWithName("default")
         return user?.id
     }
 
-    override fun getCurrentlySelectedUser(): UserDao {
+    override fun getCurrentlySelectedUser(): User {
         if (currentlySelectedUser == null) {
-            currentlySelectedUser = userDao.all.find { it.selected }
+            currentlySelectedUser = db.getCurrentlySelectedUser()
         }
         // intentional force unwrap, there has to be a user - always!
         return currentlySelectedUser!!
     }
 
-    override fun selectUser(id: Long) {
+    override fun selectUser(id: Int) {
         val existing = getCurrentlySelectedUser()
-        updateUserInternally(existing.id, existing.name, false)
+        existing.selected = false
+        db.updateUser(existing)
 
-        val selectedUser = userDao.get(id)
+        val selectedUser = db.getUserWithId(id)
         if (selectedUser != null) {
-            updateUserInternally(id, selectedUser.name, true)
+            selectedUser.selected = true
+            db.updateUser(selectedUser)
             currentlySelectedUser = selectedUser
         }
     }
 
-    override fun updateUser(id: Long, name: String) {
-        userDao.get(id)?.let {
-            updateUserInternally(it.id, name, it.selected)
-        }
-    }
+    override fun updateUser(id: Int, name: String) {
+        val user = db.getUserWithId(id)
+        user?.name = name
+        if (user != null) {
+            db.updateUser(user)
 
-    private fun updateUserInternally(id: Long, name: String, selected: Boolean) {
-        userDao.get(id)?.let {
-            val user = UserDao(id = id, name = name, selected = selected)
-            userDao.put(user)
-            if (id == currentlySelectedUser?.id) {
+            if (currentlySelectedUser?.id == id){
                 currentlySelectedUser = user
             }
         }
     }
 
     override fun addUser(name: String) {
-        val newId = userDao.put(UserDao(0, name, false))
-        selectUser(newId)
+        val newId = db.addUser(User(name = name))
+        selectUser(newId.toInt())
     }
 
-    override fun deleteUser(id: Long) {
+    override fun deleteUser(id: Int) {
         if (currentlySelectedUser?.id == id) { // would be not so nice to have nothing selected
             getDefaultUserId()?.let(::selectUser) // this user is not deletable, so select it now!
         }
-        lastRemovedUserDao = userDao.get(id)
-        val records = recordDao.query()
-                .equal(RecordDao_.userId, id)
-                .build()
-                .find()
+        lastRemovedUserDao = db.getUserWithId(id)
+
+        val records = db.getRecordsOfUser(id)
         lastRemovedUserRecords = records
-        recordDao.remove(records)
-        userDao.remove(id)
+        //recordDao.remove(records) // TODO test this out, it may be that room is intelligent and deletes itself
+        db.deleteUserById(id)
+
     }
 
     override fun undoDeleteLastUser() {
         val lastUser = lastRemovedUserDao
         if (lastUser != null) {
-            userDao.put(lastUser)
+            db.addUser(lastUser)
             lastRemovedUserDao = null
             val lastRecords = lastRemovedUserRecords
-            lastRecords?.let(recordDao::put)
+            lastRecords?.let(db::addRecords)
             lastRemovedUserRecords = null
         }
     }
 
     override fun addRecord(key: String,
                            value: Float,
-                           timeSpan: RecordDao.TimeSpan,
-                           category: RecordDao.Category,
+                           timeSpan: TimeSpan,
+                           category: Category,
                            isConsidered: Boolean,
                            isIncome: Boolean) {
         getCurrentlySelectedUser().let {
-            recordDao.put(RecordDao(
-                    id = 0,
-                    value = value,
+            db.addRecord(Record(value = value,
                     key = key,
                     timeSpan = timeSpan,
                     category = category,
@@ -154,66 +134,70 @@ class RepositoryImpl(val db: AppDatabase) : Repository {
         }
     }
 
-    override fun addRecords(list: List<RecordDao>) {
-        recordDao.put(list)
+    override fun getDefaultUser(): User? {
+        return db.getFirstUserWithName("default")
+    }
+
+    override fun addRecords(list: List<Record>) {
+        db.addRecords(list)
     }
 
     override fun updateRecord(value: Float,
                               key: String,
-                              timeSpan: RecordDao.TimeSpan,
-                              category: RecordDao.Category,
+                              timeSpan: TimeSpan,
+                              category: Category,
                               isConsidered: Boolean,
                               isIncome: Boolean,
-                              id: Long) {
-        recordDao.get(id)?.let {
-            recordDao.put(RecordDao(
-                    id = id,
-                    value = value,
-                    key = key,
-                    timeSpan = timeSpan,
-                    category = category,
-                    isConsidered = isConsidered,
-                    isIncome = isIncome,
-                    userId = it.userId))
+                              id: Int) {
+        db.getRecordWithId(id)?.let {
+            it.apply {
+                it.value = value
+                it.key = key
+                it.timeSpan = timeSpan
+                it.category = category
+                it.isConsidered = isConsidered
+                it.isIncome = isIncome
+                it.userId = it.userId
+            }
+            db.updateRecord(it)
         }
     }
 
-    override fun deleteRecord(id: Long) {
-        lastRemovedRecordDao = recordDao.get(id)
-        recordDao.remove(id)
+    override fun deleteRecord(id: Int) {
+        lastRemovedRecordDao = db.getRecordWithId(id)
+        db.deleteRecordById(id)
     }
 
     override fun undoDeleteLastRecord() {
         val lastRecord = lastRemovedRecordDao
         if (lastRecord != null && currentlySelectedUser?.id == lastRecord.userId) {
-            recordDao.put(lastRecord)
+            db.addRecord(lastRecord)
             lastRemovedRecordDao = null
         }
     }
 
-    override fun observeRecordsOfCurrentlySelected(): Observable<List<RecordDao>> {
-        val query: Query<RecordDao> = recordDao.query().equal(RecordDao_.userId, getCurrentlySelectedUser().id).build()
-        return RxQuery.observable<RecordDao>(query)
+    override fun observeRecordsOfCurrentlySelected(): Flowable<List<Record>> {
+        return db.observeRecords(getCurrentlySelectedUser().id)
     }
 
-    override fun calc(data: List<RecordDao>): Single<Repository.CalculationResult> {
+    override fun calc(data: List<Record>): Single<Repository.CalculationResult> {
         return Single.fromCallable {
             val monthlyOutput = data
                     .filter { it.isConsidered && !it.isIncome }
                     .fold(0.0f) { total, item ->
                         when (item.timeSpan) {
-                            RecordDao.TimeSpan.MONTHLY -> total + item.value
-                            RecordDao.TimeSpan.QUARTERLY -> total + (item.value / 3)
-                            RecordDao.TimeSpan.YEARLY -> total + (item.value / 12)
+                            TimeSpan.MONTHLY -> total + item.value
+                            TimeSpan.QUARTERLY -> total + (item.value / 3)
+                            TimeSpan.YEARLY -> total + (item.value / 12)
                         }
                     }
             val monthlyInput = data
                     .filter { it.isConsidered && it.isIncome }
                     .fold(0.0f) { total, item ->
                         when (item.timeSpan) {
-                            RecordDao.TimeSpan.MONTHLY -> total + item.value
-                            RecordDao.TimeSpan.QUARTERLY -> total + (item.value / 3)
-                            RecordDao.TimeSpan.YEARLY -> total + (item.value / 12)
+                            TimeSpan.MONTHLY -> total + item.value
+                            TimeSpan.QUARTERLY -> total + (item.value / 3)
+                            TimeSpan.YEARLY -> total + (item.value / 12)
                         }
                     }
             Repository.CalculationResult(

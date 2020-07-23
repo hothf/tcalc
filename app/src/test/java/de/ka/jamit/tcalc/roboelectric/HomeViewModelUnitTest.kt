@@ -4,10 +4,15 @@ import android.os.Build
 import android.os.Looper.getMainLooper
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
+import androidx.lifecycle.SavedStateHandle
+import dagger.hilt.android.testing.*
+import de.ka.jamit.tcalc.di.SchedulerModule
 import de.ka.jamit.tcalc.repo.Repository
-import de.ka.jamit.tcalc.repo.db.RecordDao
-import de.ka.jamit.tcalc.roboelectric.base.RoboelectricKoinApplication
+import de.ka.jamit.tcalc.repo.db.Record
 import de.ka.jamit.tcalc.ui.home.HomeViewModel
+import de.ka.jamit.tcalc.utils.resources.ResourcesProvider
+import de.ka.jamit.tcalc.utils.schedulers.SchedulerProvider
+import de.ka.jamit.tcalc.utils.schedulers.TestsSchedulerProvider
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert
@@ -15,11 +20,10 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.koin.test.KoinTest
-import org.koin.test.inject
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.Shadows.shadowOf
 import org.robolectric.annotation.Config
+import javax.inject.Inject
 
 
 /**
@@ -27,18 +31,33 @@ import org.robolectric.annotation.Config
  *
  * Created by Thomas Hofmann on 17.07.20
  **/
+@UninstallModules(SchedulerModule::class)
+@HiltAndroidTest
 @RunWith(RobolectricTestRunner::class)
-@Config(sdk = [Build.VERSION_CODES.P], application = RoboelectricKoinApplication::class)
-class HomeViewModelUnitTest : KoinTest {
+@Config(sdk = [Build.VERSION_CODES.P], application = HiltTestApplication::class)
+class HomeViewModelUnitTest {
 
     @Rule
     @JvmField
-    val instantTaskExecutorRole = InstantTaskExecutorRule()
+    var hiltRule = HiltAndroidRule(this)
 
-    private val repository: Repository by inject()
+    @Rule
+    @JvmField
+    val instantTaskExecutorRole = InstantTaskExecutorRule() // important for RX tests to return immediately
+
+    @BindValue
+    @JvmField
+    val schedulerProvider: SchedulerProvider = TestsSchedulerProvider() // swap the scheduler provider for RX
+
+    @Inject
+    lateinit var repository: Repository
+
+    @Inject
+    lateinit var resourcesProvider: ResourcesProvider
 
     @Before
-    fun setUp(){
+    fun setUp() {
+        hiltRule.inject()
         repository.wipeDatabase()
     }
 
@@ -48,7 +67,7 @@ class HomeViewModelUnitTest : KoinTest {
         val user = repository.getCurrentlySelectedUser() // force initializing of the database
         Assert.assertNotNull(user)
 
-        val viewModel = HomeViewModel()
+        val viewModel = HomeViewModel(SavedStateHandle(), repository, schedulerProvider, resourcesProvider)
 
 
         runBlocking {
@@ -67,7 +86,7 @@ class HomeViewModelUnitTest : KoinTest {
         val user = repository.getCurrentlySelectedUser() // force initializing of the database
         Assert.assertNotNull(user)
 
-        val viewModel = HomeViewModel()
+        val viewModel = HomeViewModel(SavedStateHandle(), repository, schedulerProvider, resourcesProvider)
 
         val yearlyOutputObserver = Observer<String> {
             Assert.assertEquals("48.00 €", it)
@@ -88,9 +107,9 @@ class HomeViewModelUnitTest : KoinTest {
             Assert.assertEquals("2.00 €", it)
         }
 
-        val records = listOf(RecordDao(id = 0, value = 2.0f, userId = user.id),
-                RecordDao(id = 0, value = 2.0f, userId = user.id),
-                RecordDao(id = 0, value = 2.0f, isIncome = true, userId = user.id))
+        val records = listOf(Record(id = 0, value = 2.0f, userId = user.id),
+                Record(id = 0, value = 2.0f, userId = user.id),
+                Record(id = 0, value = 2.0f, isIncome = true, userId = user.id))
 
         runBlocking {
             repository.addRecords(records)
