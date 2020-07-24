@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="de.ka.jamit.tcalc.ui.home.category.CategoryListItemViewModel" />
+    </data>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/defaultBackgroundPrimary"
+        android:gravity="center">
+
+        <RelativeLayout
+            android:id="@+id/item"
+            android:layout_width="@dimen/default_86"
+            android:layout_height="@dimen/default_86"
+            android:layout_centerInParent="true">
+
+            <ImageView
+                android:id="@+id/title"
+                style="@style/textDefault.bold"
+                android:layout_width="@dimen/default_54"
+                android:layout_height="@dimen/default_54"
+                android:layout_centerInParent="true"
+                android:background="@drawable/bg_bordered_cornered"
+                android:foreground="@drawable/rounded_button_transculent_selector"
+                android:onClick="@{()->viewModel.onClick()}"
+                android:padding="@dimen/default_4"
+                android:tint="@{viewModel.categoryShade}"
+                app:setImageResource="@{viewModel.categoryImage}"
+                tools:text="Item title" />
+
+            <ImageView
+                android:layout_width="@dimen/default_24"
+                android:layout_height="@dimen/default_24"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginStart="@dimen/default_4"
+                android:layout_marginBottom="@dimen/default_4"
+                android:src="@drawable/ic_checked"
+                android:tint="@color/colorAccent"
+                android:visibility="@{viewModel.selectedVisibility}" />
+        </RelativeLayout>
+    </RelativeLayout>
+
+</layout>

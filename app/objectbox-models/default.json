@@ -4,69 +4,109 @@
   "_note3": "If you have VCS merge conflicts, you must resolve them according to ObjectBox docs.",
   "entities": [
     {
-      "id": "2:1574775729979564377",
-      "lastPropertyId": "8:6510946630205075916",
-      "name": "PeopleDao",
+      "id": "3:2102197368772465985",
+      "lastPropertyId": "8:6829942135681127047",
+      "name": "RecordDao",
       "properties": [
         {
-          "id": "1:3415489001624859788",
+          "id": "1:7098215819491930687",
           "name": "id",
           "type": 6,
           "flags": 1
         },
         {
-          "id": "2:1912812774473146109",
+          "id": "2:6001184089786331926",
+          "name": "key",
+          "type": 9
+        },
+        {
+          "id": "3:2202904196200137962",
+          "name": "value",
+          "type": 7,
+          "flags": 4
+        },
+        {
+          "id": "4:2410613748714263914",
+          "name": "timeSpan",
+          "type": 5,
+          "flags": 2
+        },
+        {
+          "id": "5:8553923404158522657",
+          "name": "userId",
+          "type": 6,
+          "flags": 4
+        },
+        {
+          "id": "6:3266688976521394936",
+          "name": "category",
+          "type": 5,
+          "flags": 2
+        },
+        {
+          "id": "7:8844950188993647429",
+          "name": "isConsidered",
+          "type": 1,
+          "flags": 4
+        },
+        {
+          "id": "8:6829942135681127047",
+          "name": "isIncome",
+          "type": 1,
+          "flags": 4
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "4:7077598409687785052",
+      "lastPropertyId": "3:6060225751370836712",
+      "name": "UserDao",
+      "properties": [
+        {
+          "id": "1:7332173870955140454",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:5947194286838615804",
           "name": "name",
           "type": 9
         },
         {
-          "id": "3:8603587990634726071",
-          "name": "height",
-          "type": 9
-        },
-        {
-          "id": "4:3554967240625618713",
-          "name": "mass",
-          "type": 9
-        },
-        {
-          "id": "5:8890814650197825200",
-          "name": "hair_color",
-          "type": 9
-        },
-        {
-          "id": "6:3622446154679168283",
-          "name": "skin_color",
-          "type": 9
-        },
-        {
-          "id": "7:3662954271741150012",
-          "name": "eye_color",
-          "type": 9
-        },
-        {
-          "id": "8:6510946630205075916",
-          "name": "gender",
-          "type": 9
+          "id": "3:6060225751370836712",
+          "name": "selected",
+          "type": 1,
+          "flags": 4
         }
       ],
       "relations": []
     }
   ],
-  "lastEntityId": "2:1574775729979564377",
+  "lastEntityId": "4:7077598409687785052",
   "lastIndexId": "0:0",
   "lastRelationId": "0:0",
   "lastSequenceId": "0:0",
   "modelVersion": 5,
   "modelVersionParserMinimum": 5,
   "retiredEntityUids": [
-    4588755026466946129
+    4588755026466946129,
+    1574775729979564377
   ],
   "retiredIndexUids": [],
   "retiredPropertyUids": [
     7535486235035811989,
     5295257134527964451,
-    68862689860177328
+    68862689860177328,
+    3415489001624859788,
+    1912812774473146109,
+    8603587990634726071,
+    3554967240625618713,
+    8890814650197825200,
+    3622446154679168283,
+    3662954271741150012,
+    6510946630205075916
   ],
   "retiredRelationUids": [],
   "version": 1

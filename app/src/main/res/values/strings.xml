@@ -1,8 +1,74 @@
 <resources>
-    <string name="app_name">Architecture</string>
+    <string name="app_name">TCalc</string>
+
+    <string name="dummy_val_one">Example 1</string>
+    <string name="dummy_val_two">Example 2</string>
+    <string name="dummy_val_three">Example 3</string>
+    <string name="dummy_val_four">Example 4</string>
+    <string name="dummy_val_five">Example 5</string>
+    <string name="dummy_val_six">Example 6</string>
+    <string name="dummy_val_seven">Example 7</string>
 
     <string name="nav_home">Home</string>
-    <string name="nav_profile">Profile</string>
     <string name="nav_settings">Settings</string>
+
+    <string name="add">Add new</string>
+    <string name="share_export">Share your export</string>
+
+    <string name="record_key_hint">Entry</string>
+    <string name="record_value_hint">0.0</string>
+
+    <string name="user_hint">Username</string>
+    <string name="user_title">Manage users</string>
+    <string name="user_add">Add a new user</string>
+    <string name="user_delete_undo_title">User deleted</string>
+    <string name="user_delete_undo_action">Undo</string>
+    <string name="user_addedit_name">Name:</string>
+
+    <string name="user_addedit_title_add">Add new user</string>
+    <string name="user_addedit_title_edit">Edit user</string>
+    <string name="user_addedit_submit">Save user</string>
+
+    <string name="category_title">Choose a category</string>
+
+    <string name="home_result_format">%.2f %s</string>
+    <string name="home_result_monthly">Monthly:</string>
+    <string name="home_result_yearly">Yearly:</string>
+    <string name="home_add">Add a new entry</string>
+    <string name="home_delete_undo_title">Entry deleted</string>
+    <string name="home_delete_undo_action">Undo</string>
+
+    <string name="home_addedit_title_add">Add new entry</string>
+    <string name="home_addedit_title_edit">Edit entry</string>
+    <string name="home_addedit_submit">Save entry</string>
+    <string name="home_addedit_referring">Referring:</string>
+    <string name="home_addedit_amount">Amount:</string>
+    <string name="home_addedit_timespan">Timespan:</string>
+    <string name="home_addedit_income">Mark as income:</string>
+    <string name="home_addedit_considered">Include in calculation:</string>
+
+    <string name="settings_import">Import entries</string>
+    <string name="settings_export">Export entries</string>
+
+    <string name="export_title">Exporting</string>
+    <string name="export_fallback_name">Export</string>
+    <string name="export_error">Error while exporting.</string>
+    <string name="import_title">Importing</string>
+    <string name="import_cancel">Cancel</string>
+    <string name="import_retry">Retry</string>
+    <string name="import_fallback_name">Imported User</string>
+    <string name="import_success_text">Imported %s successfully with %d entries!</string>
+    <string name="import_error">Error while importing.</string>
+
+    <string name="home_empty_text">No entries!</string>
+
+    <string name="enum_timespan_monthly">Monthly</string>
+    <string name="enum_timespan_quarterly">Quarterly</string>
+    <string name="enum_timespan_yearly">Yearly</string>
+
+    <string name="error_input_empty">Please enter something</string>
+    <string name="error_input_not_float">Please enter a valid number</string>
+    <string name="error_input_too_small">Please use at least %s characters</string>
+    <string name="error_input_too_long">Please use a maximum of %s characters</string>
 
 </resources>

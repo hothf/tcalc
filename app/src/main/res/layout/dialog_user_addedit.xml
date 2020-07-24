@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="de.ka.jamit.tcalc.ui.home.user.addedit.UserAddEditDialogViewModel" />
+    </data>
+
+    <RelativeLayout
+        android:theme="@style/AppTheme"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            style="@style/textDefault.title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/default_20"
+            android:gravity="center"
+            android:text="@{viewModel.editOrNewText}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/closeButton"
+            style="@style/ButtonStyle.Transculent"
+            android:layout_width="@dimen/default_48"
+            android:layout_height="@dimen/default_58"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="@dimen/default_4"
+            android:layout_marginEnd="@dimen/default_8"
+            android:onClick="@{()->viewModel.onClose()}"
+            android:tint="@color/fontDefault"
+            app:icon="@drawable/ic_close"
+            app:iconSize="@dimen/default_24"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <LinearLayout
+            android:id="@+id/editContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/closeButton"
+            android:layout_margin="@dimen/default_16"
+            android:orientation="horizontal">
+
+            <TextView
+                style="@style/textDefault.bold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/default_8"
+                android:text="@string/user_addedit_name" />
+
+            <EditText
+                android:id="@+id/editText"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/default_54"
+                android:layout_marginStart="@dimen/default_8"
+                android:layout_marginEnd="@dimen/default_8"
+                android:hint="@string/user_hint"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:text="@={viewModel.titleText}"
+                app:setError="@{viewModel.titleError}"
+                app:setSelection="@{viewModel.titleSelection}" />
+
+        </LinearLayout>
+
+        <com.google.android.material.button.MaterialButton
+            style="@style/ButtonStyle.Bordered"
+            android:id="@+id/saveButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/editContainer"
+            android:layout_centerHorizontal="true"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/default_16"
+            android:layout_marginBottom="@dimen/default_8"
+            android:onClick="@{()->viewModel.choose()}"
+            android:text="@string/user_addedit_submit" />
+
+        <View
+            android:id="@+id/bottomHelper"
+            android:layout_width="@dimen/default_1"
+            android:layout_height="@dimen/default_8"
+            android:layout_below="@+id/saveButton" />
+    </RelativeLayout>
+</layout>

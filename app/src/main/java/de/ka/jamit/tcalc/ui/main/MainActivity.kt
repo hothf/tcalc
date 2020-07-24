@@ -5,12 +5,20 @@ import android.view.View
 import androidx.navigation.NavDestination
 import androidx.navigation.Navigation.findNavController
 import androidx.navigation.ui.NavigationUI
+import dagger.hilt.android.AndroidEntryPoint
 import de.ka.jamit.tcalc.R
 import de.ka.jamit.tcalc.base.BaseActivity
 import de.ka.jamit.tcalc.base.events.ShowSnack
 import de.ka.jamit.tcalc.databinding.ActivityMainBinding
 
-class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>(R.layout.activity_main, MainViewModel::class) {
+// Workaround for https://github.com/google/dagger/issues/1904
+abstract class BaseMainActivity : BaseActivity<ActivityMainBinding, MainViewModel>(
+        R.layout.activity_main,
+        MainViewModel::class
+)
+
+@AndroidEntryPoint
+class MainActivity : BaseMainActivity() {
 
     override fun onSupportNavigateUp() = findNavController(this, R.id.main_nav_host_fragment).navigateUp()
 
@@ -19,12 +27,13 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>(R.layout.a
 
         val navController = findNavController(this, R.id.main_nav_host_fragment)
 
-        navController.addOnDestinationChangedListener { _, dest: NavDestination, _ ->
-            if (dest.id == R.id.detailFragment) {
-                getBinding<ActivityMainBinding>()?.bottomNavigation?.visibility = View.GONE
-            } else {
-                getBinding<ActivityMainBinding>()?.bottomNavigation?.visibility = View.VISIBLE
-            }
+        navController.addOnDestinationChangedListener { _, _: NavDestination, _ ->
+//            add excemptions here where the bottom navigation should be hidden!
+//            if (dest.id == R.id.detailFragment) {
+//                getBinding<ActivityMainBinding>()?.bottomNavigation?.visibility = View.GONE
+//            } else {
+            getBinding<ActivityMainBinding>()?.bottomNavigation?.visibility = View.VISIBLE
+//            }
         }
 
         getBinding<ActivityMainBinding>()?.bottomNavigation?.let {
@@ -33,13 +42,9 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>(R.layout.a
     }
 
     override fun onShowMessage(showSnack: ShowSnack) {
-        getBinding<ActivityMainBinding>()?.mainSnacker?.reveal(showSnack)
-    }
-
-    override fun onFinish() {
-        // we handle back presses in this example somewhere differently. This is why we should finish the app at some
-        // point. This is triggered by listening to a close event and then forwarded to this point, where we simply
-        // finish the app.
-        finish()
+        getBinding<ActivityMainBinding>()?.mainSnacker?.apply {
+            bringToFront()
+            reveal(showSnack)
+        }
     }
 }

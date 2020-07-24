@@ -1,25 +1,25 @@
 package de.ka.jamit.tcalc.ui.main
 
+import androidx.hilt.Assisted
+import androidx.hilt.lifecycle.ViewModelInject
+import androidx.lifecycle.SavedStateHandle
 import de.ka.jamit.tcalc.base.BaseViewModel
-import de.ka.jamit.tcalc.utils.AndroidSchedulerProvider
+import de.ka.jamit.tcalc.utils.GlobalMessageEventListener
+import de.ka.jamit.tcalc.utils.schedulers.SchedulerProvider
 import de.ka.jamit.tcalc.utils.with
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.rxkotlin.subscribeBy
 
-class MainViewModel : BaseViewModel() {
-
-    // here we listen to all sorts of global events, as the main ViewModel is connected with the MainActivity, which
-    // is the only activity the app has, thus making all UIs on top of the fragment container globally visible at all
-    // times and making the activity similar to a singleton.
+class MainViewModel
+@ViewModelInject constructor(
+        @Assisted private val stateHandle: SavedStateHandle,
+        val schedulerProvider: SchedulerProvider,
+        messageListener: GlobalMessageEventListener
+): BaseViewModel() {
 
     init {
-        closeListener.observableClose
-                .with(AndroidSchedulerProvider())
-                .subscribeBy(onNext = { close() }, onError = {})
-                .addTo(compositeDisposable)
-
         messageListener.observableGlobalMessage
-                .with(AndroidSchedulerProvider())
+                .with(schedulerProvider)
                 .subscribeBy(onNext = { showMessage(it) }, onError = {})
                 .addTo(compositeDisposable)
     }

@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="de.ka.jamit.tcalc.ui.settings.exporting.ExportingDialogViewModel" />
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:theme="@style/AppTheme">
+
+        <TextView
+            style="@style/textDefault.title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/default_20"
+            android:gravity="center"
+            android:text="@string/export_title"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:visibility="@{viewModel.loadingVisibility}" />
+
+        <View
+            android:id="@+id/helper"
+            android:layout_width="1dp"
+            android:layout_height="@dimen/default_72"
+            android:layout_centerInParent="true" />
+
+        <ImageView
+            android:id="@+id/errorImage"
+            android:layout_width="@dimen/default_54"
+            android:layout_height="@dimen/default_54"
+            android:layout_below="@+id/helper"
+            android:layout_centerHorizontal="true"
+            android:src="@drawable/ic_error"
+            android:tint="@color/fontColorNegative"
+            android:visibility="@{viewModel.errorVisibility}" />
+
+        <TextView
+            android:id="@+id/errorText"
+            style="@style/textDefault.bold"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/errorImage"
+            android:layout_marginStart="@dimen/default_16"
+            android:layout_marginTop="@dimen/default_8"
+            android:layout_marginEnd="@dimen/default_16"
+            android:layout_marginBottom="@dimen/default_24"
+            android:gravity="center"
+            android:text="@string/export_error"
+            android:visibility="@{viewModel.errorVisibility}"
+            tools:text="That did not go as expected!" />
+
+        <com.google.android.material.button.MaterialButton
+            style="@style/ButtonStyle.Bordered"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/errorText"
+            android:layout_marginStart="@dimen/default_16"
+            android:layout_marginTop="@dimen/default_16"
+            android:layout_marginBottom="@dimen/default_16"
+            android:layout_toEndOf="@+id/helper"
+            android:onClick="@{()->viewModel.onCancel()}"
+            android:text="@string/import_cancel"
+            android:visibility="@{viewModel.errorVisibility}" />
+
+        <com.google.android.material.button.MaterialButton
+            style="@style/ButtonStyle.Bordered"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/errorText"
+            android:layout_marginTop="@dimen/default_16"
+            android:layout_marginEnd="@dimen/default_16"
+            android:layout_marginBottom="@dimen/default_16"
+            android:layout_toStartOf="@+id/helper"
+            android:onClick="@{()->viewModel.onRetry()}"
+            android:text="@string/import_retry"
+            android:visibility="@{viewModel.errorVisibility}" />
+
+    </RelativeLayout>
+</layout>

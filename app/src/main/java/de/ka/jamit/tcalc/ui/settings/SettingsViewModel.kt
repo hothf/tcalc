@@ -1,35 +1,32 @@
 package de.ka.jamit.tcalc.ui.settings
 
-import android.os.Bundle
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.hilt.Assisted
+import androidx.hilt.lifecycle.ViewModelInject
+import androidx.lifecycle.SavedStateHandle
 import de.ka.jamit.tcalc.R
 import de.ka.jamit.tcalc.base.BaseViewModel
-import de.ka.jamit.tcalc.ui.settings.list.SettingsAdapter
-import de.ka.jamit.tcalc.ui.settings.list.SettingsItemViewModel
-import de.ka.jamit.tcalc.utils.NavigationUtils
+import de.ka.jamit.tcalc.repo.Repository
 import de.ka.jamit.tcalc.utils.resources.ResourcesProvider
-import org.koin.core.inject
 
-class SettingsViewModel : BaseViewModel() {
+class SettingsViewModel
+@ViewModelInject constructor(
+        @Assisted private val stateHandle: SavedStateHandle,
+        val repository: Repository,
+        val resourcesProvider: ResourcesProvider
+): BaseViewModel() {
 
-    private val resourcesProvider: ResourcesProvider by inject()
-    private val clickListener: (SettingsItemViewModel) -> Unit = {
-        navigateTo(
-            navigationTargetId = R.id.detailFragment,
-            args = Bundle().apply { putString("Argument", it.title) },
-            animType = NavigationUtils.AnimType.MODAL
-        )
+    fun onImport() {
+        handle(Import())
     }
 
-    // Please note: These are just example implementations on how you can do it, you do not have to set your adapters
-    // like this, if you prefer holding the correct data state differently. For me, it is a convenient way of having
-    // everything related to later UI updates in mutable LiveData. The idea behind this is, that the adapter itself
-    // is lifecycle aware with this approach.
-    val adapter = SettingsAdapter(clickListener = clickListener)
-
-    fun layoutManager() = LinearLayoutManager(resourcesProvider.getApplicationContext())
-
-    fun sort() {
-        adapter.sort()
+    fun onExport() {
+        var name = repository.getCurrentlySelectedUser().name
+        if (name.isEmpty()) {
+            name = resourcesProvider.getString(R.string.export_fallback_name)
+        }
+        handle(Export(name))
     }
+
+    class Import
+    class Export(val name: String)
 }

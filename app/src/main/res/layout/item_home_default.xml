@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="de.ka.jamit.tcalc.ui.home.list.HomeListItemViewModel" />
+    </data>
+
+    <RelativeLayout
+        android:theme="@style/AppTheme"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/default_100">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/defaultBackgroundPrimary" />
+
+        <ImageView
+            android:id="@+id/deleteLeftImage"
+            android:layout_width="@dimen/default_36"
+            android:layout_height="@dimen/default_36"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="@dimen/default_24"
+            android:src="@drawable/ic_delete"
+            android:tint="@color/colorRemove" />
+
+        <ImageView
+            android:id="@+id/deleteRightImage"
+            android:layout_width="@dimen/default_36"
+            android:layout_height="@dimen/default_36"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="@dimen/default_24"
+            android:src="@drawable/ic_delete"
+            android:tint="@color/colorRemove" />
+
+        <RelativeLayout
+            android:id="@+id/swipeableContainer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/defaultBackgroundPrimary">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:alpha="@{viewModel.alpha}"
+                android:background="@color/defaultBackgroundPrimary"
+                android:foreground="@drawable/rounded_button_transculent_selector"
+                android:onClick="@{()->viewModel.onClick()}" />
+
+            <ImageView
+                android:id="@+id/symbol"
+                android:layout_width="@dimen/default_24"
+                android:layout_height="match_parent"
+                android:layout_alignParentStart="true"
+                android:layout_marginStart="@dimen/default_8"
+                android:alpha="@{viewModel.alpha}"
+                android:tint="@{viewModel.valueTextColor}"
+                app:setImageResource="@{viewModel.valueImage}"
+                tools:src="@drawable/ic_add" />
+
+            <TextView
+                android:id="@+id/value"
+                style="@style/textDefault.title.bold"
+                android:layout_width="@dimen/default_86"
+                android:layout_height="match_parent"
+                android:layout_toEndOf="@+id/symbol"
+                android:alpha="@{viewModel.alpha}"
+                android:autoSizeMaxTextSize="@dimen/font_max_size"
+                android:autoSizeTextType="uniform"
+                android:ellipsize="end"
+                android:gravity="center"
+                android:maxLines="1"
+                android:text="@{viewModel.value}"
+                tools:text="12.2" />
+
+            <TextView
+                android:id="@+id/title"
+                style="@style/textDefault.bold"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_above="@+id/helper"
+                android:layout_marginStart="@dimen/default_8"
+                android:layout_toStartOf="@+id/image"
+                android:layout_toEndOf="@+id/value"
+                android:alpha="@{viewModel.alpha}"
+                android:text="@{viewModel.title}"
+                tools:text="Item title" />
+
+            <TextView
+                style="@style/textDefault.small"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/helper"
+                android:layout_marginStart="@dimen/default_8"
+                android:layout_toStartOf="@+id/image"
+                android:layout_toEndOf="@+id/value"
+                android:alpha="@{viewModel.alpha}"
+                android:text="@{viewModel.timeSpan}"
+                tools:text="YEARLY" />
+
+            <View
+                android:id="@+id/helper"
+                android:layout_width="@dimen/default_1"
+                android:layout_height="@dimen/default_1"
+                android:layout_centerVertical="true"
+                android:layout_toEndOf="@+id/value" />
+
+            <ImageView
+                android:id="@+id/image"
+                android:layout_width="@dimen/default_36"
+                android:layout_height="match_parent"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="@dimen/default_8"
+                android:alpha="@{viewModel.alpha}"
+                android:tint="@{viewModel.categoryShade}"
+                app:setImageResource="@{viewModel.categoryImage}"
+                tools:src="@drawable/ic_home" />
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+</layout>

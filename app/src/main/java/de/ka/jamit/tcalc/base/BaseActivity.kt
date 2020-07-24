@@ -6,9 +6,9 @@ import android.os.Bundle
 import androidx.annotation.LayoutRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import de.ka.jamit.tcalc.BR
 import de.ka.jamit.tcalc.base.events.*
-import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
 import kotlin.reflect.KClass
 
@@ -32,12 +32,13 @@ import kotlin.reflect.KClass
  */
 abstract class BaseActivity<out T : ViewDataBinding, E : BaseViewModel>(
     @LayoutRes private val bindingLayoutId: Int,
-    clazz: KClass<E>
+    private val clazz: KClass<E>
 ) : AppCompatActivity(), BaseComposable {
 
     private var binding: ViewDataBinding? = null
 
-    val viewModel: E by viewModel(clazz)
+    val viewModel: E
+        get() = ViewModelProvider(this).get(clazz.java)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

@@ -11,31 +11,39 @@
         android:label="fragment_home"
         tools:layout="@layout/fragment_home" />
     <fragment
-        android:id="@+id/profileFragment"
-        android:name="de.ka.jamit.tcalc.ui.profile.ProfileFragment"
-        android:label="fragment_profile"
-        tools:layout="@layout/fragment_profile" />
-    <fragment
         android:id="@+id/settingsFragment"
         android:name="de.ka.jamit.tcalc.ui.settings.SettingsFragment"
         android:label="fragment_settings"
         tools:layout="@layout/fragment_settings" />
-    <fragment
-        android:id="@+id/detailFragment"
-        android:name="de.ka.jamit.tcalc.ui.settings.detail.DetailFragment"
-        android:label="DetailFragment"
-        tools:layout="@layout/fragment_detail" />
-
     <dialog
-        android:id="@+id/dialogFragment"
-        android:name="de.ka.jamit.tcalc.ui.profile.dialogs.ProfileDialog"
-        android:label="DialogFragment"
-        tools:layout="@layout/dialog_profile" />
-
+        android:id="@+id/dialogHomeAdd"
+        android:name="de.ka.jamit.tcalc.ui.home.addedit.HomeAddEditDialog"
+        android:label="fragment_home_add_dialog"
+        tools:layout="@layout/dialog_home_addedit" />
     <dialog
-        android:id="@+id/dialogBottomSheet"
-        android:name="de.ka.jamit.tcalc.ui.profile.dialogs.ProfileBottomSheet"
-        android:label="BottomSheet"
-        tools:layout="@layout/dialog_profile" />
+        android:id="@+id/dialogUser"
+        android:name="de.ka.jamit.tcalc.ui.home.user.UserDialog"
+        android:label="fragment_home_user_dialog"
+        tools:layout="@layout/dialog_user" />
+    <dialog
+        android:id="@+id/dialogUserAddEdit"
+        android:name="de.ka.jamit.tcalc.ui.home.user.addedit.UserAddEditDialog"
+        android:label="fragment_user_add_dialog"
+        tools:layout="@layout/dialog_user_addedit" />
+    <dialog
+        android:id="@+id/dialogImport"
+        android:name="de.ka.jamit.tcalc.ui.settings.importing.ImportingDialog"
+        android:label="fragment_import_dialog"
+        tools:layout="@layout/dialog_importing" />
+    <dialog
+        android:id="@+id/dialogExport"
+        android:name="de.ka.jamit.tcalc.ui.settings.exporting.ExportingDialog"
+        android:label="fragment_export_dialog"
+        tools:layout="@layout/dialog_exporting" />
+    <dialog
+        android:id="@+id/dialogCategory"
+        android:name="de.ka.jamit.tcalc.ui.home.category.CategoryDialog"
+        android:label="fragment_category_dialog"
+        tools:layout="@layout/dialog_category" />
 
 </navigation>

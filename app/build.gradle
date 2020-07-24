@@ -6,7 +6,7 @@ apply plugin: 'kotlin-android-extensions'
 
 apply plugin: 'kotlin-kapt'
 
-apply plugin: 'io.objectbox'
+apply plugin: 'dagger.hilt.android.plugin'
 
 android {
     compileSdkVersion "$target_version".toInteger()
@@ -28,20 +28,34 @@ android {
     buildFeatures {
         dataBinding = true
     }
+    hilt {
+        enableTransformForLocalTests = true
+    }
+    testOptions {
+        unitTests {
+            returnDefaultValues = true
+            includeAndroidResources = true
+        }
+    }
     buildTypes {
         debug {
             minifyEnabled false
-            buildConfigField "String", "API_URL", "\"https://swapi.co/api/\""
         }
         prerelease {
             minifyEnabled false
-            buildConfigField "String", "API_URL", "\"https://swapi.co/api/\""
         }
         release {
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            buildConfigField "String", "API_URL", "\"https://swapi.co/api/\""
         }
+    }
+}
+
+tasks.withType(Test) {
+    testLogging {
+        exceptionFormat "full"
+        events "started", "skipped", "passed", "failed"
+        showStandardStreams true
     }
 }
 
@@ -59,12 +73,12 @@ dependencies {
     implementation "androidx.navigation:navigation-ui-ktx:$navigation_version"
     implementation "androidx.fragment:fragment-ktx:$fragment_version"
     implementation "androidx.core:core-ktx:$ktx_core_version"
-    implementation "org.koin:koin-android:$koin_version"
-    implementation "org.koin:koin-androidx-viewmodel:$koin_version"
-    testImplementation "org.koin:koin-test:$koin_version"
     testImplementation "androidx.arch.core:core-testing:$core_testing_version"
     testImplementation "junit:junit:$junit_version"
+    testImplementation "org.robolectric:robolectric:$roboelectric_version"
     androidTestImplementation "androidx.test.espresso:espresso-core:$espresso_version"
+    testImplementation "io.mockk:mockk:$mockk_version"
+    androidTestImplementation "io.mockk:mockk-android:$mockk_version"
 
     // ui testing
     implementation "androidx.test:runner:$test_version"
@@ -73,6 +87,14 @@ dependencies {
     debugImplementation "androidx.fragment:fragment-testing:$espresso_fragment_version"
     androidTestImplementation "androidx.test.ext:junit:$ext_junit_version"
     androidTestImplementation "androidx.test.espresso:espresso-contrib:$espresso_contrib_version"
+
+    // hilt dependency injection
+    implementation "com.google.dagger:hilt-android:$hilt_version"
+    kapt "com.google.dagger:hilt-android-compiler:$hilt_version"
+    testImplementation "com.google.dagger:hilt-android-testing:$hilt_version"
+    kaptTest "com.google.dagger:hilt-android-compiler:$hilt_version"
+    implementation "androidx.hilt:hilt-lifecycle-viewmodel:$hilt_viewmodel_version"
+    kapt "androidx.hilt:hilt-compiler:$hilt_viewmodel_version"
 
     // logging
     implementation "com.jakewharton.timber:timber:$timber_version"
@@ -93,9 +115,17 @@ dependencies {
     implementation "io.reactivex.rxjava2:rxandroid:$rx_android_version"
     implementation "io.reactivex.rxjava2:rxkotlin:$rx_kotlin_version"
 
-    // database
-    implementation "io.objectbox:objectbox-kotlin:$objectbox_version"
+    // room database
+    implementation "androidx.room:room-runtime:$room_version"
+    kapt "androidx.room:room-compiler:$room_version"
+    implementation "androidx.room:room-rxjava2:$room_version"
 
     // time
     implementation "com.jakewharton.threetenabp:threetenabp:$java_time_abp_version"
+
+    // csv
+    implementation "com.opencsv:opencsv:$csv_version"
+
+    // recyclerview animations
+    implementation "jp.wasabeef:recyclerview-animators:$rv_animations_version"
 }

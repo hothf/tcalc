@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="de.ka.jamit.tcalc.ui.home.user.UserDialogViewModel" />
+    </data>
+
+    <RelativeLayout
+        android:theme="@style/AppTheme"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            style="@style/textDefault.title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/default_20"
+            android:gravity="center"
+            android:text="@string/user_title"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/closeButton"
+            style="@style/ButtonStyle.Transculent"
+            android:layout_width="@dimen/default_48"
+            android:layout_height="@dimen/default_58"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="@dimen/default_4"
+            android:layout_marginEnd="@dimen/default_8"
+            android:onClick="@{()->viewModel.onClose()}"
+            android:tint="@color/fontDefault"
+            app:icon="@drawable/ic_close"
+            app:iconSize="@dimen/default_24"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/closeButton">
+
+            <de.ka.jamit.tcalc.utils.AutoReleaseRecyclerView
+                android:id="@+id/userRecycler"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:adapter="@{viewModel.adapter}"
+                app:layoutManager="@{viewModel.layoutManager()}"
+                app:setItemAnimator="@{viewModel.itemAnimator}" />
+
+        </androidx.core.widget.NestedScrollView>
+
+        <de.ka.jamit.tcalc.utils.Snacker
+            android:id="@+id/dialogSnacker"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginStart="@dimen/default_76"
+            android:layout_marginEnd="@dimen/default_76"
+            android:layout_above="@+id/helperBottom" />
+
+        <View
+            android:id="@+id/helperBottom"
+            android:layout_width="@dimen/default_1"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="@dimen/default_32"
+            android:layout_height="@dimen/default_1" />
+    </RelativeLayout>
+</layout>
