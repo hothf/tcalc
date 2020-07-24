@@ -2,14 +2,16 @@ package de.ka.jamit.tcalc.ui.home.user
 
 import android.view.View
 import de.ka.jamit.tcalc.base.BaseItemViewModel
-import de.ka.jamit.tcalc.repo.db.UserDao
+import de.ka.jamit.tcalc.repo.Repository
+import de.ka.jamit.tcalc.repo.db.User
 
 /**
  * A ViewModel for a user list item.
  *
  * Created by Thomas Hofmann on 07.07.20
  **/
-class UserListItemViewModel(val item: UserDao,
+class UserListItemViewModel(val repository: Repository,
+                            val item: User,
                             private val moreClickListener: (() -> Unit)? = null,
                             private val clickListener: ((UserListItemViewModel) -> Unit)? = null,
                             private val editListener: ((UserListItemViewModel) -> Unit)? = null,
@@ -18,7 +20,7 @@ class UserListItemViewModel(val item: UserDao,
 
     val title = item.name
 
-    val isDefaultItem = item.id == 1L
+    val isDefaultItem = item.id == repository.getDefaultUser()?.id ?: false
 
     val isMoreItem = moreClickListener != null
 
@@ -36,7 +38,9 @@ class UserListItemViewModel(val item: UserDao,
     }
 
     fun onDismissed() {
-        repository.deleteUser(item.id)
-        deletionListener?.invoke()
+        if (!isDefaultItem) {
+            repository.deleteUser(item.id)
+            deletionListener?.invoke()
+        }
     }
 }

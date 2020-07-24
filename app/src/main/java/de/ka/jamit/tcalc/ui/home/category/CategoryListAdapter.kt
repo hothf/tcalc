@@ -8,14 +8,15 @@ import androidx.recyclerview.widget.DiffUtil
 import de.ka.jamit.tcalc.base.BaseAdapter
 import de.ka.jamit.tcalc.base.BaseViewHolder
 import de.ka.jamit.tcalc.databinding.ItemCategoryDefaultBinding
+import de.ka.jamit.tcalc.utils.resources.ResourcesProvider
 
 /**
  * A adapter for category list items.
  *
  * Created by Thomas Hofmann on 10.07.20
  **/
-class CategoryListAdapter(list: ArrayList<CategoryListItemViewModel> = arrayListOf()) :
-        BaseAdapter<CategoryListItemViewModel>(list, CategoryListAdapterDiffCallback()) {
+class CategoryListAdapter(list: ArrayList<CategoryListItemViewModel> = arrayListOf(), resourcesProvider: ResourcesProvider) :
+        BaseAdapter<CategoryListItemViewModel>(resourcesProvider, list, CategoryListAdapterDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder<*> {
         return CategoryListViewHolder(ItemCategoryDefaultBinding.inflate(layoutInflater, parent, false))

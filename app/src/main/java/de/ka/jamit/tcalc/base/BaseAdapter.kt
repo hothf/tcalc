@@ -9,11 +9,8 @@ import androidx.databinding.BaseObservable
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import de.ka.jamit.tcalc.BR
-import de.ka.jamit.tcalc.repo.Repository
 import de.ka.jamit.tcalc.utils.resources.ResourcesProvider
 import io.reactivex.disposables.CompositeDisposable
-import org.koin.core.KoinComponent
-import org.koin.core.inject
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -28,12 +25,12 @@ import kotlin.collections.ArrayList
  * **Important:** Set the right lifecycle owner of this adapter to make use of `MutableLiveData used in item `ViewModels`.
  */
 abstract class BaseAdapter<E : BaseItemViewModel>(
+        resourcesProvider: ResourcesProvider,
         private val items: ArrayList<E> = arrayListOf(),
         private val diffCallback: DiffUtil.ItemCallback<E>? = null
-) : RecyclerView.Adapter<BaseViewHolder<*>>(), KoinComponent {
+) : RecyclerView.Adapter<BaseViewHolder<*>>() {
 
     private var differ: AsyncListDiffer<E>? = null
-    private val resourcesProvider: ResourcesProvider by inject()
 
     val layoutInflater: LayoutInflater = LayoutInflater.from(resourcesProvider.getApplicationContext())
     var isEmpty: Boolean = items.isEmpty()
@@ -166,9 +163,7 @@ abstract class BaseAdapter<E : BaseItemViewModel>(
  * These viewModels are not created through the android ViewModel framework but still may be used
  * with `ObservableFields`.
  */
-abstract class BaseItemViewModel(val type: Int = 0) : BaseObservable(), KoinComponent {
-
-    val repository: Repository by inject()
+abstract class BaseItemViewModel(val type: Int = 0) : BaseObservable() {
 
     var compositeDisposable: CompositeDisposable? = null
 

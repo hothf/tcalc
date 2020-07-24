@@ -68,7 +68,7 @@ fun Fragment.navigate(navigateTo: NavigateTo) {
     val navController = try {
         view?.findNavController()
     } catch (exception: Exception) {
-        Timber.e(exception, "While trying to find nav controller, using parent fragment manager instead")
+        Timber.i("Error while trying to find nav controller, using parent fragment manager instead")
         val host: Fragment? = parentFragmentManager.findFragmentById(R.id.main_nav_host_fragment)
         host?.let(NavHostFragment::findNavController)
     }

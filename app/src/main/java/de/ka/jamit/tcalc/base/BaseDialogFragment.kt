@@ -16,11 +16,11 @@ import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.setFragmentResultListener
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import de.ka.jamit.tcalc.base.events.*
-import org.koin.androidx.viewmodel.ext.android.getViewModel
 import timber.log.Timber
 import kotlin.reflect.KClass
 
@@ -42,14 +42,15 @@ import kotlin.reflect.KClass
  */
 abstract class BaseDialogFragment<out T : ViewDataBinding, E : BaseViewModel>(
     @LayoutRes private val bindingLayoutId: Int,
-    clazz: KClass<E>,
+    private val clazz: KClass<E>,
     private val dialogMode: DialogMode = DialogMode.DIALOG,
     private val cancellable: Boolean = true
 ) : BottomSheetDialogFragment(), BaseComposable {
 
     private var binding: ViewDataBinding? = null
 
-    val viewModel: E by lazy { getViewModel(clazz) }
+    val viewModel: E
+        get() = ViewModelProvider(this).get(clazz.java)
 
     override fun onCreateView(
         inflater: LayoutInflater,

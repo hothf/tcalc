@@ -1,6 +1,7 @@
 package de.ka.jamit.tcalc.ui.settings.exporting
 
 import android.content.Intent
+import dagger.hilt.android.AndroidEntryPoint
 import de.ka.jamit.tcalc.R
 import de.ka.jamit.tcalc.base.BaseDialogFragment
 import de.ka.jamit.tcalc.databinding.DialogExportingBinding
@@ -10,12 +11,16 @@ import de.ka.jamit.tcalc.databinding.DialogExportingBinding
  *
  * Created by Thomas Hofmann on 09.07.20
  **/
-class ExportingDialog : BaseDialogFragment<DialogExportingBinding, ExportingDialogViewModel>(
+// Workaround for https://github.com/google/dagger/issues/1904
+abstract class BaseExportDialogFragment : BaseDialogFragment<DialogExportingBinding, ExportingDialogViewModel>(
         R.layout.dialog_exporting,
         ExportingDialogViewModel::class,
         DialogMode.DIALOG,
         cancellable = false
-) {
+)
+
+@AndroidEntryPoint
+class ExportingDialog : BaseExportDialogFragment() {
 
     override fun onHandle(element: Any?) {
         if (element is ExportingDialogViewModel.Completed) {

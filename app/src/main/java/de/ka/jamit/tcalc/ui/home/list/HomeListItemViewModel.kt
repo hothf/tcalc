@@ -2,22 +2,23 @@ package de.ka.jamit.tcalc.ui.home.list
 
 import de.ka.jamit.tcalc.R
 import de.ka.jamit.tcalc.base.BaseItemViewModel
+import de.ka.jamit.tcalc.repo.Repository
 import de.ka.jamit.tcalc.repo.db.AppDatabase
-import de.ka.jamit.tcalc.repo.db.RecordDao
+import de.ka.jamit.tcalc.repo.db.Record
 import de.ka.jamit.tcalc.utils.resources.ResourcesProvider
-import org.koin.core.inject
 
 /**
  * A ViewModel for a home list item.
  * Created by Thomas Hofmann on 03.07.20
  **/
-class HomeListItemViewModel(val item: RecordDao,
-                            private val listener: ((HomeListItemViewModel) -> Unit)? = null,
-                            private val moreListener: (() -> Unit)? = null,
-                            private val removeListener: (() -> Unit)? = null) :
+class HomeListItemViewModel(
+        val resourcesProvider: ResourcesProvider,
+        val repository: Repository,
+        val item: Record,
+        private val listener: ((HomeListItemViewModel) -> Unit)? = null,
+        private val moreListener: (() -> Unit)? = null,
+        private val removeListener: (() -> Unit)? = null) :
         BaseItemViewModel() {
-
-    private val resourcesProvider: ResourcesProvider by inject()
 
     val isMore = moreListener != null
     val title = AppDatabase.getTranslatedStringForKey(resourcesProvider, item.key)

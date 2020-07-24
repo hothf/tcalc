@@ -2,13 +2,17 @@ package de.ka.jamit.tcalc.ui.home
 
 import android.os.Bundle
 import android.view.View
+import androidx.hilt.Assisted
+import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.SavedStateHandle
 import androidx.recyclerview.widget.LinearLayoutManager
 import de.ka.jamit.tcalc.R
 import de.ka.jamit.tcalc.base.BaseViewModel
 import de.ka.jamit.tcalc.base.events.ShowSnack
 import de.ka.jamit.tcalc.repo.Repository
-import de.ka.jamit.tcalc.repo.db.RecordDao
+import de.ka.jamit.tcalc.repo.db.Record
+import de.ka.jamit.tcalc.repo.db.User
 import de.ka.jamit.tcalc.ui.home.addedit.HomeAddEditDialog
 import de.ka.jamit.tcalc.ui.home.list.HomeListAdapter
 import de.ka.jamit.tcalc.ui.home.list.HomeListItemViewModel
@@ -21,14 +25,17 @@ import io.reactivex.disposables.Disposable
 
 import io.reactivex.rxkotlin.addTo
 import jp.wasabeef.recyclerview.animators.SlideInDownAnimator
-import org.koin.core.inject
 import timber.log.Timber
 
 
-class HomeViewModel : BaseViewModel() {
+class HomeViewModel
+@ViewModelInject constructor(
+        @Assisted private val stateHandle: SavedStateHandle,
+        val repository: Repository,
+        val schedulerProvider: SchedulerProvider,
+        val resourcesProvider: ResourcesProvider
+) : BaseViewModel() {
 
-    private val resourcesProvider: ResourcesProvider by inject()
-    private val schedulerProvider: SchedulerProvider by inject()
     private var users: Disposable? = null
     private var userRecords: Disposable? = null
 
@@ -45,7 +52,7 @@ class HomeViewModel : BaseViewModel() {
     val resultMonthlyDeltaText = MutableLiveData<String>("")
     val resultYearlyDeltaText = MutableLiveData<String>("")
     val userText = MutableLiveData<String>("")
-    val adapter = HomeListAdapter()
+    val adapter = HomeListAdapter(resourcesProvider = resourcesProvider)
 
     fun itemAnimator() = SlideInDownAnimator()
 
@@ -62,7 +69,7 @@ class HomeViewModel : BaseViewModel() {
             putInt(HomeAddEditDialog.CATEGORY_KEY, it.item.category.id)
             putBoolean(HomeAddEditDialog.CONSIDERED_KEY, it.item.isConsidered)
             putBoolean(HomeAddEditDialog.INCOME_KEY, it.item.isIncome)
-            putLong(HomeAddEditDialog.ID_KEY, it.item.id)
+            putInt(HomeAddEditDialog.ID_KEY, it.item.id)
         }
         navigateTo(R.id.dialogHomeAdd, args = arguments)
     }
@@ -87,23 +94,26 @@ class HomeViewModel : BaseViewModel() {
         users?.let(compositeDisposable::remove)
         users = repository.observeUsers()
                 .with(schedulerProvider)
-                .subscribe({ users ->
-                    Timber.e(users.toString())
+                .subscribe({ users: List<User> ->
                     val selected = users.firstOrNull { it.selected } ?: return@subscribe
                     userText.postValue(selected.name)
                     userRecords?.let(compositeDisposable::remove)
                     userRecords = repository.observeRecordsOfCurrentlySelected()
                             .with(schedulerProvider)
                             .subscribe({ records ->
-                                Timber.d("||| record: $records")
                                 val items = records.map { record ->
-                                    HomeListItemViewModel(item = record,
+                                    HomeListItemViewModel(
+                                            resourcesProvider = resourcesProvider,
+                                            repository = repository,
+                                            item = record,
                                             listener = itemListener,
                                             removeListener = removeListener)
                                 }.toMutableList()
                                 showEmptyView.postValue(items.isEmpty())
                                 items.add(HomeListItemViewModel(
-                                        RecordDao(id = -1, userId = -1),
+                                        resourcesProvider = resourcesProvider,
+                                        repository = repository,
+                                        item = Record(id = -1, userId = -1),
                                         moreListener = addListener))
                                 adapter.setItems(items)
                                 calc(records)
@@ -118,14 +128,13 @@ class HomeViewModel : BaseViewModel() {
 
     fun layoutManager() = LinearLayoutManager(resourcesProvider.getApplicationContext())
 
-    private fun calc(data: List<RecordDao>) {
+    private fun calc(data: List<Record>) {
         resultVisibility.postValue(View.GONE)
         loadingVisibility.postValue(View.VISIBLE)
         repository.calc(data)
                 .with(schedulerProvider)
                 .subscribe({ result: Repository.CalculationResult ->
                     // TODO get unit from repository or elsewhere!
-                    Timber.e("wat::: ${result.monthlyIncome}")
                     resultMonthlyIncomeText.postValue(
                             String.format(resourcesProvider.getString(R.string.home_result_format),
                                     result.monthlyIncome, "€"))

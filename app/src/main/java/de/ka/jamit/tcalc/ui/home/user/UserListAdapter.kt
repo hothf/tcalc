@@ -9,6 +9,7 @@ import de.ka.jamit.tcalc.base.BaseAdapter
 import de.ka.jamit.tcalc.base.BaseViewHolder
 import de.ka.jamit.tcalc.databinding.ItemUserAddBinding
 import de.ka.jamit.tcalc.databinding.ItemUserDefaultBinding
+import de.ka.jamit.tcalc.utils.resources.ResourcesProvider
 import kotlin.math.abs
 import kotlin.math.min
 
@@ -17,8 +18,8 @@ import kotlin.math.min
  *
  * Created by Thomas Hofmann on 07.07.20
  **/
-class UserListAdapter(list: ArrayList<UserListItemViewModel> = arrayListOf()) :
-        BaseAdapter<UserListItemViewModel>(list, UserListAdapterDiffCallback()) {
+class UserListAdapter(list: ArrayList<UserListItemViewModel> = arrayListOf(), resourcesProvider: ResourcesProvider) :
+        BaseAdapter<UserListItemViewModel>(resourcesProvider, list, UserListAdapterDiffCallback()) {
 
     override fun onItemDismiss(position: Int) {
         getItems()[position].let {

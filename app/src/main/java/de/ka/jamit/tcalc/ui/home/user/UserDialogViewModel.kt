@@ -1,22 +1,23 @@
 package de.ka.jamit.tcalc.ui.home.user
 
 import android.os.Bundle
+import androidx.hilt.Assisted
+import androidx.hilt.lifecycle.ViewModelInject
+import androidx.lifecycle.SavedStateHandle
 import androidx.recyclerview.widget.LinearLayoutManager
 import de.ka.jamit.tcalc.R
 import de.ka.jamit.tcalc.base.BaseViewModel
 import de.ka.jamit.tcalc.base.events.ShowSnack
-import de.ka.jamit.tcalc.repo.db.UserDao
+import de.ka.jamit.tcalc.repo.Repository
+import de.ka.jamit.tcalc.repo.db.User
 import de.ka.jamit.tcalc.ui.home.addedit.HomeAddEditDialog
 import de.ka.jamit.tcalc.ui.home.user.addedit.UserAddEditDialog
 import de.ka.jamit.tcalc.utils.Snacker
 import de.ka.jamit.tcalc.utils.resources.ResourcesProvider
 import de.ka.jamit.tcalc.utils.schedulers.SchedulerProvider
 import de.ka.jamit.tcalc.utils.with
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.addTo
-import io.reactivex.schedulers.Schedulers
 import jp.wasabeef.recyclerview.animators.SlideInDownAnimator
-import org.koin.core.inject
 import timber.log.Timber
 
 /**
@@ -24,12 +25,13 @@ import timber.log.Timber
  *
  * Created by Thomas Hofmann on 03.07.20
  **/
-class UserDialogViewModel : BaseViewModel() {
+class UserDialogViewModel
+@ViewModelInject constructor(@Assisted private val stateHandle: SavedStateHandle,
+                             val schedulerProvider: SchedulerProvider,
+                             val resourcesProvider: ResourcesProvider,
+                             val repository: Repository) : BaseViewModel() {
 
-    private val resourcesProvider: ResourcesProvider by inject()
-    private val schedulerProvider: SchedulerProvider by inject()
-
-    val adapter = UserListAdapter()
+    val adapter = UserListAdapter(resourcesProvider = resourcesProvider)
 
     fun itemAnimator() = SlideInDownAnimator()
 
@@ -41,7 +43,7 @@ class UserDialogViewModel : BaseViewModel() {
         val arguments = Bundle().apply {
             putBoolean(UserAddEditDialog.UPDATE_KEY, true)
             putString(UserAddEditDialog.TITLE_KEY, it.item.name)
-            putLong(HomeAddEditDialog.ID_KEY, it.item.id)
+            putInt(HomeAddEditDialog.ID_KEY, it.item.id)
         }
         navigateTo(R.id.dialogUserAddEdit, args = arguments)
     }
@@ -63,10 +65,18 @@ class UserDialogViewModel : BaseViewModel() {
                 .with(schedulerProvider)
                 .subscribe({ users ->
                     val items = users.map { user ->
-                        UserListItemViewModel(user, null, itemListener, editListener, deletionListener)
+                        UserListItemViewModel(
+                                repository = repository,
+                                item = user,
+                                clickListener = itemListener,
+                                editListener = editListener,
+                                deletionListener = deletionListener)
                     }.toMutableList()
                     // add more item
-                    items.add(UserListItemViewModel(UserDao(-1), addListener, null, null, null))
+                    items.add(UserListItemViewModel(
+                            repository = repository,
+                            item = User(-1),
+                            moreClickListener = addListener))
                     adapter.setItems(items)
                 }, { error ->
                     Timber.e(error, "While observing user data.")

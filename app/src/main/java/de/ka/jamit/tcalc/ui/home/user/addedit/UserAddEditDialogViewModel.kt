@@ -1,25 +1,30 @@
 package de.ka.jamit.tcalc.ui.home.user.addedit
 
 import android.os.Bundle
+import androidx.hilt.Assisted
+import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.SavedStateHandle
 import de.ka.jamit.tcalc.R
 import de.ka.jamit.tcalc.base.BaseViewModel
+import de.ka.jamit.tcalc.repo.Repository
 import de.ka.jamit.tcalc.utils.InputValidator
 import de.ka.jamit.tcalc.utils.ValidationRules
 import de.ka.jamit.tcalc.utils.resources.ResourcesProvider
-import org.koin.core.inject
 
 /**
  * A ViewModel for updating or creating a new user entry.
  *
  * Created by Thomas Hofmann on 08.07.20
  **/
-class UserAddEditDialogViewModel : BaseViewModel() {
+class UserAddEditDialogViewModel
+@ViewModelInject constructor(@Assisted private val stateHandle: SavedStateHandle,
+                             val repository: Repository,
+                             val inputValidator: InputValidator,
+                             val resourcesProvider: ResourcesProvider) : BaseViewModel() {
 
-    private val resourcesProvider: ResourcesProvider by inject()
-    private val inputValidator: InputValidator by inject()
     private var isUpdating = false
-    private var id: Long = 0L
+    private var id: Int = 0
 
     val titleText = MutableLiveData<String>("")
     val titleError = MutableLiveData<String?>(null)
@@ -57,7 +62,7 @@ class UserAddEditDialogViewModel : BaseViewModel() {
         val title = bundle.getString(UserAddEditDialog.TITLE_KEY, "")
         titleText.postValue(title)
         titleSelection.postValue(title.length)
-        id = bundle.getLong(UserAddEditDialog.ID_KEY)
+        id = bundle.getInt(UserAddEditDialog.ID_KEY)
         editOrNewText.postValue(if (isUpdating) resourcesProvider.getString(R.string.user_addedit_title_edit) else resourcesProvider.getString(R.string.user_addedit_title_add))
     }
 

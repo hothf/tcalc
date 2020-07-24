@@ -5,12 +5,20 @@ import android.view.View
 import androidx.navigation.NavDestination
 import androidx.navigation.Navigation.findNavController
 import androidx.navigation.ui.NavigationUI
+import dagger.hilt.android.AndroidEntryPoint
 import de.ka.jamit.tcalc.R
 import de.ka.jamit.tcalc.base.BaseActivity
 import de.ka.jamit.tcalc.base.events.ShowSnack
 import de.ka.jamit.tcalc.databinding.ActivityMainBinding
 
-class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>(R.layout.activity_main, MainViewModel::class) {
+// Workaround for https://github.com/google/dagger/issues/1904
+abstract class BaseMainActivity : BaseActivity<ActivityMainBinding, MainViewModel>(
+        R.layout.activity_main,
+        MainViewModel::class
+)
+
+@AndroidEntryPoint
+class MainActivity : BaseMainActivity() {
 
     override fun onSupportNavigateUp() = findNavController(this, R.id.main_nav_host_fragment).navigateUp()
 
@@ -19,7 +27,7 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>(R.layout.a
 
         val navController = findNavController(this, R.id.main_nav_host_fragment)
 
-        navController.addOnDestinationChangedListener { _, dest: NavDestination, _ ->
+        navController.addOnDestinationChangedListener { _, _: NavDestination, _ ->
 //            add excemptions here where the bottom navigation should be hidden!
 //            if (dest.id == R.id.detailFragment) {
 //                getBinding<ActivityMainBinding>()?.bottomNavigation?.visibility = View.GONE

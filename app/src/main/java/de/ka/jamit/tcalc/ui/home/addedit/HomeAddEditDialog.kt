@@ -1,23 +1,30 @@
 package de.ka.jamit.tcalc.ui.home.addedit
 
 import android.os.Bundle
+import dagger.hilt.android.AndroidEntryPoint
 import de.ka.jamit.tcalc.R
 import de.ka.jamit.tcalc.base.BaseDialogFragment
 import de.ka.jamit.tcalc.base.events.FragmentResultable
+import de.ka.jamit.tcalc.databinding.DialogExportingBinding
 import de.ka.jamit.tcalc.databinding.DialogHomeAddeditBinding
 import de.ka.jamit.tcalc.ui.home.category.CategoryDialog
+import de.ka.jamit.tcalc.ui.settings.exporting.ExportingDialogViewModel
 
 /**
  * A bottom sheet for adding a new value.
  *
  * Created by Thomas Hofmann on 03.07.20
  **/
-class HomeAddEditDialog : BaseDialogFragment<DialogHomeAddeditBinding, HomeAddEditDialogViewModel>(
+// Workaround for https://github.com/google/dagger/issues/1904
+abstract class BaseAddEditDialogFragment : BaseDialogFragment<DialogHomeAddeditBinding, HomeAddEditDialogViewModel>(
         R.layout.dialog_home_addedit,
         HomeAddEditDialogViewModel::class,
         DialogMode.BOTTOM_SHEET,
         cancellable = true
-), FragmentResultable {
+)
+
+@AndroidEntryPoint
+class HomeAddEditDialog : BaseAddEditDialogFragment(), FragmentResultable {
 
     override fun onHandle(element: Any?) {
         if (element is HomeAddEditDialogViewModel.Choose) {
