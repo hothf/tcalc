@@ -49,6 +49,11 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    configurations { //build.gradle: Error: commons-logging defines classes that conflict with classes now provided by Android. S
+        all {
+            exclude group: 'commons-logging', module: 'commons-logging'
+        }
+    }
 }
 
 tasks.withType(Test) {

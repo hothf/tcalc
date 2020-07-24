@@ -27,7 +27,7 @@ class HomeAddEditDialogViewModel
         val repository: Repository,
         val inputValidator: InputValidator,
         val resourcesProvider: ResourcesProvider
-): BaseViewModel() {
+) : BaseViewModel() {
 
     private var isUpdating = false
     private var id: Int = 0
@@ -132,10 +132,10 @@ class HomeAddEditDialogViewModel
         isUpdating = bundle.getBoolean(HomeAddEditDialog.UPDATE_KEY, false)
         val key = bundle.getString(HomeAddEditDialog.TITLE_KEY) ?: ""
         keyText.postValue(AppDatabase.getTranslatedStringForKey(resourcesProvider, key))
-        keySelection.postValue(key.length)
+//        if (key.isNotEmpty()) keySelection.postValue(key.length - 1)
         val value = bundle.getFloat(HomeAddEditDialog.VALUE_KEY).toString()
         valueText.postValue(value)
-        valueSelection.postValue(value.length)
+//        if (value.isNotEmpty()) valueSelection.postValue(value.length - 1)
         timeSpanPosition.postValue(bundle.getInt(HomeAddEditDialog.TIMESPAN_KEY))
         val category = bundle.getInt(HomeAddEditDialog.CATEGORY_KEY)
         updateCategory(category)
