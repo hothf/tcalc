@@ -43,14 +43,13 @@
         <RelativeLayout
             android:id="@+id/swipeableContainer"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/defaultBackgroundPrimary">
+            android:layout_height="match_parent">
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:alpha="@{viewModel.alpha}"
-                android:background="@color/defaultBackgroundPrimary"
+                android:background="@color/defaultBackgroundPrimaryAlternative"
                 android:foreground="@drawable/rounded_button_transculent_selector"
                 android:onClick="@{()->viewModel.onClick()}" />
 

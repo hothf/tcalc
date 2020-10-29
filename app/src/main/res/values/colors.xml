@@ -8,6 +8,7 @@
     <color name="colorRemove">#bf0821</color>
 
     <color name="defaultBackgroundPrimary">#ffffff</color>
+    <color name="defaultBackgroundPrimaryAlternative">#ffffff</color>
     <color name="defaultBackgroundPrimaryInverted">#000000</color>
     <color name="defaultBackgroundSecondary">#efefef</color>
     <color name="defaultBackgroundPrimaryDark">#cecece</color>
@@ -32,7 +33,7 @@
     <color name="fontColorPositive">#1f8f45</color>
     <color name="fontColorNegative">#f11100</color>
 
-
+    <color name="shade_transparent">#ddcacaca</color>
     <color name="shade_one">#7b7d77</color>
     <color name="shade_two">#c1f70f</color>
     <color name="shade_three">#ee30e630</color>
