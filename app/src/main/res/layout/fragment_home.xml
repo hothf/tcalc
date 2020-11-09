@@ -115,7 +115,7 @@
                 android:layout_height="match_parent"
                 android:layout_below="@+id/resultShadow"
                 android:layout_centerInParent="true"
-                android:background="@color/defaultBackgroundPrimary"
+                android:background="@color/defaultBackgroundPrimaryAlternative"
                 android:gravity="center"
                 android:paddingStart="@dimen/default_8"
                 android:paddingEnd="@dimen/default_8"

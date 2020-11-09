@@ -18,6 +18,8 @@ This is a small app offering the capability of showing the monthly costs a user 
 This app is made completely for offline use due to the nature of the very personal data a user can enter and save. It uses a device owned database. It is possible to create several users and share them through an import and export feature which generates a human readable CSV-file.
 
 
+Offers a dark mode and uses animated vector drawables for bottom navigation icons.
+
 ## Screens
 
 <div align="center">
@@ -45,9 +47,10 @@ To accelerate development and testability, a `Model-View-ViewModel (MVVM)` appro
 
 Business logic will mainly be implemented in `viewModels`. Only certain callbacks will need activities or fragments.
 
-- Heavilt relies on Jetpack libraries for example for [navigation](https://developer.android.com/jetpack/androidx/releases/navigation) and [architecture components](https://developer.android.com/topic/libraries/architecture)
+- Heavily relies on Jetpack libraries for example for [navigation](https://developer.android.com/jetpack/androidx/releases/navigation) and [architecture components](https://developer.android.com/topic/libraries/architecture)
 - As a dependency injection framework, for clear seperation of concerns and easy testability of business logic, this project uses [Hilt](https://dagger.dev/hilt/) based on dagger
 - The current implementation of the database is provided by [Room](https://developer.android.com/topic/libraries/architecture/room)
+- Uses [RxJava](https://github.com/ReactiveX/RxJava)) and the **Repository** pattern for accessing data streams.
 
 ## Linting
 The [detekt](https://github.com/arturbosch/detekt) plugin is used for kotlin linting. Usage: `./gradlew detektCheck`

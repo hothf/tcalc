@@ -61,7 +61,7 @@ class UserAddEditDialogViewModel
         isUpdating = bundle.getBoolean(UserAddEditDialog.UPDATE_KEY, false)
         val title = bundle.getString(UserAddEditDialog.TITLE_KEY, "")
         titleText.postValue(title)
-        titleSelection.postValue(title.length)
+//        if (title.isNotEmpty()) titleSelection.postValue(title.length-1)
         id = bundle.getInt(UserAddEditDialog.ID_KEY)
         editOrNewText.postValue(if (isUpdating) resourcesProvider.getString(R.string.user_addedit_title_edit) else resourcesProvider.getString(R.string.user_addedit_title_add))
     }

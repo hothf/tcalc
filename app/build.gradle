@@ -17,6 +17,7 @@ android {
         versionCode "$project_version_code".toInteger()
         versionName "$project_version_name"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        vectorDrawables.useSupportLibrary = true
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -47,6 +48,11 @@ android {
         release {
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    configurations { //build.gradle: Error: commons-logging defines classes that conflict with classes now provided by Android. S
+        all {
+            exclude group: 'commons-logging', module: 'commons-logging'
         }
     }
 }

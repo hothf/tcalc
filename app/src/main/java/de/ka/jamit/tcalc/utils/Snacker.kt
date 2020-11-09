@@ -5,6 +5,7 @@ import android.animation.AnimatorListenerAdapter
 import android.content.Context
 import android.graphics.Rect
 import android.os.Handler
+import android.os.Looper
 import android.text.SpannableString
 import android.text.style.UnderlineSpan
 import android.util.AttributeSet
@@ -99,7 +100,7 @@ class Snacker @JvmOverloads constructor(
         ERROR(R.color.snackErrorTextColor, R.color.snackActionTextColor, R.drawable.bg_snacker_error)
     }
 
-    private val snackHandler = Handler()
+    private val snackHandler = Handler(Looper.getMainLooper())
 
     private var isHidingStopped = false
     private var snackText: TextView

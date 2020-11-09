@@ -3,13 +3,12 @@
     <color name="colorPrimary">#ff7412</color>
     <color name="colorPrimaryDark">#ff6a00</color>
     <color name="colorAccent">#eb6b34</color>
-    <color name="colorHighlight">@color/colorAccent</color>
 
     <color name="colorRemove">#bf0821</color>
 
     <color name="defaultBackgroundPrimary">#ffffff</color>
+    <color name="defaultBackgroundPrimaryAlternative">#ffffff</color>
     <color name="defaultBackgroundPrimaryInverted">#000000</color>
-    <color name="defaultBackgroundSecondary">#efefef</color>
     <color name="defaultBackgroundPrimaryDark">#cecece</color>
     <color name="defaultBackgroundPrimaryVeryDark">#acacac</color>
 
@@ -23,16 +22,14 @@
     <color name="snackActionTextColor">#ffff00</color>
 
     <color name="fontNav">#232323</color>
-    <color name="fontTitle">#333333</color>
     <color name="fontDefault">#6B6B6B</color>
     <color name="fontHint">#8B8B8B</color>
-    <color name="fontDisabled">#33888888</color>
     <color name="fontDefaultInverted">#ffffff</color>
 
     <color name="fontColorPositive">#1f8f45</color>
     <color name="fontColorNegative">#f11100</color>
 
-
+    <color name="shade_transparent">#ddcacaca</color>
     <color name="shade_one">#7b7d77</color>
     <color name="shade_two">#c1f70f</color>
     <color name="shade_three">#ee30e630</color>

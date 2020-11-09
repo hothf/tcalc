@@ -46,7 +46,7 @@
             android:layout_height="match_parent"
             android:foreground="@drawable/rounded_button_transculent_selector"
             android:onClick="@{()->viewModel.onClick()}"
-            android:background="@color/defaultBackgroundPrimary">
+            android:background="@color/defaultBackgroundPrimaryAlternative">
 
             <ImageView
                 android:id="@+id/checkedImage"
