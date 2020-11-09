@@ -3,11 +3,11 @@
 
     <item
         android:id="@+id/homeFragment"
-        android:icon="@drawable/ic_home"
+        android:icon="@drawable/menu_home_selector"
         android:title="@string/nav_home" />
 
     <item
         android:id="@+id/settingsFragment"
-        android:icon="@drawable/ic_settings"
+        android:icon="@drawable/menu_settings_selector"
         android:title="@string/nav_settings" />
 </menu>
