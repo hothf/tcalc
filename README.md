@@ -18,6 +18,8 @@ This is a small app offering the capability of showing the monthly costs a user 
 This app is made completely for offline use due to the nature of the very personal data a user can enter and save. It uses a device owned database. It is possible to create several users and share them through an import and export feature which generates a human readable CSV-file.
 
 
+Offers a dark mode and uses animated vector drawables for bottom navigation icons.
+
 ## Screens
 
 <div align="center">
