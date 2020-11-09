@@ -1,6 +1,7 @@
 package de.ka.jamit.tcalc.ui.settings.importing
 
 import android.os.Handler
+import android.os.Looper
 import dagger.hilt.android.AndroidEntryPoint
 import de.ka.jamit.tcalc.R
 import de.ka.jamit.tcalc.base.BaseDialogFragment
@@ -25,7 +26,7 @@ class ImportingDialog : BaseImportDialogFragment() {
     override fun onHandle(element: Any?) {
         if (element is ImportingDialogViewModel.Completed) {
             if (element.lastImportResult != null) {
-                Handler().postDelayed({
+                Handler(Looper.getMainLooper()).postDelayed({
                     dismissAllowingStateLoss()
                 }, SUCCESS_DIsMISS_DELAY_MS)
             } else {

@@ -17,6 +17,7 @@ android {
         versionCode "$project_version_code".toInteger()
         versionName "$project_version_name"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        vectorDrawables.useSupportLibrary = true
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
