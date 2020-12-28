@@ -3,8 +3,10 @@ package de.ka.jamit.tcalc.ui.home.list
 
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.StringRes
 import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.DiffUtil
+import de.ka.jamit.tcalc.R
 import de.ka.jamit.tcalc.base.BaseAdapter
 import de.ka.jamit.tcalc.base.BaseViewHolder
 import de.ka.jamit.tcalc.databinding.ItemHomeAddBinding
@@ -21,7 +23,7 @@ import kotlin.math.min
 class HomeListAdapter(list: ArrayList<HomeListItemViewModel> = arrayListOf(), resourcesProvider: ResourcesProvider) :
         BaseAdapter<HomeListItemViewModel>(resourcesProvider, list, HomeListAdapterDiffCallback()) {
 
-    private var ascending = true
+    var currentSorting = Sorting(true, Type.TITLE)
 
     override fun onItemDismiss(position: Int) {
         val item = getItems()[position]
@@ -55,7 +57,7 @@ class HomeListAdapter(list: ArrayList<HomeListItemViewModel> = arrayListOf(), re
     }
 
     fun toggleSort() {
-        ascending = !ascending
+        currentSorting.ascending = !currentSorting.ascending
         setItems(getItems())
     }
 
@@ -63,11 +65,23 @@ class HomeListAdapter(list: ArrayList<HomeListItemViewModel> = arrayListOf(), re
         var result = items.toMutableList()
         val loadingItem = items.last()
         result.remove(loadingItem)
-        result = if (ascending) {
-            result.sortedBy { it.title }.toMutableList()
+
+        result = if (currentSorting.ascending) {
+            result.sortedBy {
+                when (currentSorting.type) {
+                    Type.TITLE -> it.title
+                    Type.VALUE -> it.value
+                }
+            }.toMutableList()
         } else {
-            result.sortedByDescending { it.title }.toMutableList()
+            result.sortedByDescending {
+                when (currentSorting.type) {
+                    Type.TITLE -> it.title
+                    Type.VALUE -> it.value
+                }
+            }.toMutableList()
         }
+
         result.add(loadingItem)
         return result
     }
@@ -78,6 +92,12 @@ class HomeListAdapter(list: ArrayList<HomeListItemViewModel> = arrayListOf(), re
 
     companion object {
         const val LOADING_ITEM_ID = -1
+    }
+
+    data class Sorting(var ascending: Boolean, var type: Type)
+
+    enum class Type(@StringRes val titleRes: Int) {
+        TITLE(R.string.home_add), VALUE(R.string.import_title)
     }
 }
 

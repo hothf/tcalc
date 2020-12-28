@@ -54,6 +54,7 @@ class HomeViewModel
     val resultYearlyDeltaText = MutableLiveData<String>("")
     val userText = MutableLiveData<String>("")
     val adapter = HomeListAdapter(resourcesProvider = resourcesProvider)
+    val sortingText = MutableLiveData<String>(resourcesProvider.getString(adapter.currentSorting.type.titleRes))
 
     fun itemAnimator() = SlideInDownAnimator()
 
@@ -61,8 +62,9 @@ class HomeViewModel
         navigateTo(R.id.dialogUser)
     }
 
-    fun onSortingClicked(){
+    fun onSortingClicked() {
         adapter.toggleSort()
+        sortingText.postValue(resourcesProvider.getString(adapter.currentSorting.type.titleRes))
     }
 
     private val itemListener: (HomeListItemViewModel) -> Unit = {

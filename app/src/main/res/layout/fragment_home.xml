@@ -77,6 +77,7 @@
                     </LinearLayout>
 
                     <LinearLayout
+                        android:id="@+id/sortingContainer"
                         android:layout_width="wrap_content"
                         android:layout_height="@dimen/default_42"
                         android:layout_centerHorizontal="true"
@@ -84,7 +85,7 @@
                         android:layout_below="@+id/userContainer"
                         android:layout_marginTop="@dimen/default_8"
                         android:foreground="@drawable/rounded_button_transculent_selector"
-                        android:onClick="@{()->viewModel.onSortingClicked()}"
+
                         android:orientation="horizontal">
 
                         <TextView
@@ -96,7 +97,7 @@
                             android:paddingStart="@dimen/default_16"
                             android:paddingEnd="@dimen/default_8"
                             android:singleLine="true"
-                            android:text="@{viewModel.userText}"
+                            android:text="@{viewModel.sortingText}"
                             tools:text="Username" />
 
                         <ImageView
