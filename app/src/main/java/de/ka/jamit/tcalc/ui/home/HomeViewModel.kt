@@ -15,6 +15,7 @@ import de.ka.jamit.tcalc.repo.db.Record
 import de.ka.jamit.tcalc.repo.db.User
 import de.ka.jamit.tcalc.ui.home.addedit.HomeAddEditDialog
 import de.ka.jamit.tcalc.ui.home.list.HomeListAdapter
+import de.ka.jamit.tcalc.ui.home.list.HomeListAdapter.Companion.LOADING_ITEM_ID
 import de.ka.jamit.tcalc.ui.home.list.HomeListItemViewModel
 import de.ka.jamit.tcalc.utils.Snacker
 import de.ka.jamit.tcalc.utils.resources.ResourcesProvider
@@ -58,6 +59,10 @@ class HomeViewModel
 
     fun onUserClicked() {
         navigateTo(R.id.dialogUser)
+    }
+
+    fun onSortingClicked(){
+        adapter.toggleSort()
     }
 
     private val itemListener: (HomeListItemViewModel) -> Unit = {
@@ -113,7 +118,7 @@ class HomeViewModel
                                 items.add(HomeListItemViewModel(
                                         resourcesProvider = resourcesProvider,
                                         repository = repository,
-                                        item = Record(id = -1, userId = -1),
+                                        item = Record(id = LOADING_ITEM_ID, userId = LOADING_ITEM_ID),
                                         moreListener = addListener))
                                 adapter.setItems(items)
                                 calc(records)

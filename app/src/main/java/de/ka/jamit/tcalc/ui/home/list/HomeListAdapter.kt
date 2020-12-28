@@ -21,6 +21,8 @@ import kotlin.math.min
 class HomeListAdapter(list: ArrayList<HomeListItemViewModel> = arrayListOf(), resourcesProvider: ResourcesProvider) :
         BaseAdapter<HomeListItemViewModel>(resourcesProvider, list, HomeListAdapterDiffCallback()) {
 
+    private var ascending = true
+
     override fun onItemDismiss(position: Int) {
         val item = getItems()[position]
         if (!item.isMore) {
@@ -50,6 +52,32 @@ class HomeListAdapter(list: ArrayList<HomeListItemViewModel> = arrayListOf(), re
                     && oldItem.value == newItem.value
                     && oldItem.item == newItem.item
         }
+    }
+
+    fun toggleSort() {
+        ascending = !ascending
+        setItems(getItems())
+    }
+
+    private fun sort(items: List<HomeListItemViewModel>): List<HomeListItemViewModel> {
+        var result = items.toMutableList()
+        val loadingItem = items.last()
+        result.remove(loadingItem)
+        result = if (ascending) {
+            result.sortedBy { it.title }.toMutableList()
+        } else {
+            result.sortedByDescending { it.title }.toMutableList()
+        }
+        result.add(loadingItem)
+        return result
+    }
+
+    override fun setItems(newItems: List<HomeListItemViewModel>) {
+        super.setItems(sort(newItems))
+    }
+
+    companion object {
+        const val LOADING_ITEM_ID = -1
     }
 }
 
