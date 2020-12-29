@@ -1,3 +1,8 @@
+## 1.1.2 [29-12-2020]
+
+- Remove dependencies of bundles and navigation inside view Models.
+- Add a bottom sheet for sorting
+
 ## 1.1.1 [09-11-2020]
 
 - Add a dark mode
