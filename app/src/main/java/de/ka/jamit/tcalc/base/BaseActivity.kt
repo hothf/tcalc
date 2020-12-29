@@ -61,8 +61,15 @@ abstract class BaseActivity<out T : ViewDataBinding, E : BaseViewModel>(
         )
 
         intent?.extras?.let {
-            viewModel.onArgumentsReceived(it)
+            onArgumentsReceived(it)
         }
+    }
+
+    /**
+     * Called when new arguments in a [bundle] have been received.
+     */
+    open fun onArgumentsReceived(bundle: Bundle){
+        // handled by children
     }
 
     override fun onDestroy() {

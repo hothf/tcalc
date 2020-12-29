@@ -3,13 +3,16 @@ package de.ka.jamit.tcalc.ui.home.list
 
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.StringRes
 import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.DiffUtil
+import de.ka.jamit.tcalc.R
 import de.ka.jamit.tcalc.base.BaseAdapter
 import de.ka.jamit.tcalc.base.BaseViewHolder
 import de.ka.jamit.tcalc.databinding.ItemHomeAddBinding
 import de.ka.jamit.tcalc.databinding.ItemHomeDefaultBinding
 import de.ka.jamit.tcalc.utils.resources.ResourcesProvider
+import java.io.Serializable
 import kotlin.math.abs
 import kotlin.math.min
 
@@ -20,6 +23,12 @@ import kotlin.math.min
  **/
 class HomeListAdapter(list: ArrayList<HomeListItemViewModel> = arrayListOf(), resourcesProvider: ResourcesProvider) :
         BaseAdapter<HomeListItemViewModel>(resourcesProvider, list, HomeListAdapterDiffCallback()) {
+
+    var currentSorting = sorting.first()
+        set(value) {
+            field = value
+            setItems(getItems())
+        }
 
     override fun onItemDismiss(position: Int) {
         val item = getItems()[position]
@@ -50,6 +59,53 @@ class HomeListAdapter(list: ArrayList<HomeListItemViewModel> = arrayListOf(), re
                     && oldItem.value == newItem.value
                     && oldItem.item == newItem.item
         }
+    }
+
+    private fun sort(items: List<HomeListItemViewModel>): List<HomeListItemViewModel> {
+        var result = items.toMutableList()
+        val loadingItem = items.last()
+        result.remove(loadingItem)
+
+        result = if (currentSorting.ascending) {
+            result.sortedBy {
+                when (currentSorting.type) {
+                    Type.TITLE_ASC, Type.TITLE_DESC -> it.title
+                    Type.VALUE_ASC, Type.VALUE_DESC -> it.value
+                }
+            }.toMutableList()
+        } else {
+            result.sortedByDescending {
+                when (currentSorting.type) {
+                    Type.TITLE_ASC, Type.TITLE_DESC -> it.title
+                    Type.VALUE_ASC, Type.VALUE_DESC -> it.value
+                }
+            }.toMutableList()
+        }
+
+        result.add(loadingItem)
+        return result
+    }
+
+    override fun setItems(newItems: List<HomeListItemViewModel>) {
+        super.setItems(sort(newItems))
+    }
+
+    data class Sorting(var ascending: Boolean, var type: Type) : Serializable
+
+    enum class Type(@StringRes val titleRes: Int) : Serializable {
+        TITLE_ASC(R.string.sort_title_asc),
+        TITLE_DESC(R.string.sort_title_desc),
+        VALUE_ASC(R.string.sort_value_asc),
+        VALUE_DESC(R.string.sort_value_desc)
+    }
+
+    companion object {
+        val sorting = listOf(
+                Sorting(ascending = true, type = Type.TITLE_ASC),
+                Sorting(ascending = false, type = Type.TITLE_DESC),
+                Sorting(ascending = true, type = Type.VALUE_ASC),
+                Sorting(ascending = false, type = Type.VALUE_DESC)
+        )
     }
 }
 

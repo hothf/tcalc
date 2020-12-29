@@ -1,6 +1,5 @@
 package de.ka.jamit.tcalc.ui.home.addedit
 
-import android.os.Bundle
 import android.widget.ArrayAdapter
 import android.widget.SpinnerAdapter
 import androidx.hilt.Assisted
@@ -11,7 +10,6 @@ import de.ka.jamit.tcalc.R
 import de.ka.jamit.tcalc.base.BaseViewModel
 import de.ka.jamit.tcalc.repo.Repository
 import de.ka.jamit.tcalc.repo.db.*
-import de.ka.jamit.tcalc.ui.home.category.CategoryDialog
 import de.ka.jamit.tcalc.utils.InputValidator
 import de.ka.jamit.tcalc.utils.ValidationRules
 import de.ka.jamit.tcalc.utils.resources.ResourcesProvider
@@ -122,29 +120,32 @@ class HomeAddEditDialogViewModel
 
     fun onCategory() {
         categoryPosition.value?.let {
-            val arguments = Bundle().apply { putInt(CategoryDialog.ID_KEY, it) }
-            navigateTo(R.id.dialogCategory, args = arguments)
+            handle(CategoryChosen(it))
         }
     }
 
-    override fun onArgumentsReceived(bundle: Bundle) {
-        super.onArgumentsReceived(bundle)
-        isUpdating = bundle.getBoolean(HomeAddEditDialog.UPDATE_KEY, false)
-        val key = bundle.getString(HomeAddEditDialog.TITLE_KEY) ?: ""
+    /**
+     * Update the viewModel with new data.
+     */
+    fun updateWith(updatedId: Int,
+                   updating: Boolean,
+                   key: String,
+                   value: String,
+                   timeSpan: Int,
+                   category: Int,
+                   considered: Boolean,
+                   income: Boolean) {
+        isUpdating = updating
+        id = updatedId
         keyText.postValue(AppDatabase.getTranslatedStringForKey(resourcesProvider, key))
-//        if (key.isNotEmpty()) keySelection.postValue(key.length - 1)
-        val value = bundle.getFloat(HomeAddEditDialog.VALUE_KEY).toString()
         valueText.postValue(value)
-//        if (value.isNotEmpty()) valueSelection.postValue(value.length - 1)
-        timeSpanPosition.postValue(bundle.getInt(HomeAddEditDialog.TIMESPAN_KEY))
-        val category = bundle.getInt(HomeAddEditDialog.CATEGORY_KEY)
-        updateCategory(category)
-        consideredCheck.postValue(bundle.getBoolean(HomeAddEditDialog.CONSIDERED_KEY))
-        incomeCheck.postValue(bundle.getBoolean(HomeAddEditDialog.INCOME_KEY))
-        id = bundle.getInt(HomeAddEditDialog.ID_KEY)
+        timeSpanPosition.postValue(timeSpan)
+        consideredCheck.postValue(considered)
+        incomeCheck.postValue(income)
         editOrNewText.postValue(if (isUpdating) resourcesProvider.getString(R.string.home_addedit_title_edit) else resourcesProvider.getString(R.string.home_addedit_title_add))
+        updateCategory(category)
     }
 
-
     class Choose
+    class CategoryChosen(val position: Int)
 }

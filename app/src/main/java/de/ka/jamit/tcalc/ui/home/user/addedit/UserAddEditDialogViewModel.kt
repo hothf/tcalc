@@ -1,6 +1,5 @@
 package de.ka.jamit.tcalc.ui.home.user.addedit
 
-import android.os.Bundle
 import androidx.hilt.Assisted
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.MutableLiveData
@@ -56,13 +55,10 @@ class UserAddEditDialogViewModel
         handle(Choose())
     }
 
-    override fun onArgumentsReceived(bundle: Bundle) {
-        super.onArgumentsReceived(bundle)
-        isUpdating = bundle.getBoolean(UserAddEditDialog.UPDATE_KEY, false)
-        val title = bundle.getString(UserAddEditDialog.TITLE_KEY, "")
+    fun updateWith(updatedId: Int, updating: Boolean, title: String) {
+        id = updatedId
+        isUpdating = updating
         titleText.postValue(title)
-//        if (title.isNotEmpty()) titleSelection.postValue(title.length-1)
-        id = bundle.getInt(UserAddEditDialog.ID_KEY)
         editOrNewText.postValue(if (isUpdating) resourcesProvider.getString(R.string.user_addedit_title_edit) else resourcesProvider.getString(R.string.user_addedit_title_add))
     }
 

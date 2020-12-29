@@ -25,7 +25,7 @@
 
             <androidx.appcompat.widget.Toolbar
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/default_58"
+                android:layout_height="@dimen/default_100"
                 app:layout_scrollFlags="scroll|enterAlways">
 
                 <RelativeLayout
@@ -34,10 +34,21 @@
                     android:paddingStart="@dimen/default_8"
                     android:paddingEnd="@dimen/default_8">
 
-                    <LinearLayout
+                    <TextView
+                        style="@style/textDefault.bold"
                         android:layout_width="wrap_content"
                         android:layout_height="@dimen/default_42"
-                        android:layout_centerInParent="true"
+                        android:layout_marginTop="@dimen/default_8"
+                        android:gravity="center"
+                        android:text="@string/app_name" />
+
+                    <LinearLayout
+                        android:id="@+id/userContainer"
+                        android:layout_width="wrap_content"
+                        android:layout_height="@dimen/default_42"
+                        android:layout_alignParentEnd="true"
+                        android:layout_marginTop="@dimen/default_8"
+                        android:layout_marginEnd="@dimen/default_16"
                         android:background="@drawable/bg_bordered_cornered"
                         android:foreground="@drawable/rounded_button_transculent_selector"
                         android:onClick="@{()->viewModel.onUserClicked()}"
@@ -63,6 +74,39 @@
                             android:layout_gravity="center_vertical"
                             android:src="@drawable/ic_dropdown"
                             android:tint="@color/fontDefault" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/sortingContainer"
+                        android:layout_width="wrap_content"
+                        android:layout_height="@dimen/default_42"
+                        android:layout_below="@+id/userContainer"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="@dimen/default_8"
+                        android:layout_marginEnd="@dimen/default_16"
+                        android:foreground="@drawable/rounded_button_transculent_selector"
+                        android:onClick="@{()->viewModel.onSortingClicked()}"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            style="@style/textDefault"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:ellipsize="end"
+                            android:gravity="center"
+                            android:paddingStart="@dimen/default_16"
+                            android:paddingEnd="@dimen/default_8"
+                            android:singleLine="true"
+                            android:text="@{viewModel.sortingText}"
+                            tools:text="Username" />
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:src="@drawable/ic_dropdown"
+                            android:tint="@color/fontDefault" />
+
                     </LinearLayout>
 
                 </RelativeLayout>

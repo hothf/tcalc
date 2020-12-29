@@ -33,6 +33,11 @@ class CategoryDialog : BaseCategoryDialogFragment() {
         }
     }
 
+    override fun onArgumentsReceived(bundle: Bundle) {
+        val id = bundle.getInt(ID_KEY)
+        viewModel.updateWith(id)
+    }
+
     companion object {
         const val ID_KEY = "_k_id"
         const val RESULT_KEY = "_k_cat_res"

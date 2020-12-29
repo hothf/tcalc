@@ -1,5 +1,6 @@
 package de.ka.jamit.tcalc.ui.home.user.addedit
 
+import android.os.Bundle
 import dagger.hilt.android.AndroidEntryPoint
 import de.ka.jamit.tcalc.R
 import de.ka.jamit.tcalc.base.BaseDialogFragment
@@ -25,6 +26,14 @@ class UserAddEditDialog : BaseUserAddEditDialogFragment() {
         if (element is UserAddEditDialogViewModel.Choose) {
             dismissAllowingStateLoss()
         }
+    }
+
+    override fun onArgumentsReceived(bundle: Bundle) {
+        val id = bundle.getInt(ID_KEY)
+        val updating = bundle.getBoolean(UPDATE_KEY, false)
+        val title = bundle.getString(TITLE_KEY, "")
+
+        viewModel.updateWith(id, updating, title)
     }
 
     companion object {
