@@ -14,7 +14,7 @@ import de.ka.jamit.tcalc.utils.resources.ResourcesProvider
 class HomeListItemViewModel(
         val resourcesProvider: ResourcesProvider,
         val repository: Repository,
-        val item: Record,
+        val item: Record = Record(),
         private val listener: ((HomeListItemViewModel) -> Unit)? = null,
         private val moreListener: (() -> Unit)? = null,
         private val removeListener: (() -> Unit)? = null) :

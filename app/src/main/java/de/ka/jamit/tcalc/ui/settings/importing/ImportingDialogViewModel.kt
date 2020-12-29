@@ -1,9 +1,7 @@
 package de.ka.jamit.tcalc.ui.settings.importing
 
 import android.net.Uri
-import android.os.Bundle
 import android.view.View
-import androidx.core.net.toUri
 import androidx.hilt.Assisted
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.MutableLiveData
@@ -30,27 +28,21 @@ class ImportingDialogViewModel
         val csvUtils: CSVUtils,
         val schedulerProvider: SchedulerProvider,
         val resourcesProvider: ResourcesProvider
-): BaseViewModel() {
+) : BaseViewModel() {
 
     val errorVisibility = MutableLiveData<Int>(View.GONE)
     val loadingVisibility = MutableLiveData<Int>(View.GONE)
     val successVisibility = MutableLiveData<Int>(View.GONE)
     val lastImportText = MutableLiveData<String>("")
 
-    private var uri: Uri? = null
+    private var lastUri: Uri? = null
 
-    override fun onArgumentsReceived(bundle: Bundle) {
-        super.onArgumentsReceived(bundle)
-
-        uri = bundle.getString(ImportingDialog.URI_KEY)?.toUri()
-        import()
-    }
-
-    private fun import() {
-        successVisibility.postValue(View.GONE)
-        errorVisibility.postValue(View.GONE)
-        loadingVisibility.postValue(View.VISIBLE)
+    fun import(uri: Uri?) {
         uri?.let {
+            successVisibility.postValue(View.GONE)
+            errorVisibility.postValue(View.GONE)
+            loadingVisibility.postValue(View.VISIBLE)
+            lastUri = it
             csvUtils.importCSV(it)
                     .with(schedulerProvider)
                     .subscribe({
@@ -71,7 +63,7 @@ class ImportingDialogViewModel
     }
 
     fun onRetry() {
-        import()
+        import(lastUri)
     }
 
     fun onCancel() {

@@ -27,24 +27,19 @@ class ExportingDialogViewModel
         val csvUtils: CSVUtils,
         val schedulerProvider: SchedulerProvider,
         val resourcesProvider: ResourcesProvider
-): BaseViewModel() {
+) : BaseViewModel() {
 
     val errorVisibility = MutableLiveData<Int>(View.GONE)
     val loadingVisibility = MutableLiveData<Int>(View.GONE)
 
-    private var uri: Uri? = null
+    private var lastUri: Uri? = null
 
-    override fun onArgumentsReceived(bundle: Bundle) {
-        super.onArgumentsReceived(bundle)
-
-        uri = bundle.getString(ExportingDialog.URI_KEY)?.toUri()
-        export()
-    }
-
-    private fun export() {
-        errorVisibility.postValue(View.GONE)
-        loadingVisibility.postValue(View.VISIBLE)
+    fun export(uri: Uri?) {
         uri?.let {
+            lastUri = it
+            errorVisibility.postValue(View.GONE)
+            loadingVisibility.postValue(View.VISIBLE)
+
             csvUtils.exportCSV(it)
                     .with(schedulerProvider)
                     .subscribe({
@@ -58,7 +53,7 @@ class ExportingDialogViewModel
     }
 
     fun onRetry() {
-        export()
+        lastUri?.let(::export)
     }
 
     fun onCancel() {

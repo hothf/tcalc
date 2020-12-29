@@ -140,10 +140,17 @@ abstract class BaseDialogFragment<out T : ViewDataBinding, E : BaseViewModel>(
         )
 
         arguments?.let {
-            viewModel.onArgumentsReceived(it)
+            onArgumentsReceived(it)
         }
 
         return binding?.root
+    }
+
+    /**
+     * Called when new arguments in a [bundle] have been received.
+     */
+    open fun onArgumentsReceived(bundle: Bundle){
+        // handled by children
     }
 
     /**

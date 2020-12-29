@@ -5,10 +5,10 @@ import dagger.hilt.android.AndroidEntryPoint
 import de.ka.jamit.tcalc.R
 import de.ka.jamit.tcalc.base.BaseDialogFragment
 import de.ka.jamit.tcalc.base.events.FragmentResultable
-import de.ka.jamit.tcalc.databinding.DialogExportingBinding
+import de.ka.jamit.tcalc.base.events.NavigateTo
+import de.ka.jamit.tcalc.base.navigate
 import de.ka.jamit.tcalc.databinding.DialogHomeAddeditBinding
 import de.ka.jamit.tcalc.ui.home.category.CategoryDialog
-import de.ka.jamit.tcalc.ui.settings.exporting.ExportingDialogViewModel
 
 /**
  * A bottom sheet for adding a new value.
@@ -29,7 +29,31 @@ class HomeAddEditDialog : BaseAddEditDialogFragment(), FragmentResultable {
     override fun onHandle(element: Any?) {
         if (element is HomeAddEditDialogViewModel.Choose) {
             dismissAllowingStateLoss()
+        } else if (element is HomeAddEditDialogViewModel.CategoryChosen) {
+            val arguments = Bundle().apply { putInt(CategoryDialog.ID_KEY, element.position) }
+            navigate(NavigateTo(R.id.dialogCategory, args = arguments))
         }
+    }
+
+    override fun onArgumentsReceived(bundle: Bundle) {
+        val isUpdating = bundle.getBoolean(UPDATE_KEY, false)
+        val key = bundle.getString(TITLE_KEY) ?: ""
+        val value = bundle.getFloat(VALUE_KEY).toString()
+        val timeSpan = bundle.getInt(TIMESPAN_KEY)
+        val category = bundle.getInt(CATEGORY_KEY)
+        val consideredCheck = bundle.getBoolean(CONSIDERED_KEY)
+        val incomeCheck = bundle.getBoolean(INCOME_KEY)
+        val id = bundle.getInt(ID_KEY)
+        viewModel.updateWith(id, isUpdating, key, value, timeSpan, category, consideredCheck, incomeCheck)
+    }
+
+    override fun getResultRequestKey(): String {
+        return CategoryDialog.RESULT_KEY
+    }
+
+    override fun onFragmentResult(resultBundle: Bundle) {
+        val result = resultBundle.getInt(CategoryDialog.ID_KEY)
+        viewModel.updateCategory(result)
     }
 
     companion object {
@@ -41,15 +65,6 @@ class HomeAddEditDialog : BaseAddEditDialogFragment(), FragmentResultable {
         const val UPDATE_KEY = "_k_isupdate_"
         const val CONSIDERED_KEY = "_k_consid"
         const val INCOME_KEY = "_k_income"
-    }
-
-    override fun getResultRequestKey(): String {
-        return CategoryDialog.RESULT_KEY
-    }
-
-    override fun onFragmentResult(resultBundle: Bundle) {
-        val result = resultBundle.getInt(CategoryDialog.ID_KEY)
-        viewModel.updateCategory(result)
     }
 }
 

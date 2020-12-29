@@ -1,12 +1,8 @@
 package de.ka.jamit.tcalc.base
 
 import android.os.Bundle
-import androidx.annotation.IdRes
 import androidx.lifecycle.ViewModel
-import androidx.navigation.NavOptions
-import androidx.navigation.Navigator
 import de.ka.jamit.tcalc.base.events.*
-import de.ka.jamit.tcalc.utils.*
 import io.reactivex.disposables.CompositeDisposable
 import timber.log.Timber
 import kotlin.reflect.KClass
@@ -35,51 +31,6 @@ abstract class BaseViewModel : ViewModel() {
     val compositeDisposable = CompositeDisposable()
 
     private fun queueEvent(event: Event) = events.queueValue(event)
-
-    /**
-     * Called when new arguments in a [bundle] have been received.
-     */
-    open fun onArgumentsReceived(bundle: Bundle) {
-        // to be implemented by children
-    }
-
-    /**
-     * Fires an event to navigate to the given destination.
-     *
-     * **Note:** Consider not to use the method in your production code, if you want to get rid of Android Apis inside
-     * the ViewModel. You could also just fire an event which will handle the navigate to in the fragment/activity.
-     * This is here for convenience and rapid development.
-     *
-     * @param navigationTargetId the target to navigate to. May reference a destination or action,
-     * pass -1 as id to simply pop the back stack.
-     * @param clearBackStack clears the backstack. Note that you can not use [navigationPopupToId] when this is set to true
-     * @param args optional arguments to pass for the target fragment
-     * @param navOptions optional navigator options for setting the default animations and behaviour
-     * @param extras options for the transaction, like shared views fro transitions
-     * @param animType a type of animation, defaults to system animations
-     * @param navigationPopupToId id for target to popup to. This will only work, if [clearBackStack] is set to false
-     */
-    fun navigateTo(
-        @IdRes navigationTargetId: Int,
-        clearBackStack: Boolean = false,
-        args: Bundle? = null,
-        navOptions: NavOptions? = null,
-        extras: Navigator.Extras? = null,
-        animType: NavigationUtils.AnimType = NavigationUtils.AnimType.DEFAULT,
-        @IdRes popupToId: Int? = null
-    ) {
-        queueEvent(
-            NavigateTo(
-                navigationTargetId = navigationTargetId,
-                clearBackStack = clearBackStack,
-                args = args,
-                navOptions = navOptions,
-                extras = extras,
-                animType = animType,
-                navigationPopupToId = popupToId
-            )
-        )
-    }
 
     /**
      * Fires an event to show a message with [snack] options.

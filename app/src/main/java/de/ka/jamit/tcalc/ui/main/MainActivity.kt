@@ -28,12 +28,7 @@ class MainActivity : BaseMainActivity() {
         val navController = findNavController(this, R.id.main_nav_host_fragment)
 
         navController.addOnDestinationChangedListener { _, _: NavDestination, _ ->
-//            add excemptions here where the bottom navigation should be hidden!
-//            if (dest.id == R.id.detailFragment) {
-//                getBinding<ActivityMainBinding>()?.bottomNavigation?.visibility = View.GONE
-//            } else {
             getBinding<ActivityMainBinding>()?.bottomNavigation?.visibility = View.VISIBLE
-//            }
         }
 
         getBinding<ActivityMainBinding>()?.bottomNavigation?.let {

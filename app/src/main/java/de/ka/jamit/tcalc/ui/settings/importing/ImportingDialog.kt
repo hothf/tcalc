@@ -1,7 +1,9 @@
 package de.ka.jamit.tcalc.ui.settings.importing
 
+import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import androidx.core.net.toUri
 import dagger.hilt.android.AndroidEntryPoint
 import de.ka.jamit.tcalc.R
 import de.ka.jamit.tcalc.base.BaseDialogFragment
@@ -33,6 +35,11 @@ class ImportingDialog : BaseImportDialogFragment() {
                 dismissAllowingStateLoss()
             }
         }
+    }
+
+    override fun onArgumentsReceived(bundle: Bundle) {
+        val uri = bundle.getString(URI_KEY)?.toUri()
+        viewModel.import(uri)
     }
 
     companion object {

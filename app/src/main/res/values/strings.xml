@@ -46,6 +46,13 @@
     <string name="home_addedit_income">Mark as income:</string>
     <string name="home_addedit_considered">Include in calculation:</string>
 
+    <string name="sort_title_asc">Titel A-Z</string>
+    <string name="sort_title_desc">Titel Z-A</string>
+    <string name="sort_value_asc">Werte aufsteigend</string>
+    <string name="sort_value_desc">Werte absteigend</string>
+
+    <string name="sorting_title">Sort</string>
+
     <string name="settings_import">Import entries</string>
     <string name="settings_export">Export entries</string>
 

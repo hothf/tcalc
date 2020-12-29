@@ -105,13 +105,20 @@ abstract class BaseFragment<out T : ViewDataBinding, E : BaseViewModel>(
         )
 
         arguments?.let {
-            viewModel.onArgumentsReceived(it)
+            onArgumentsReceived(it)
         }
     }
 
     override fun onDestroyView() {
         binding = null
         super.onDestroyView()
+    }
+
+    /**
+     * Called when new arguments in a [bundle] have been received.
+     */
+    open fun onArgumentsReceived(bundle: Bundle){
+        // handled by children
     }
 
     /**
