@@ -1,16 +1,17 @@
 package de.ka.jamit.tcalc.ui.home
 
-
 import android.os.Bundle
-import android.view.ContextMenu
-import android.view.ContextMenu.ContextMenuInfo
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.View
+import androidx.fragment.app.setFragmentResultListener
 import dagger.hilt.android.AndroidEntryPoint
 import de.ka.jamit.tcalc.R
 import de.ka.jamit.tcalc.base.BaseFragment
+import de.ka.jamit.tcalc.base.events.FragmentResultable
+import de.ka.jamit.tcalc.base.events.NavigateTo
+import de.ka.jamit.tcalc.base.navigate
 import de.ka.jamit.tcalc.databinding.FragmentHomeBinding
+import de.ka.jamit.tcalc.ui.home.list.HomeListAdapter
+import de.ka.jamit.tcalc.ui.home.sorting.SortingDialog
+import de.ka.jamit.tcalc.utils.NavigationUtils.navigateTo
 
 
 // Workaround for https://github.com/google/dagger/issues/1904
@@ -20,22 +21,23 @@ abstract class BaseHomeFragment : BaseFragment<FragmentHomeBinding, HomeViewMode
 )
 
 @AndroidEntryPoint
-class HomeFragment : BaseHomeFragment() {
+class HomeFragment : BaseHomeFragment(), FragmentResultable {
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    override fun getResultRequestKey() = SortingDialog.RESULT_KEY
 
-        getBinding<FragmentHomeBinding>()?.sortingContainer?.let { container ->
-            registerForContextMenu(container)
-            container.setOnClickListener {
-                container.showContextMenu()
-            }
-        }
+    override fun onFragmentResult(resultBundle: Bundle) {
+        (resultBundle.getSerializable(SortingDialog.SORTING_KEY) as? HomeListAdapter.Sorting)?.let(viewModel::sort)
     }
 
-    override fun onCreateContextMenu(menu: ContextMenu, v: View, menuInfo: ContextMenuInfo?) {
-        super.onCreateContextMenu(menu, v, menuInfo)
-
-        requireActivity().menuInflater.inflate(R.menu.menu_sorting, menu)
+    override fun onHandle(element: Any?) {
+        if (element is HomeViewModel.SortClick) {
+            setFragmentResultListener(getResultRequestKey()) { _, bundle ->
+                this.onFragmentResult(bundle)
+            }
+            val arguments = Bundle().apply {
+                putSerializable(SortingDialog.CURRENTLY_SELECTED_KEY, element.currentSorting)
+            }
+            navigate(NavigateTo(R.id.dialogSorting, args = arguments))
+        }
     }
 }

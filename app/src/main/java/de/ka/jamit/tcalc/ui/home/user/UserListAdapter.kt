@@ -46,7 +46,7 @@ class UserListAdapter(list: ArrayList<UserListItemViewModel> = arrayListOf(), re
     class UserListAdapterDiffCallback : DiffUtil.ItemCallback<UserListItemViewModel>() {
         override fun areItemsTheSame(oldItem: UserListItemViewModel,
                                      newItem: UserListItemViewModel): Boolean {
-            return oldItem.item.id == newItem.item.id
+            return oldItem.item?.id == newItem.item?.id
         }
 
         override fun areContentsTheSame(oldItem: UserListItemViewModel,

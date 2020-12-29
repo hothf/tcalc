@@ -36,16 +36,21 @@ class UserDialogViewModel
     fun itemAnimator() = SlideInDownAnimator()
 
     private val itemListener: (UserListItemViewModel) -> Unit = {
-        repository.selectUser(it.item.id)
+        it.item?.let { user ->
+            repository.selectUser(user.id)
+        }
+
     }
 
     private val editListener: (UserListItemViewModel) -> Unit = {
-        val arguments = Bundle().apply {
-            putBoolean(UserAddEditDialog.UPDATE_KEY, true)
-            putString(UserAddEditDialog.TITLE_KEY, it.item.name)
-            putInt(HomeAddEditDialog.ID_KEY, it.item.id)
+        it.item?.let { user ->
+            val arguments = Bundle().apply {
+                putBoolean(UserAddEditDialog.UPDATE_KEY, true)
+                putString(UserAddEditDialog.TITLE_KEY, user.name)
+                putInt(HomeAddEditDialog.ID_KEY, user.id)
+            }
+            navigateTo(R.id.dialogUserAddEdit, args = arguments)
         }
-        navigateTo(R.id.dialogUserAddEdit, args = arguments)
     }
 
     private val deletionListener: () -> Unit = {

@@ -45,5 +45,10 @@
         android:name="de.ka.jamit.tcalc.ui.home.category.CategoryDialog"
         android:label="fragment_category_dialog"
         tools:layout="@layout/dialog_category" />
+    <dialog
+        android:id="@+id/dialogSorting"
+        android:name="de.ka.jamit.tcalc.ui.home.sorting.SortingDialog"
+        android:label="fragment_sorting_dialog"
+        tools:layout="@layout/dialog_sorting" />
 
 </navigation>

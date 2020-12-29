@@ -5,10 +5,8 @@ import dagger.hilt.android.AndroidEntryPoint
 import de.ka.jamit.tcalc.R
 import de.ka.jamit.tcalc.base.BaseDialogFragment
 import de.ka.jamit.tcalc.base.events.FragmentResultable
-import de.ka.jamit.tcalc.databinding.DialogExportingBinding
 import de.ka.jamit.tcalc.databinding.DialogHomeAddeditBinding
 import de.ka.jamit.tcalc.ui.home.category.CategoryDialog
-import de.ka.jamit.tcalc.ui.settings.exporting.ExportingDialogViewModel
 
 /**
  * A bottom sheet for adding a new value.
@@ -32,6 +30,7 @@ class HomeAddEditDialog : BaseAddEditDialogFragment(), FragmentResultable {
         }
     }
 
+    // TODO check keys and move them away so that viewModels no longer depend on dialogs and fragments ...
     companion object {
         const val TITLE_KEY = "_k_title_"
         const val ID_KEY = "_k_id_"

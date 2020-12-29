@@ -12,6 +12,7 @@ import de.ka.jamit.tcalc.base.BaseViewHolder
 import de.ka.jamit.tcalc.databinding.ItemHomeAddBinding
 import de.ka.jamit.tcalc.databinding.ItemHomeDefaultBinding
 import de.ka.jamit.tcalc.utils.resources.ResourcesProvider
+import java.io.Serializable
 import kotlin.math.abs
 import kotlin.math.min
 
@@ -23,7 +24,11 @@ import kotlin.math.min
 class HomeListAdapter(list: ArrayList<HomeListItemViewModel> = arrayListOf(), resourcesProvider: ResourcesProvider) :
         BaseAdapter<HomeListItemViewModel>(resourcesProvider, list, HomeListAdapterDiffCallback()) {
 
-    var currentSorting = Sorting(true, Type.TITLE)
+    var currentSorting = sorting.first()
+        set(value) {
+            field = value
+            setItems(getItems())
+        }
 
     override fun onItemDismiss(position: Int) {
         val item = getItems()[position]
@@ -56,11 +61,6 @@ class HomeListAdapter(list: ArrayList<HomeListItemViewModel> = arrayListOf(), re
         }
     }
 
-    fun toggleSort() {
-        currentSorting.ascending = !currentSorting.ascending
-        setItems(getItems())
-    }
-
     private fun sort(items: List<HomeListItemViewModel>): List<HomeListItemViewModel> {
         var result = items.toMutableList()
         val loadingItem = items.last()
@@ -69,15 +69,15 @@ class HomeListAdapter(list: ArrayList<HomeListItemViewModel> = arrayListOf(), re
         result = if (currentSorting.ascending) {
             result.sortedBy {
                 when (currentSorting.type) {
-                    Type.TITLE -> it.title
-                    Type.VALUE -> it.value
+                    Type.TITLE_ASC, Type.TITLE_DESC -> it.title
+                    Type.VALUE_ASC, Type.VALUE_DESC -> it.value
                 }
             }.toMutableList()
         } else {
             result.sortedByDescending {
                 when (currentSorting.type) {
-                    Type.TITLE -> it.title
-                    Type.VALUE -> it.value
+                    Type.TITLE_ASC, Type.TITLE_DESC -> it.title
+                    Type.VALUE_ASC, Type.VALUE_DESC -> it.value
                 }
             }.toMutableList()
         }
@@ -90,14 +90,22 @@ class HomeListAdapter(list: ArrayList<HomeListItemViewModel> = arrayListOf(), re
         super.setItems(sort(newItems))
     }
 
-    companion object {
-        const val LOADING_ITEM_ID = -1
+    data class Sorting(var ascending: Boolean, var type: Type) : Serializable
+
+    enum class Type(@StringRes val titleRes: Int) : Serializable {
+        TITLE_ASC(R.string.sort_title_asc),
+        TITLE_DESC(R.string.sort_title_desc),
+        VALUE_ASC(R.string.sort_value_asc),
+        VALUE_DESC(R.string.sort_value_desc)
     }
 
-    data class Sorting(var ascending: Boolean, var type: Type)
-
-    enum class Type(@StringRes val titleRes: Int) {
-        TITLE(R.string.home_add), VALUE(R.string.import_title)
+    companion object {
+        val sorting = listOf(
+                Sorting(ascending = true, type = Type.TITLE_ASC),
+                Sorting(ascending = false, type = Type.TITLE_DESC),
+                Sorting(ascending = true, type = Type.VALUE_ASC),
+                Sorting(ascending = false, type = Type.VALUE_DESC)
+        )
     }
 }
 
