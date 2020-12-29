@@ -1,6 +1,5 @@
 package de.ka.jamit.tcalc.ui.home.category
 
-import android.os.Bundle
 import androidx.hilt.Assisted
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.SavedStateHandle
@@ -30,10 +29,8 @@ class CategoryDialogViewModel
             COLUMNS_COUNT
     )
 
-    override fun onArgumentsReceived(bundle: Bundle) {
-        super.onArgumentsReceived(bundle)
-
-        id = bundle.getInt(CategoryDialog.ID_KEY)
+    fun updateWith(updatedId: Int){
+        id = updatedId
         populateList()
     }
 

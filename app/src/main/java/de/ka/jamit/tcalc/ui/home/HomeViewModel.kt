@@ -1,6 +1,5 @@
 package de.ka.jamit.tcalc.ui.home
 
-import android.os.Bundle
 import android.view.View
 import androidx.hilt.Assisted
 import androidx.hilt.lifecycle.ViewModelInject
@@ -13,7 +12,6 @@ import de.ka.jamit.tcalc.base.events.ShowSnack
 import de.ka.jamit.tcalc.repo.Repository
 import de.ka.jamit.tcalc.repo.db.Record
 import de.ka.jamit.tcalc.repo.db.User
-import de.ka.jamit.tcalc.ui.home.addedit.HomeAddEditDialog
 import de.ka.jamit.tcalc.ui.home.list.HomeListAdapter
 import de.ka.jamit.tcalc.ui.home.list.HomeListItemViewModel
 import de.ka.jamit.tcalc.utils.Snacker
@@ -58,7 +56,7 @@ class HomeViewModel
     fun itemAnimator() = SlideInDownAnimator()
 
     fun onUserClicked() {
-        navigateTo(R.id.dialogUser)
+        handle(UserDialog())
     }
 
     fun onSortingClicked() {
@@ -71,21 +69,11 @@ class HomeViewModel
     }
 
     private val itemListener: (HomeListItemViewModel) -> Unit = {
-        val arguments = Bundle().apply {
-            putBoolean(HomeAddEditDialog.UPDATE_KEY, true)
-            putString(HomeAddEditDialog.TITLE_KEY, it.item.key)
-            putFloat(HomeAddEditDialog.VALUE_KEY, it.item.value)
-            putInt(HomeAddEditDialog.TIMESPAN_KEY, it.item.timeSpan.id)
-            putInt(HomeAddEditDialog.CATEGORY_KEY, it.item.category.id)
-            putBoolean(HomeAddEditDialog.CONSIDERED_KEY, it.item.isConsidered)
-            putBoolean(HomeAddEditDialog.INCOME_KEY, it.item.isIncome)
-            putInt(HomeAddEditDialog.ID_KEY, it.item.id)
-        }
-        navigateTo(R.id.dialogHomeAdd, args = arguments)
+       handle(ItemClick(it.item))
     }
 
     private val addListener = {
-        navigateTo(R.id.dialogHomeAdd)
+        handle(Add())
     }
 
     private val removeListener = {
@@ -180,4 +168,7 @@ class HomeViewModel
     }
 
     class SortClick(val currentSorting: HomeListAdapter.Sorting)
+    class UserDialog
+    class Add
+    class ItemClick(val item: Record)
 }

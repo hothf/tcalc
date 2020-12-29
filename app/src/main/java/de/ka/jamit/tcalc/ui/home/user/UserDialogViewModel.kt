@@ -1,6 +1,5 @@
 package de.ka.jamit.tcalc.ui.home.user
 
-import android.os.Bundle
 import androidx.hilt.Assisted
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.SavedStateHandle
@@ -10,8 +9,6 @@ import de.ka.jamit.tcalc.base.BaseViewModel
 import de.ka.jamit.tcalc.base.events.ShowSnack
 import de.ka.jamit.tcalc.repo.Repository
 import de.ka.jamit.tcalc.repo.db.User
-import de.ka.jamit.tcalc.ui.home.addedit.HomeAddEditDialog
-import de.ka.jamit.tcalc.ui.home.user.addedit.UserAddEditDialog
 import de.ka.jamit.tcalc.utils.Snacker
 import de.ka.jamit.tcalc.utils.resources.ResourcesProvider
 import de.ka.jamit.tcalc.utils.schedulers.SchedulerProvider
@@ -39,18 +36,10 @@ class UserDialogViewModel
         it.item?.let { user ->
             repository.selectUser(user.id)
         }
-
     }
 
     private val editListener: (UserListItemViewModel) -> Unit = {
-        it.item?.let { user ->
-            val arguments = Bundle().apply {
-                putBoolean(UserAddEditDialog.UPDATE_KEY, true)
-                putString(UserAddEditDialog.TITLE_KEY, user.name)
-                putInt(HomeAddEditDialog.ID_KEY, user.id)
-            }
-            navigateTo(R.id.dialogUserAddEdit, args = arguments)
-        }
+       handle(Edit(it.item))
     }
 
     private val deletionListener: () -> Unit = {
@@ -62,7 +51,7 @@ class UserDialogViewModel
     }
 
     private val addListener: () -> Unit = {
-        navigateTo(R.id.dialogUserAddEdit)
+        handle(Add())
     }
 
     init {
@@ -96,4 +85,6 @@ class UserDialogViewModel
 
     class Close
     class ShowDialogSnack(val snack: ShowSnack)
+    class Add
+    class Edit(val item: User?)
 }

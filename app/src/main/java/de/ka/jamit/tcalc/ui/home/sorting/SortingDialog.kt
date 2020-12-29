@@ -5,6 +5,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import de.ka.jamit.tcalc.R
 import de.ka.jamit.tcalc.base.BaseDialogFragment
 import de.ka.jamit.tcalc.databinding.DialogSortingBinding
+import de.ka.jamit.tcalc.ui.home.list.HomeListAdapter
 
 /**
  * A sorting dialog.
@@ -28,6 +29,12 @@ class SortingDialog : BaseSortingDialogFragment() {
         } else if (element is SortingDialogViewModel.Choose) {
             dismissDialogWithResult(RESULT_KEY, Bundle().apply { putSerializable(SORTING_KEY, element.sorting) })
         }
+    }
+
+    override fun onArgumentsReceived(bundle: Bundle) {
+        val selectedItem = bundle.getSerializable(SortingDialog.CURRENTLY_SELECTED_KEY) as? HomeListAdapter.Sorting
+
+        selectedItem?.let(viewModel::select)
     }
 
     companion object {

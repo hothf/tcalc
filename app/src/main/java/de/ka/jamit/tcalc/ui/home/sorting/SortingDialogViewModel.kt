@@ -1,6 +1,5 @@
 package de.ka.jamit.tcalc.ui.home.sorting
 
-import android.os.Bundle
 import androidx.hilt.Assisted
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.MutableLiveData
@@ -27,10 +26,7 @@ class SortingDialogViewModel
 
     var adapter: MutableLiveData<SortingListAdapter?> = MutableLiveData(null)
 
-    override fun onArgumentsReceived(bundle: Bundle) {
-        super.onArgumentsReceived(bundle)
-
-        val selectedItem = bundle.getSerializable(SortingDialog.CURRENTLY_SELECTED_KEY) as? HomeListAdapter.Sorting
+    fun select(selectedItem: HomeListAdapter.Sorting){
         adapter.postValue(SortingListAdapter(
                 resourcesProvider = resourcesProvider,
                 currentlySelectedItem = selectedItem,

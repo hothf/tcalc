@@ -35,8 +35,7 @@ class CategoryListAdapter(list: ArrayList<CategoryListItemViewModel> = arrayList
     }
 }
 
-class CategoryListViewHolder(binding: ViewDataBinding) : BaseViewHolder<ViewDataBinding>
-(binding) {
+class CategoryListViewHolder(binding: ViewDataBinding) : BaseViewHolder<ViewDataBinding>(binding) {
     override var swipeableView: View? = null
     override var isSwipeable = false
     override var isDraggable = false
