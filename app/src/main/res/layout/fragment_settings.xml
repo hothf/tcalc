@@ -18,29 +18,34 @@
         tools:context=".ui.main.MainActivity">
 
         <TextView
-            android:id="@+id/message"
+            style="@style/textDefault.bold"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:layout_marginStart="@dimen/default_24"
+            android:layout_height="@dimen/default_42"
+            android:layout_marginTop="@dimen/default_8"
+            android:gravity="center"
+            android:text="@string/settings_title" />
+
+        <View
+            android:id="@+id/helper"
+            android:layout_width="@dimen/default_1"
+            android:layout_height="@dimen/default_1"
+            android:layout_centerInParent="true"/>
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/button"
+            android:layout_above="@+id/helper"
             style="@style/ButtonStyle.Bordered"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:onClick="@{()->viewModel.onImport()}"
+            android:layout_marginBottom="@dimen/default_16"
             android:text="@string/settings_import" />
 
         <com.google.android.material.button.MaterialButton
             style="@style/ButtonStyle.Bordered"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/button"
+            android:layout_below="@+id/helper"
             android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/default_16"
             android:onClick="@{()->viewModel.onExport()}"
             android:text="@string/settings_export" />
     </RelativeLayout>

@@ -55,8 +55,12 @@
     <style name="ButtonStyle.Bordered" parent="@style/Widget.MaterialComponents.Button">
         <item name="shapeAppearance">@style/cardShape</item>
         <item name="android:textAllCaps">false</item>
+        <item name="android:textColor">@color/fontDefaultInverted</item>
+        <item name="android:layout_height">@dimen/default_54</item>
+        <item name="android:layout_width">@dimen/default_200</item>
+        <item name="android:textStyle">bold</item>
         <item name="android:textSize">@dimen/font_default_size</item>
-        <item name="android:textColor">@color/defaultBackgroundPrimary</item>
+        <item name="android:letterSpacing">0</item>
     </style>
 
     <style name="cardShape" parent="ShapeAppearance.MaterialComponents.MediumComponent">

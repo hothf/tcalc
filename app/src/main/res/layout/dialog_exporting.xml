@@ -66,8 +66,6 @@
 
         <com.google.android.material.button.MaterialButton
             style="@style/ButtonStyle.Bordered"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:layout_below="@+id/errorText"
             android:layout_marginStart="@dimen/default_16"
             android:layout_marginTop="@dimen/default_16"
@@ -79,8 +77,6 @@
 
         <com.google.android.material.button.MaterialButton
             style="@style/ButtonStyle.Bordered"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:layout_below="@+id/errorText"
             android:layout_marginTop="@dimen/default_16"
             android:layout_marginEnd="@dimen/default_16"
