@@ -21,6 +21,8 @@
         <item name="colorControlActivated">@color/colorAccent</item>
         <item name="colorControlNormal">@color/fontHint</item>
 
+        <item name="android:windowBackground">@drawable/launch_background</item>
+
         <item name="android:colorBackground">@color/defaultBackgroundPrimary</item>
     </style>
 

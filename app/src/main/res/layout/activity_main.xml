@@ -11,9 +11,9 @@
     </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
-
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/defaultBackgroundPrimary"
         tools:context=".ui.main.MainActivity">
 
         <fragment
@@ -29,6 +29,7 @@
             style="@style/bottomNavigation"
             android:layout_width="match_parent"
             android:layout_height="@dimen/navBarHeight"
+            app:labelVisibilityMode="unlabeled"
             app:layout_anchor="@+id/main_nav_host_fragment"
             app:layout_anchorGravity="bottom"
             app:menu="@menu/bottom_navigation" />
