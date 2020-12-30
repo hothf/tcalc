@@ -29,7 +29,9 @@
     <color name="fontColorPositive">#1f8f45</color>
     <color name="fontColorNegative">#f11100</color>
 
-    <color name="shade_transparent">#ddcacaca</color>
+    <color name="resultColor">#F5F5F5</color>
+
+    <color name="shade_transparent">#55cacaca</color>
     <color name="shade_one">#7b7d77</color>
     <color name="shade_two">#c1f70f</color>
     <color name="shade_three">#ee30e630</color>

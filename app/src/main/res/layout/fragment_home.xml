@@ -25,7 +25,7 @@
 
             <androidx.appcompat.widget.Toolbar
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/default_100"
+                android:layout_height="@dimen/default_108"
                 app:layout_scrollFlags="scroll|enterAlways">
 
                 <RelativeLayout
@@ -84,6 +84,7 @@
                         android:layout_centerHorizontal="true"
                         android:layout_marginTop="@dimen/default_8"
                         android:layout_marginEnd="@dimen/default_16"
+                        android:layout_marginBottom="@dimen/default_8"
                         android:foreground="@drawable/rounded_button_transculent_selector"
                         android:onClick="@{()->viewModel.onSortingClicked()}"
                         android:orientation="horizontal">
@@ -149,7 +150,7 @@
             <View
                 android:id="@+id/resultShadow"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/default_4"
+                android:layout_height="@dimen/default_3"
                 android:layout_alignParentTop="true"
                 android:background="@drawable/bg_shadow_top" />
 
@@ -159,7 +160,7 @@
                 android:layout_height="match_parent"
                 android:layout_below="@+id/resultShadow"
                 android:layout_centerInParent="true"
-                android:background="@color/defaultBackgroundPrimaryAlternative"
+                android:background="@color/resultColor"
                 android:gravity="center"
                 android:paddingStart="@dimen/default_8"
                 android:paddingEnd="@dimen/default_8"
