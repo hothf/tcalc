@@ -1,3 +1,8 @@
+## 1.2.0 [30-12-2020]
+
+- Add new round and launcher icon
+- Fix settings and home styles
+
 ## 1.1.2 [29-12-2020]
 
 - Remove dependencies of bundles and navigation inside view Models.
